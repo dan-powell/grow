@@ -1,0 +1,47 @@
+name: grow
+recipe: laravel
+config:
+  webroot: public
+  via: nginx
+  php: '8.1'
+  composer: 
+    'deployer/deployer' : 'v7.0.*'
+services:
+  appserver:
+    overrides:
+      environment:
+        - SSH_AUTH_SOCK=/ssh-agent
+      volumes:
+        - ${SSH_AUTH_SOCK}:/ssh-agent
+  database:
+    creds:
+      user: grow
+      password: grow
+      database: grow
+  node:
+    type: node:14
+    build:
+      - npm install
+    scanner: false
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
+  pma:
+    type: phpmyadmin
+    hosts: database
+tooling:
+  node:
+    service: node
+  npm:
+    service: node
+  dep:
+    service: appserver
+    desription: run deployer commands
+    cmd:
+      - "dep"
+proxy:
+  node: 
+    - bs.grow.lndo.site:3000
+  pma: 
+    - pma.grow.lndo.site

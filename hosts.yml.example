@@ -1,0 +1,12 @@
+staging:
+  hostname: example.com
+  user: username
+  stage: staging
+  branch: production
+  deploy_path: ~/www/staging
+production:
+  hostname: example.com
+  user: username
+  stage: production
+  branch: production
+  deploy_path: ~/www/production
