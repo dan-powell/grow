@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Reading;
 
-class device extends Model
+class Device extends Model
 {
     use HasFactory;
 

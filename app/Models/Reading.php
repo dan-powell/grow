@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Device;
 use App\Models\ReadingData;
 
-class reading extends Model
+class Reading extends Model
 {
     protected $table = 'reading';
 
