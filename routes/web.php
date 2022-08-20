@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Models\Device;
+use App\Models\DeviceDataconfig;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +17,7 @@ use App\Http\Controllers\DeviceController;
 |
 */
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('/device/{name}', [DeviceController::class, 'show'])->name('device.show');
+Route::get('/', [DashboardController::class, 'show'])->name('dashboard.show')->breadcrumb('<span class="fas fa-th"></span> Dashboard');
+Route::get('/devices', [DeviceController::class, 'index'])->name('device.index')->breadcrumb('<span class="fas fa-th"></span> Devices');
+Route::get('/devices/{device:id}', [DeviceController::class, 'show'])->name('device.show')->breadcrumb(fn(Device $device) => $device->name, 'device.index');
+Route::get('/devices/{device:id}/readings/{dataconfig:id}', [DeviceController::class, 'reading'])->name('device.reading')->breadcrumb(fn(Device $device, DeviceDataconfig $dataconfig) => $dataconfig->name, 'device.show');;

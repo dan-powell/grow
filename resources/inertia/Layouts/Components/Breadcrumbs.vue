@@ -1,12 +1,11 @@
 
 <template>
-    <nav class="Breadcrumbs">
-        <ul class="Breadcrumbs-list">
-            <li class="Breadcrumbs-item" v-for="item in breadcrumbs" v-bind:key="item">
-                <Link class="Breadcrumbs-link" v-if="!item.is_current_page" :href="item.url">
-                    <span v-html="item.title"></span>
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li v-for="breadcrumb in breadcrumbs" v-bind:key="breadcrumb">
+                <Link :class="{'is-active':breadcrumb.is_current_page}" :href="breadcrumb.url">
+                    <span v-html="breadcrumb.title"></span>
                 </Link>
-                <!-- <span class="Breadcrumbs-link" v-else v-html="item.title"></span> -->
             </li>
         </ul>
     </nav>
@@ -22,16 +21,6 @@
         computed: {
             breadcrumbs() {
                 return this.$page.props?.breadcrumbs
-            },
-            breadcrumbs_first() {
-                return this.$page.props?.breadcrumbs.slice(0,3)
-            },
-            breadcrumbs_more() {
-                if(this.$page.props?.breadcrumbs.slice(2).length > 1) {
-                    return this.$page.props?.breadcrumbs.slice(2)
-                } else {
-                    return [];
-                }
             },
         }
     })

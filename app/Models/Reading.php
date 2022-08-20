@@ -15,6 +15,10 @@ class Reading extends Model
 
     protected $fillable = ['timestamp'];
 
+    protected $hidden = [
+        'data'
+    ];
+
     protected $dates = [
         'timestamp'
     ];
@@ -28,14 +32,42 @@ class Reading extends Model
     {
         // Always eager-load data
         static::addGlobalScope('eager', function (Builder $builder) {
-            $builder->with(['data']);
+            $builder->with(['device.dataconfigs', 'data']);
         });
 
+        // On record retrieval
         static::retrieved(function ($reading) {
+            // Collect datapoints to add to model as attributes
+            $datapoints = [];
             foreach($reading->data as $datum) {
-                $reading->{$datum->name} = $datum->value;
+                // Find the relevant config
+                $config = $reading->device->dataconfigs->keyBy('key')[$datum->key] ?? null;
+                if($config) {
+                    // If we have config, then 
+                    $datapoint = $config;
+                    // Calibrate the value
+                    $datapoint->value = $reading->calibrateDataValue($config, $datum->value);
+                    $datapoints[$config->key] = $datapoint;
+                }
             }
+            // Add datapoints to model
+            $reading->datapoints = $datapoints;
         });
+    }
+
+    protected function calibrateDataValue($config, $value)
+    {
+        // Does the value require adjustment?
+        if($config->calibrate && $config->calibrate_value) {
+            if($config->calibrate_percentage) {
+                // Adjust by a percentage
+                $value += ($value/100)*$config->calibrate_value;
+            } else {
+                // Adjust by a simple value
+                $value += $config->calibrate_value;
+            }
+        }
+        return $value;
     }
 
     public function device()

@@ -43902,13 +43902,21 @@ function compileToFunction(template, options) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var map = {
+	"./Dashboard.vue": [
+		"./resources/inertia/Pages/Dashboard.vue",
+		"resources_inertia_Pages_Dashboard_vue"
+	],
+	"./Devices/Index.vue": [
+		"./resources/inertia/Pages/Devices/Index.vue",
+		"resources_inertia_Pages_Devices_Index_vue"
+	],
+	"./Devices/Reading.vue": [
+		"./resources/inertia/Pages/Devices/Reading.vue",
+		"resources_inertia_Pages_Devices_Reading_vue"
+	],
 	"./Devices/Show.vue": [
 		"./resources/inertia/Pages/Devices/Show.vue",
 		"resources_inertia_Pages_Devices_Show_vue"
-	],
-	"./Home.vue": [
-		"./resources/inertia/Pages/Home.vue",
-		"resources_inertia_Pages_Home_vue"
 	]
 };
 function webpackAsyncContext(req) {
@@ -44059,7 +44067,7 @@ module.exports = JSON.parse('{"_from":"axios@^0.21","_id":"axios@0.21.4","_inBun
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_inertia_Pages_Devices_Show_vue":1,"resources_inertia_Pages_Home_vue":1}[chunkId]) return "js/app/" + chunkId + ".js";
+/******/ 			if ({"resources_inertia_Pages_Dashboard_vue":1,"resources_inertia_Pages_Devices_Index_vue":1,"resources_inertia_Pages_Devices_Reading_vue":1,"resources_inertia_Pages_Devices_Show_vue":1}[chunkId]) return "js/app/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

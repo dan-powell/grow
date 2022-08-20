@@ -8,12 +8,27 @@ use App\Models\Device;
 
 class DeviceController extends Controller
 {
-    public function show($name, Request $request)
+    public function index(Request $request)
     {
-        $device = Device::where('name', $name)->with(['readings'])->firstOrFail();
+        return Inertia::render('Devices/Index', [
+            'devices' => Device::with(['dataconfigs'])->get(),
+        ]);
+    }
+
+    public function show($device, Request $request)
+    {
         return Inertia::render('Devices/Show', [
             'device' => $device,
-            'readings' => $device->readings
+            'dataconfigs' => $device->dataconfigs,
+        ]);
+    }
+
+    public function reading($device, $dataconfig, Request $request)
+    {
+        return Inertia::render('Devices/Reading', [
+            'device' => $device,
+            'readings' => $device->readings,
+            'dataconfig' => $dataconfig,
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Reading;
+use App\Models\DeviceDataconfig;
 
 class Device extends Model
 {
@@ -19,6 +20,11 @@ class Device extends Model
     public function readings()
     {
         return $this->hasMany(Reading::class);
+    }
+
+    public function dataconfigs()
+    {
+        return $this->hasMany(DeviceDataconfig::class);
     }
 
 }

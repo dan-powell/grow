@@ -7,6 +7,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\Device;
+use App\Models\DeviceDataconfig;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,14 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+        });
+
+        Route::bind('device', function ($value) {
+            return Device::where('id', $value)->firstOrFail();
+        });
+
+        Route::bind('dataconfig', function ($value) {
+            return DeviceDataconfig::where('id', $value)->firstOrFail();
         });
     }
 

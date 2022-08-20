@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Device;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
-    public function home()
+    public function show()
     {
-        return Inertia::render('Home', [
+        return Inertia::render('Dashboard', [
             'devices' => Device::all()
         ]);
     }

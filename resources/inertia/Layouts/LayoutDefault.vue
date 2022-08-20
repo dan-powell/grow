@@ -1,11 +1,6 @@
 <template>
-    <div class="LayoutDefault">
-        <!-- <FlashBanner/> -->
-        <main class="LayoutDefault-main">
-            <div class="LayoutDefault-inner">
-                <slot></slot>
-            </div>
-        </main>
+    <div class="container">
+        <slot></slot>
     </div>
 </template>
 

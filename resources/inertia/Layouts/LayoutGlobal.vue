@@ -1,5 +1,5 @@
 <template>
-    <div class="LayoutGlobal">
+    <div>
         <GlobalHeader/>
         <slot></slot>
         <!-- <Notifications/> -->

@@ -30,7 +30,7 @@ return new class extends Migration
         Schema::create('reading_data', function (Blueprint $table) {
             $table->id();
             $table->biginteger('reading_id')->unsigned();
-            $table->string('name');
+            $table->string('key');
             $table->float('value', 8, 4);
             $table->foreign('reading_id')->references('id')->on('reading')->onDelete('cascade');
             $table->timestamps();
