@@ -3,9 +3,6 @@
     <div>
         <nav class="Header-nav">
             <NavTop></NavTop>
-            <button class="NavTop-link" type="button">
-                <span class="NavTop-icon fas fa-caret-down"></span> More
-            </button>
         </nav>
     </div>
 </template>

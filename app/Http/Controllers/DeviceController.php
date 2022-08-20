@@ -10,7 +10,7 @@ class DeviceController extends Controller
 {
     public function show($name, Request $request)
     {
-        $device = Device::where('name', $name)->with(['readings.data'])->firstOrFail();
+        $device = Device::where('name', $name)->with(['readings'])->firstOrFail();
         return Inertia::render('Devices/Show', [
             'device' => $device,
             'readings' => $device->readings

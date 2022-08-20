@@ -5,10 +5,6 @@
                 {{ device.name }}
             </a>
         </div>
-        <VueTableLite
-            :columns="columns"
-            :rows="devices"
-        />
     </LayoutDefault>
 </template>
 
@@ -18,25 +14,18 @@
     import LayoutDefault from '@/Layouts/LayoutDefault.vue'
     import Title from '@/Layouts/Components/Title.vue'
     import Link from '@/Components/Link.vue'
-    import VueTableLite from 'vue3-table-lite'
     export default defineComponent({
         layout: Layout,
         components: {
             LayoutDefault,
             Title,
             Link,
-            VueTableLite
         },
         props: [
             'devices',
         ],
         data() {
-            return {
-                'columns': [
-                    'id',
-                    'name'
-                ]
-            }
+            return {}
         },
         methods: {
 
