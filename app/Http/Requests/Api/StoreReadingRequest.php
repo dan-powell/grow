@@ -24,7 +24,9 @@ class StoreReadingRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'nickname' => 'required|string',
+            'timestamp' => 'required|date',
+            'readings' => 'required|array'
         ];
     }
 }

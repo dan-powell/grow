@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('devices', function (Blueprint $table) {
+        Schema::create('device', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->id();
             $table->biginteger('device_id')->unsigned();
             $table->datetime('timestamp');
-            $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
+            $table->foreign('device_id')->references('id')->on('device')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -46,6 +46,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('reading_data');
         Schema::dropIfExists('reading');
-        Schema::dropIfExists('devices');
+        Schema::dropIfExists('device');
     }
 };
