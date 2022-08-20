@@ -25,7 +25,7 @@ add('shared_dirs', [
 set('writable_dirs', []);
 
 // Hosts
-inventory('hosts.yml');
+import('hosts.yml');
 
 set('default_stage', 'production');
 
@@ -34,11 +34,6 @@ set('default_stage', 'production');
 task('build', function () {
     run('cd {{release_path}} && build');
 });
-
-task('composerconfig-prod', function () {
-})->onStage('production');
-
-before('deploy:vendors', 'composerconfig-prod');
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
