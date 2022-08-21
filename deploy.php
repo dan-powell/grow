@@ -31,9 +31,11 @@ set('default_stage', 'production');
 
 // Tasks
 
-task('build', function () {
-    run('cd {{release_path}} && build');
+task('artisan:breadcrumbs:cache', function () {
+    run('{{bin/php}} {{release_path}}/artisan breadcrumbs:cache');
 });
+
+before('artisan:route:cache', 'artisan:breadcrumbs:cache');
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');

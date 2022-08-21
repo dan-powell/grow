@@ -17,9 +17,9 @@ class ReadingController extends Controller
         $device = Device::where('nickname', $request->input('nickname'))->firstOrFail();
         
         $data = [];
-        foreach($request->input('readings') as $name => $value) {
+        foreach($request->input('readings') as $key => $value) {
             $datum = new ReadingData();
-            $datum->name = $name;
+            $datum->key = $key;
             $datum->value = $value;
             $data[] = $datum;
         }
