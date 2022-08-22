@@ -17,7 +17,7 @@ use App\Models\DeviceDataconfig;
 |
 */
 
-Route::get('/', [DashboardController::class, 'show'])->name('dashboard.show')->breadcrumb('<span class="fas fa-th"></span> Dashboard');
-Route::get('/devices', [DeviceController::class, 'index'])->name('device.index')->breadcrumb('<span class="fas fa-th"></span> Devices');
+Route::get('/', [DashboardController::class, 'show'])->name('dashboard.show')->breadcrumb('Dashboard');
+Route::get('/devices', [DeviceController::class, 'index'])->name('device.index')->breadcrumb('Devices', 'dashboard.show');
 Route::get('/devices/{device:id}', [DeviceController::class, 'show'])->name('device.show')->breadcrumb(fn(Device $device) => $device->name, 'device.index');
 Route::get('/devices/{device:id}/readings/{dataconfig:id}', [DeviceController::class, 'reading'])->name('device.reading')->breadcrumb(fn(Device $device, DeviceDataconfig $dataconfig) => $dataconfig->name, 'device.show');;

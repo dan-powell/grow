@@ -11,7 +11,8 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 
         <link href="{{ mix('/css/bulma.css') }}" rel="stylesheet" />
-       <script src="{{ mix('/js/app.js') }}" defer></script>
+        <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
+        <script src="{{ mix('/js/app.js') }}" defer></script>
         @routes
         @inertiaHead
     </head>

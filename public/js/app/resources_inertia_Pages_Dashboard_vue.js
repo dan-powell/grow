@@ -207,7 +207,7 @@ __webpack_require__.r(__webpack_exports__);
     Title: _Layouts_Components_Title_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     Link: _Components_Link_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
-  props: ['devices'],
+  props: ['devices', 'reading_latest'],
   data: function data() {
     return {};
   },
@@ -431,7 +431,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "container"
+  "class": "container mt-4"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")]);
@@ -471,23 +471,97 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
-var _hoisted_1 = ["href"];
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "title s-3"
+}, "Latest reading", -1
+/* HOISTED */
+);
+
+var _hoisted_2 = {
+  "class": "card"
+};
+var _hoisted_3 = {
+  "class": "card-header"
+};
+var _hoisted_4 = {
+  "class": "card-header-title"
+};
+var _hoisted_5 = {
+  "class": "card-header-title is-justify-content-end"
+};
+var _hoisted_6 = {
+  "class": "card-content"
+};
+var _hoisted_7 = {
+  "class": "columns is-multiline is-centered"
+};
+var _hoisted_8 = {
+  "class": "tile is-child box"
+};
+var _hoisted_9 = {
+  "class": "title"
+};
+var _hoisted_10 = {
+  "class": "subtitle"
+};
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "title"
+}, "Devices", -1
+/* HOISTED */
+);
+
+var _hoisted_12 = {
+  "class": "columns is-multiline"
+};
+var _hoisted_13 = ["href"];
+var _hoisted_14 = {
+  "class": "tile is-child box"
+};
+var _hoisted_15 = {
+  "class": "title"
+};
+var _hoisted_16 = {
+  "class": "subtitle"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_LayoutDefault = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("LayoutDefault");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_LayoutDefault, null, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.devices, function (device) {
+      return [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("header", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.reading_latest.timestamp_formatted), 1
+      /* TEXT */
+      )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.reading_latest.device.name), 1
+      /* TEXT */
+      )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.reading_latest.datapoints, function (datapoint) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-          key: device
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-          href: _ctx.route('device.show', device.name)
-        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(device.name), 9
-        /* TEXT, PROPS */
-        , _hoisted_1)]);
+          "class": "column is-one-quarter tile is-parent has-text-centered",
+          key: datapoint
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("article", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(datapoint.value_formatted), 1
+        /* TEXT */
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(datapoint.name), 1
+        /* TEXT */
+        )])]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))];
+      ))])])]), _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_12, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.devices, function (device) {
+        var _device$reading_lates;
+
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+          "class": "column tile is-parent has-text-centered",
+          key: device,
+          href: _ctx.route('device.show', device)
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("article", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(device.name), 1
+        /* TEXT */
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_16, "Last reading: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_device$reading_lates = device.reading_latest[0]) === null || _device$reading_lates === void 0 ? void 0 : _device$reading_lates.timestamp_formatted), 1
+        /* TEXT */
+        )])], 8
+        /* PROPS */
+        , _hoisted_13);
+      }), 128
+      /* KEYED_FRAGMENT */
+      ))])];
     }),
     _: 1
     /* STABLE */

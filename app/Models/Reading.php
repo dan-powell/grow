@@ -23,6 +23,10 @@ class Reading extends Model
         'timestamp'
     ];
 
+    protected $appends = [
+        'timestamp_formatted'
+    ];
+
     /**
      * The "booted" method of the model.
      *
@@ -47,12 +51,18 @@ class Reading extends Model
                     $datapoint = $config;
                     // Calibrate the value
                     $datapoint->value = $reading->calibrateDataValue($config, $datum->value);
+                    $datapoint->value_formatted = $config->prefix ?? '' . $reading->calibrateDataValue($config, $datum->value) . $config->suffix ?? '';
                     $datapoints[$config->key] = $datapoint;
                 }
             }
             // Add datapoints to model
             $reading->datapoints = $datapoints;
         });
+    }
+
+    protected function getTimestampFormattedAttribute()
+    {
+        return $this->timestamp->format('dS M H:i');
     }
 
     protected function calibrateDataValue($config, $value)

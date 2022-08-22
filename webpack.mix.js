@@ -19,6 +19,7 @@ const path = require('path');
     //     require('postcss-import'),
     //     require('postcss-mixins')
     // ])
+    .css('resources/css/app.css', 'public/css',)
     .css('node_modules/bulma/css/bulma.css', 'public/css',)
     .webpackConfig({
         resolve: {

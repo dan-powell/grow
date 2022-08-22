@@ -74,7 +74,7 @@
                     }
                 })
                 return {
-                    label: 'test',
+                    label: this.dataconfig.name,
                     data: array 
                 }
             },

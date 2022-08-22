@@ -41385,6 +41385,19 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
+/***/ "./resources/css/app.css":
+/*!*******************************!*\
+  !*** ./resources/css/app.css ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./node_modules/bulma/css/bulma.css":
 /*!******************************************!*\
   !*** ./node_modules/bulma/css/bulma.css ***!
@@ -44179,7 +44192,8 @@ module.exports = JSON.parse('{"_from":"axios@^0.21","_id":"axios@0.21.4","_inBun
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
-/******/ 			"css/bulma": 0
+/******/ 			"css/bulma": 0,
+/******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
 /******/ 		__webpack_require__.f.j = (chunkId, promises) => {
@@ -44191,7 +44205,7 @@ module.exports = JSON.parse('{"_from":"axios@^0.21","_id":"axios@0.21.4","_inBun
 /******/ 					if(installedChunkData) {
 /******/ 						promises.push(installedChunkData[2]);
 /******/ 					} else {
-/******/ 						if("css/bulma" != chunkId) {
+/******/ 						if(!/^css\/(app|bulma)$/.test(chunkId)) {
 /******/ 							// setup Promise in chunk cache
 /******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
 /******/ 							promises.push(installedChunkData[2] = promise);
@@ -44271,8 +44285,9 @@ module.exports = JSON.parse('{"_from":"axios@^0.21","_id":"axios@0.21.4","_inBun
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/bulma"], () => (__webpack_require__("./resources/inertia/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/bulma"], () => (__webpack_require__("./node_modules/bulma/css/bulma.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/bulma","css/app"], () => (__webpack_require__("./resources/inertia/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/bulma","css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/bulma","css/app"], () => (__webpack_require__("./node_modules/bulma/css/bulma.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
