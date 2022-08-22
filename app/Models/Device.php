@@ -19,7 +19,7 @@ class Device extends Model
 
     public function readings()
     {
-        return $this->hasMany(Reading::class);
+        return $this->hasMany(Reading::class)->orderBy('timestamp');
     }
 
     public function dataconfigs()

@@ -2,6 +2,7 @@
     <LayoutDefault>
         <Line
             :chart-data="chartData"
+            :chart-options="options"
             :width=800
             :height=800
         />
@@ -12,9 +13,7 @@
     import { defineComponent } from 'vue'
     import Layout from '@/Layouts/LayoutGlobal.vue'
     import LayoutDefault from '@/Layouts/LayoutDefault.vue'
-    // import Title from '@/Layouts/Components/Title.vue'
     import Link from '@/Components/Link.vue'
-    import { Inertia } from '@inertiajs/inertia'
     import VueTableLite from 'vue3-table-lite'
     import { Line } from 'vue-chartjs'
     import { Chart as ChartJS,
@@ -23,16 +22,19 @@
         Legend,
         LineElement,
         LinearScale,
+        TimeSeriesScale,
         PointElement,
         CategoryScale,
         Plugin
     } from 'chart.js'
+    import 'chartjs-adapter-moment';
     ChartJS.register(
         Title,
         Tooltip,
         Legend,
         LineElement,
         LinearScale,
+        TimeSeriesScale,
         PointElement,
         CategoryScale
     )
@@ -40,7 +42,6 @@
         layout: Layout,
         components: {
             LayoutDefault,
-            // Title,
             Link,
             VueTableLite,
             Line
@@ -50,36 +51,46 @@
             'readings',
             'dataconfig'
         ],
-        data() {
-            return {
-            }
-        },
         computed: {
             chartData: function() {
                 return {
-                    labels: this.labels,
-                    datasets: [
-                        {
-                            label: this.dataconfig.name,
-                            data: this.data
-                        }
-                    ]
+                    datasets: this.datasets
                 }
             },
-            labels: function() {
-                let array = [];
-                this.readings.forEach(function(reading) {
-                    array.push(reading.timestamp)
-                })
-                return array
+            datasets: function() {
+                return [
+                    this.dataset1,
+                ]
             },
-            data: function() {
+            dataset1: function() {
                 let array = [];
                 let dataconfig = this.dataconfig
                 this.readings.forEach(function(reading) {
-                    array.push(reading.datapoints[dataconfig.key].value)
+                    if(typeof reading.datapoints[dataconfig.key] != 'undefined') {
+                        array.push({
+                            x: reading.timestamp,
+                            y: reading.datapoints[dataconfig.key].value
+                        })
+                    }
                 })
-                return array
+                return {
+                    label: 'test',
+                    data: array 
+                }
+            },
+            options: function() {
+                return {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    quarter: 'MMM YYYY'
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
 
