@@ -19,12 +19,12 @@ class Device extends Model
 
     public function reading_latest()
     {
-        return $this->hasMany(Reading::class)->orderBy('timestamp', 'DESC');
+        return $this->hasMany(Reading::class)->orderBy('timestamp', 'desc');
     }
 
     public function readings()
     {
-        return $this->hasMany(Reading::class)->orderBy('timestamp');
+        return $this->hasMany(Reading::class);
     }
 
     public function dataconfigs()

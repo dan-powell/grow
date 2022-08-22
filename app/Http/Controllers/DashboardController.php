@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         return Inertia::render('Dashboard', [
             'devices' => Device::with(['reading_latest'])->get(),
-            'reading_latest' => Reading::orderBy('timestamp')->with(['device.dataconfigs'])->first()
+            'reading_latest' => Reading::orderBy('timestamp', 'desc')->with(['device.dataconfigs'])->first()
         ]);
     }
 }
