@@ -24,7 +24,8 @@ class Reading extends Model
     ];
 
     protected $appends = [
-        'timestamp_formatted'
+        'timestamp_formatted',
+        'created_at_formatted'
     ];
 
     /**
@@ -63,6 +64,11 @@ class Reading extends Model
     protected function getTimestampFormattedAttribute()
     {
         return $this->timestamp->format('dS M H:i');
+    }
+
+    protected function getCreatedAtFormattedAttribute()
+    {
+        return $this->created_at->format('dS M H:i');
     }
 
     protected function calibrateDataValue($config, $value)

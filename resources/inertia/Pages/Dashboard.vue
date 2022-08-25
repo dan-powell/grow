@@ -4,7 +4,7 @@
         <div class="card">
             <header class="card-header">
                 <h2 class="card-header-title">
-                    <p><strong>{{ reading_latest.timestamp_formatted }}</strong></p>
+                    <p><strong>{{ reading_latest.timestamp_formatted }}</strong> Received: {{ reading_latest.created_at_formatted }}</p>
                 </h2>
                 <div class="card-header-title is-justify-content-end"><p><strong> {{ reading_latest.device.name }}</strong></p></div>
             </header>
