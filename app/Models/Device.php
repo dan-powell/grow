@@ -17,6 +17,8 @@ class Device extends Model
 
     protected $fillable = ['name'];
 
+    protected $dates = ['alerted'];
+
     public function reading_latest()
     {
         return $this->hasMany(Reading::class)->orderBy('timestamp', 'desc');

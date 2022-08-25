@@ -38,7 +38,12 @@ class CheckLastReading extends Command
             $latest_reading = Reading::where('device_id', $device->id)->orderBy('created_at', 'desc')->first();
             if(isset($latest_reading) && $latest_reading->created_at->lessThan(Carbon::now()->addHours(-3))) {
                 $this->info($device->name . ' (' . $device->location . ') has not had a reading for over 3 hours');
-                Notification::route('mail', [config('site.alert_email')])->notify(new DeviceAlertLateReading($device, $latest_reading));
+                if(!isset($device->alerted) || $device->alerted->lessThan(Carbon::now()->addHours(-12))) {
+                    $this->info('Sending alarm notification');
+                    Notification::route('mail', [config('site.alert_email')])->notify(new DeviceAlertLateReading($device, $latest_reading));
+                    $device->alerted = Carbon::now();
+                    $device->save();
+                }
                 $ok = false;
             }
         }
