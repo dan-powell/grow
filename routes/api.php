@@ -19,4 +19,4 @@ use App\Http\Controllers\Api\ReadingController;
 //     return $request->user();
 // });
 
-Route::post('reading', [ReadingController::class, 'store'])->name('reading.store');
+Route::post('reading', [ReadingController::class, 'store'])->middleware('auth.basic')->name('reading.store');

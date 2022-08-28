@@ -23,7 +23,7 @@ class CheckLastReading extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Checks last readings for each device';
 
     /**
      * Execute the console command.
