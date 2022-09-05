@@ -31,7 +31,7 @@ return new class extends Migration
             $table->id();
             $table->biginteger('reading_id')->unsigned();
             $table->string('key');
-            $table->float('value', 8, 4);
+            $table->float('value', 16, 4);
             $table->foreign('reading_id')->references('id')->on('reading')->onDelete('cascade');
             $table->timestamps();
         });
