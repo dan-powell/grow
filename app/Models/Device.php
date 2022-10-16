@@ -27,7 +27,7 @@ class Device extends Model
 
     public function readings()
     {
-        return $this->hasMany(Reading::class)->orderBy('timestamp', 'desc')->limit(48);
+        return $this->hasMany(Reading::class)->orderBy('timestamp', 'desc')->limit(144);
     }
 
     public function dataconfigs()
