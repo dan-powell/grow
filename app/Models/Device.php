@@ -18,7 +18,9 @@ class Device extends Model
 
     protected $fillable = ['name'];
 
-    protected $dates = ['alerted'];
+    protected $casts = [
+        'alerted' => 'datetime'
+    ];
 
     public function reading_latest()
     {

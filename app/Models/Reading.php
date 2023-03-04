@@ -19,8 +19,8 @@ class Reading extends Model
         'data'
     ];
 
-    protected $dates = [
-        'timestamp'
+    protected $casts = [
+        'timestamp' => 'datetime'
     ];
 
     protected $appends = [
@@ -48,7 +48,7 @@ class Reading extends Model
                 // Find the relevant config
                 $config = $reading->device->dataconfigs->keyBy('key')[$datum->key] ?? null;
                 if($config) {
-                    // If we have config, then 
+                    // If we have config, then
                     $datapoint = $config;
                     // Calibrate the value
                     $datapoint->value = $reading->calibrateDataValue($config, $datum->value);
