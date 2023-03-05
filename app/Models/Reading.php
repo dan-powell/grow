@@ -18,7 +18,7 @@ class Reading extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['timestamp'];
+    protected $guarded = [];
 
     protected $hidden = [
         'data'

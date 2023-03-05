@@ -17,7 +17,7 @@ class DeviceConfig extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'key', 'summary', 'location', 'calibrate', 'calibrate_value', 'calibrate_percentage'];
+    protected $guarded = [];
 
     public function device()
     {

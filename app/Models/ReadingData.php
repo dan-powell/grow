@@ -17,7 +17,7 @@ class ReadingData extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['name', 'value'];
+    protected $guarded = [];
 
     public function reading()
     {
