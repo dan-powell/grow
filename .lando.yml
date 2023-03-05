@@ -52,3 +52,5 @@ proxy:
     - bs.grow.lndo.site:3000
   pma:
     - pma.grow.lndo.site
+  mailhog:
+    - mailhog.grow.lndo.site

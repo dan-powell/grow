@@ -45,8 +45,15 @@ class Reading extends Model
             $builder->with(['device.configs', 'data']);
         });
 
+        // On record creation
+        static::created(function (self $reading) {
+            // Reset the last alert time
+            $reading->device->reading_alert_last = null;
+            $reading->device->save();
+        });
+
         // On record retrieval
-        static::retrieved(function ($reading) {
+        static::retrieved(function (self $reading) {
             // Collect datapoints to add to model as attributes
             $datapoints = [];
             foreach($reading->data as $datum) {

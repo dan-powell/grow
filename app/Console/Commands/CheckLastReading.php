@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Device;
 use App\Models\Reading;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\DeviceAlertLateReading;
@@ -35,16 +36,33 @@ class CheckLastReading extends Command
         $ok = true;
         $devices = Device::all();
         foreach($devices as $device) {
-            $latest_reading = Reading::where('device_id', $device->id)->orderBy('created_at', 'desc')->first();
-            if(isset($latest_reading) && $latest_reading->created_at->lessThan(Carbon::now()->subHours(config('site.alert_device_late')))) {
-                $this->info($device->name . ' (' . $device->location . ') has not had a reading for over ' . config('site.alert_device_late') . ' hours');
-                if(!isset($device->alerted) || $device->alerted->lessThan(Carbon::now()->subHours(config('site.alert_timeout')))) {
-                    $this->info('Sending alarm notification');
-                    Notification::route('mail', [config('site.alert_email')])->notify(new DeviceAlertLateReading($device, $latest_reading));
-                    $device->alerted = Carbon::now();
-                    $device->save();
+            $this->info('Checking: ' . $device->name);
+            // Alert enabled & has a timeout setting?
+            if($device->reading_alert && $device->reading_alert_time) {
+                // Get the latest reading
+                $latest_reading = Reading::where('device_id', $device->id)->orderBy('created_at', 'desc')->first();
+                $this->info('Last Reading: ' . $latest_reading->created_at->toDateTimeString());
+                // Check if the last reading older than timeout config
+                if(isset($latest_reading) && $latest_reading->created_at->lessThan(Carbon::now()->subMinutes($device->reading_alert_time))) {
+
+                    $this->info($device->name . ' (' . ($device->location ?? '') . ') has not had a reading for ' . $latest_reading->created_at->diffInHours(now()) . ' hours');
+
+                    // Check if last alert is set. If it is, then don't send a notification
+                    if(!$device->reading_alert_last) {
+                        $this->info('Alert notification triggered');
+                        // Send notifications to all subscribed users
+                        $users = User::where('receive_alerts', true)->get();
+                        foreach($users as $user) {
+                            $this->info('Sending alarm notification to ' . $user->email);
+                            Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReading($device, $latest_reading));
+                        }
+                        $device->reading_alert_last = now();
+                        $device->save();
+                    }
+                    $ok = false;
                 }
-                $ok = false;
+            } else {
+                $this->info('Alerts disabled');
             }
         }
         if ($ok) {

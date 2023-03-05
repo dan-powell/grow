@@ -18,7 +18,7 @@ class Device extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['name'];
+    protected $guarded = [];
 
     protected $casts = [
         'alerted' => 'datetime'
