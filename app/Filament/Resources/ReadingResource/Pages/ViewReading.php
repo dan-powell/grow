@@ -4,16 +4,9 @@ namespace App\Filament\Resources\ReadingResource\Pages;
 
 use App\Filament\Resources\ReadingResource;
 use Filament\Pages\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class EditReading extends EditRecord
+class ViewReading extends ViewRecord
 {
     protected static string $resource = ReadingResource::class;
-
-    protected function getActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
 }

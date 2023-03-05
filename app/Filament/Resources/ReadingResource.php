@@ -50,7 +50,7 @@ class ReadingResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -68,8 +68,7 @@ class ReadingResource extends Resource
     {
         return [
             'index' => Pages\ListReadings::route('/'),
-            'create' => Pages\CreateReading::route('/create'),
-            'edit' => Pages\EditReading::route('/{record}/edit'),
+            'view' => Pages\ViewReading::route('/{record}'),
         ];
     }
 }

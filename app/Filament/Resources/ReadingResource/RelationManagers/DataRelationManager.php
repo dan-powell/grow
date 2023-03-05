@@ -23,6 +23,9 @@ class DataRelationManager extends RelationManager
                 Forms\Components\TextInput::make('key')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('value')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -41,7 +44,7 @@ class DataRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

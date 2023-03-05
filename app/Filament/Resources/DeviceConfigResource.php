@@ -23,12 +23,12 @@ class DeviceConfigResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
+                Forms\Components\Select::make('device_id')
+                    ->relationship('device', 'name')
+                    ->preload()
+                    ->searchable()
                     ->required()
-                    ->maxLength(26),
-                Forms\Components\TextInput::make('device_id')
-                    ->required()
-                    ->maxLength(26),
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -82,14 +82,14 @@ class DeviceConfigResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -97,5 +97,5 @@ class DeviceConfigResource extends Resource
             'create' => Pages\CreateDeviceConfig::route('/create'),
             'edit' => Pages\EditDeviceConfig::route('/{record}/edit'),
         ];
-    }    
+    }
 }

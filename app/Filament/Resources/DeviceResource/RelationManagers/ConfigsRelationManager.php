@@ -23,6 +23,24 @@ class ConfigsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('key')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('summary')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('chart')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('location')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('prefix')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('suffix')
+                    ->maxLength(255),
+                Forms\Components\Toggle::make('calibrate')
+                    ->required(),
+                Forms\Components\TextInput::make('calibrate_value'),
+                Forms\Components\Toggle::make('calibrate_percentage')
+                    ->required(),
             ]);
     }
 
@@ -45,5 +63,5 @@ class ConfigsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }    
+    }
 }

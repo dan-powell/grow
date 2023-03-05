@@ -23,9 +23,6 @@ class DeviceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->required()
-                    ->maxLength(26),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -36,10 +33,13 @@ class DeviceResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('location')
                     ->maxLength(255),
-                Forms\Components\Toggle::make('reading_alert')
-                    ->inline(false),
-                Forms\Components\TextInput::make('reading_alert_time'),
-                Forms\Components\DateTimePicker::make('reading_alert_last'),
+                Forms\Components\Section::make('Alerts')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Toggle::make('reading_alert')
+                            ->inline(false),
+                        Forms\Components\TextInput::make('reading_alert_time')->suffix('mins'),
+                    ])
             ]);
     }
 
