@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\Reading;
-use App\Models\DataConfig;
+use App\Models\DeviceConfig;
 
 class ReadingData extends Model
 {
@@ -26,7 +26,7 @@ class ReadingData extends Model
 
     public function config()
     {
-        return $this->belongsTo(DataConfig::class);
+        return $this->belongsTo(DeviceConfig::class);
     }
 
 }
