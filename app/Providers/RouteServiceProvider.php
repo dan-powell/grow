@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use App\Models\Device;
-use App\Models\DeviceDataconfig;
+use App\Models\DeviceConfig;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -44,7 +44,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('dataconfig', function ($value) {
-            return DeviceDataconfig::where('id', $value)->firstOrFail();
+            return DeviceConfig::where('id', $value)->firstOrFail();
         });
     }
 

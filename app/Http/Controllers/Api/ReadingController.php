@@ -15,7 +15,7 @@ class ReadingController extends Controller
     public function store(StoreReadingRequest $request)
     {
         $device = Device::where('nickname', $request->input('nickname'))->firstOrFail();
-        
+
         $data = [];
         foreach($request->input('readings') as $key => $value) {
             $datum = new ReadingData();

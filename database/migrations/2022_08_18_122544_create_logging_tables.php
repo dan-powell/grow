@@ -14,27 +14,45 @@ return new class extends Migration
     public function up()
     {
         Schema::create('device', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name');
+            $table->string('nickname');
+            $table->string('summary')->nullable();
+            $table->string('location')->nullable();
             $table->timestamps();
         });
 
+        Schema::create('device_config', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->foreignUlid('device_id')->constrained('device')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('name');
+            $table->string('key');
+            $table->string('summary')->nullable();
+            $table->string('chart')->nullable();
+            $table->string('location')->nullable();
+            $table->string('prefix')->nullable();
+            $table->string('suffix')->nullable();
+            $table->boolean('calibrate')->default(false);
+            $table->decimal('calibrate_value', 8, 2)->nullable();
+            $table->boolean('calibrate_percentage')->default(false);
+        });
+
         Schema::create('reading', function (Blueprint $table) {
-            $table->id();
-            $table->biginteger('device_id')->unsigned();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('device_id')->constrained('device')->cascadeOnDelete()->cascadeOnUpdate();
             $table->datetime('timestamp');
-            $table->foreign('device_id')->references('id')->on('device')->onDelete('cascade');
             $table->timestamps();
         });
 
         Schema::create('reading_data', function (Blueprint $table) {
-            $table->id();
-            $table->biginteger('reading_id')->unsigned();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('reading_id')->constrained('reading')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUlid('config_id')->nullable()->constrained('device_config')->setNullOnDelete()->cascadeOnUpdate();
             $table->string('key');
             $table->float('value', 16, 4);
-            $table->foreign('reading_id')->references('id')->on('reading')->onDelete('cascade');
             $table->timestamps();
         });
+
     }
 
     /**
@@ -46,6 +64,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('reading_data');
         Schema::dropIfExists('reading');
+        Schema::dropIfExists('device_config');
         Schema::dropIfExists('device');
     }
 };

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Device;
+use Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Device>
@@ -25,7 +26,8 @@ class DeviceFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->jobTitle(),
+            'name' => fake()->jobTitle(),
+            'nickname' => fake()->slug(),
         ];
     }
 
@@ -39,6 +41,7 @@ class DeviceFactory extends Factory
         return $this->state(function (array $attributes) use ($name) {
             return [
                 'name' => $name,
+                'nickname' => Str::slugify($name)
             ];
         });
     }

@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\Device;
 
-class DeviceDataconfig extends Model
+class DeviceConfig extends Model
 {
     use HasFactory;
+    use HasUlids;
 
-    protected $table = 'device_dataconfig';
+    protected $table = 'device_config';
 
     public $timestamps = false;
 

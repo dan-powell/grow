@@ -4,7 +4,7 @@ config:
   webroot: public
   via: nginx
   php: '8.1'
-  composer: 
+  composer:
     'deployer/deployer' : 'v7.0.0-rc.9'
 services:
   appserver:
@@ -37,11 +37,18 @@ tooling:
     service: node
   dep:
     service: appserver
-    description: run deployer commands
+    description: Run deployer commands
     cmd:
       - "dep"
+  refresh:
+    service: appserver
+    description: Refresh project with new DB
+    cmd:
+      - "php artisan db:wipe"
+      - "php artisan migrate"
+      - "php artisan db:seed"
 proxy:
-  node: 
+  node:
     - bs.grow.lndo.site:3000
-  pma: 
+  pma:
     - pma.grow.lndo.site

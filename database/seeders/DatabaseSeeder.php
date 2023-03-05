@@ -5,7 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Device;
-use App\Models\DeviceDataconfig;
+use App\Models\DeviceConfig;
 use App\Models\Reading;
 use App\Models\ReadingData;
 
@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $devices = Device::factory()
             ->count(rand(1,3))
             ->has(
-                DeviceDataconfig::factory()
+                DeviceConfig::factory()
                     ->count(rand(1,6)),
                 'readings'
             )
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         foreach($devices as $device) {
 
             $readings = Reading::factory()
-                ->count(rand(100,1000))
+                ->count(rand(10,100))
                 ->make();
 
             $readings = $device->readings()->saveMany($readings);

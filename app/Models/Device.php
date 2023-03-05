@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Reading;
-use App\Models\DeviceDataconfig;
+use App\Models\DeviceConfig;
 
 class Device extends Model
 {
     use HasFactory;
+    use HasUlids;
 
     protected $table = 'device';
 
@@ -34,7 +36,7 @@ class Device extends Model
 
     public function dataconfigs()
     {
-        return $this->hasMany(DeviceDataconfig::class);
+        return $this->hasMany(DeviceConfig::class);
     }
 
 }
