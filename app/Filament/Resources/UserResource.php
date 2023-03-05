@@ -35,6 +35,8 @@ class UserResource extends Resource
                     ->password()
                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state)),
+                Forms\Components\Toggle::make('admin')
+                    ->required(),
                 Forms\Components\Toggle::make('receive_alerts')
                     ->required(),
             ]);
