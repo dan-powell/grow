@@ -42,7 +42,7 @@ class Reading extends Model
     {
         // Always eager-load data
         static::addGlobalScope('eager', function (Builder $builder) {
-            $builder->with(['device.dataconfigs', 'data']);
+            $builder->with(['device.configs', 'data']);
         });
 
         // On record retrieval
@@ -51,7 +51,7 @@ class Reading extends Model
             $datapoints = [];
             foreach($reading->data as $datum) {
                 // Find the relevant config
-                $config = $reading->device->dataconfigs->keyBy('key')[$datum->key] ?? null;
+                $config = $reading->device->configs->keyBy('key')[$datum->key] ?? null;
                 if($config) {
                     // If we have config, then
                     $datapoint = $config;

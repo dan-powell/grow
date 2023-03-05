@@ -201,7 +201,7 @@ chart_js__WEBPACK_IMPORTED_MODULE_5__.Chart.register(chart_js__WEBPACK_IMPORTED_
     VueTableLite: vue3_table_lite__WEBPACK_IMPORTED_MODULE_4__["default"],
     Line: vue_chartjs__WEBPACK_IMPORTED_MODULE_7__.Line
   },
-  props: ['device', 'readings', 'dataconfig'],
+  props: ['device', 'readings', 'config'],
   computed: {
     chartData: function chartData() {
       return {
@@ -213,17 +213,17 @@ chart_js__WEBPACK_IMPORTED_MODULE_5__.Chart.register(chart_js__WEBPACK_IMPORTED_
     },
     dataset1: function dataset1() {
       var array = [];
-      var dataconfig = this.dataconfig;
+      var config = this.config;
       this.readings.forEach(function (reading) {
-        if (typeof reading.datapoints[dataconfig.key] != 'undefined') {
+        if (typeof reading.datapoints[config.key] != 'undefined') {
           array.push({
             x: reading.timestamp,
-            y: reading.datapoints[dataconfig.key].value
+            y: reading.datapoints[config.key].value
           });
         }
       });
       return {
-        label: this.dataconfig.name,
+        label: this.config.name,
         data: array
       };
     },

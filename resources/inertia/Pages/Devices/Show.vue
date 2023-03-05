@@ -1,16 +1,16 @@
 <template>
     <LayoutDefault>
-        
+
         <h2 class="title is-1">{{ device.name }}</h2>
         <h2 class="title is-3">Reading Types</h2>
         <div class="card">
             <div class="card-content">
                 <section class="columns is-multiline is-centered">
-                    <Link class="column is-one-quarter tile is-parent has-text-centered"  v-for="dataconfig in dataconfigs" v-bind:key="dataconfig" :href="route('device.reading', [device, dataconfig])">
+                    <Link class="column is-one-quarter tile is-parent has-text-centered"  v-for="config in configs" v-bind:key="config" :href="route('device.config', [device, config])">
                         <article class="tile is-child box">
-                            <p class="title">{{ dataconfig.name }}</p>
-                            <p class="subtitle">{{ dataconfig.summary }}</p>
-                            <p class="subtitle">{{ dataconfig.location }}</p>
+                            <p class="title">{{ config.name }}</p>
+                            <p class="subtitle">{{ config.summary }}</p>
+                            <p class="subtitle">{{ config.location }}</p>
                         </article>
                     </Link>
                 </section>
@@ -32,7 +32,7 @@
         },
         props: [
             'device',
-            'dataconfigs'
+            'configs'
         ],
         data() {
             return {

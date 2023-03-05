@@ -31,17 +31,12 @@ class DeviceFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return static
-     */
     public function name($name)
     {
         return $this->state(function (array $attributes) use ($name) {
             return [
                 'name' => $name,
-                'nickname' => Str::slugify($name)
+                'nickname' => Str::slug($name)
             ];
         });
     }

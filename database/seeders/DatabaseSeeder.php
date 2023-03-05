@@ -8,6 +8,7 @@ use App\Models\Device;
 use App\Models\DeviceConfig;
 use App\Models\Reading;
 use App\Models\ReadingData;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,13 +20,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
+        // Create a test device using fixed values
+        $devices = Device::factory()
+            ->name('Test 1')
+            ->has(DeviceConfig::factory()->name('Temperature'), 'configs')
+            ->has(DeviceConfig::factory()->name('Pressure'), 'configs')
+            ->create();
+
+
         $devices = Device::factory()
             ->count(rand(1,3))
-            ->has(
-                DeviceConfig::factory()
-                    ->count(rand(1,6)),
-                'readings'
-            )
+            ->has(DeviceConfig::factory()->count(rand(1,6)), 'configs')
             ->create();
 
         foreach($devices as $device) {
@@ -37,24 +42,22 @@ class DatabaseSeeder extends Seeder
             $readings = $device->readings()->saveMany($readings);
 
             foreach($readings as $reading) {
-                foreach($device->dataconfigs as $dataconfig) {
+                foreach($device->configs as $config) {
                     $reading->data()->saveMany(
                         ReadingData::factory()
-                            ->key($dataconfig->key)
+                            ->key($config->key)
+                            ->config($config->id)
                             ->count(1)
                             ->make()
                         );
                 }
             }
-
-
         }
 
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
     }
 
 

@@ -14,13 +14,19 @@ class ReadingController extends Controller
 {
     public function store(StoreReadingRequest $request)
     {
-        $device = Device::where('nickname', $request->input('nickname'))->firstOrFail();
+        $device = Device::where('nickname', $request->input('nickname'))->with(['configs'])->firstOrFail();
 
         $data = [];
         foreach($request->input('readings') as $key => $value) {
             $datum = new ReadingData();
             $datum->key = $key;
             $datum->value = $value;
+            foreach($device->configs as $config) {
+                if($config->key == $key) {
+                    $datum->config_id = $config->id;
+                    break;
+                }
+            }
             $data[] = $datum;
         }
 

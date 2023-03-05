@@ -44,4 +44,14 @@ class ReadingDataFactory extends Factory
         });
     }
 
+    public function config($config_id)
+    {
+        return $this->state(function (array $attributes) use ($config_id) {
+            return [
+                'config_id' => $config_id,
+            ];
+        });
+    }
+
+
 }

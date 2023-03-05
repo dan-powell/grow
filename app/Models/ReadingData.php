@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\Reading;
+use App\Models\DataConfig;
 
 class ReadingData extends Model
 {
@@ -21,6 +22,11 @@ class ReadingData extends Model
     public function reading()
     {
         return $this->belongsTo(Reading::class);
+    }
+
+    public function config()
+    {
+        return $this->belongsTo(DataConfig::class);
     }
 
 }

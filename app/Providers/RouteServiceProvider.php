@@ -43,7 +43,7 @@ class RouteServiceProvider extends ServiceProvider
             return Device::where('id', $value)->firstOrFail();
         });
 
-        Route::bind('dataconfig', function ($value) {
+        Route::bind('config', function ($value) {
             return DeviceConfig::where('id', $value)->firstOrFail();
         });
     }

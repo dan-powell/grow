@@ -11,7 +11,7 @@ class DeviceController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Devices/Index', [
-            'devices' => Device::with(['dataconfigs'])->get(),
+            'devices' => Device::with(['configs'])->get(),
         ]);
     }
 
@@ -19,16 +19,16 @@ class DeviceController extends Controller
     {
         return Inertia::render('Devices/Show', [
             'device' => $device,
-            'dataconfigs' => $device->dataconfigs,
+            'configs' => $device->configs,
         ]);
     }
 
-    public function reading($device, $dataconfig, Request $request)
+    public function configdata($device, $config, Request $request)
     {
         return Inertia::render('Devices/Reading', [
             'device' => $device,
             'readings' => $device->readings,
-            'dataconfig' => $dataconfig,
+            'config' => $config,
         ]);
     }
 }

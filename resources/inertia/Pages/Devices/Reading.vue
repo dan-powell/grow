@@ -49,7 +49,7 @@
         props: [
             'device',
             'readings',
-            'dataconfig'
+            'config'
         ],
         computed: {
             chartData: function() {
@@ -64,18 +64,18 @@
             },
             dataset1: function() {
                 let array = [];
-                let dataconfig = this.dataconfig
+                let config = this.config
                 this.readings.forEach(function(reading) {
-                    if(typeof reading.datapoints[dataconfig.key] != 'undefined') {
+                    if(typeof reading.datapoints[config.key] != 'undefined') {
                         array.push({
                             x: reading.timestamp,
-                            y: reading.datapoints[dataconfig.key].value
+                            y: reading.datapoints[config.key].value
                         })
                     }
                 })
                 return {
-                    label: this.dataconfig.name,
-                    data: array 
+                    label: this.config.name,
+                    data: array
                 }
             },
             options: function() {
