@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('device', function (Blueprint $table) {
-            $table->string('nickname');
+            $table->string('nickname')->nullable();
             $table->string('summary')->nullable();
             $table->string('location')->nullable();
         });
@@ -33,10 +33,6 @@ return new class extends Migration
             $table->boolean('calibrate_percentage')->default(false);
             $table->foreign('device_id')->references('id')->on('device')->onDelete('cascade');
         });
-
-        Schema::table('reading_data', function (Blueprint $table) {
-            $table->renameColumn('name', 'key');
-        });
     }
 
     /**
@@ -46,10 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('reading_data', function (Blueprint $table) {
-            $table->renameColumn('key', 'name');
-        });
-
         Schema::dropIfExists('device_dataconfig');
 
         Schema::table('device', function (Blueprint $table) {

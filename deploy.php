@@ -4,7 +4,7 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 // Project name
-set('application', 'grow.local');
+set('application', 'grow.dan-powell.uk');
 
 // Project repository
 set('repository', 'git@github.com:dan-powell/grow.git');
