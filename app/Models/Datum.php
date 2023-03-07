@@ -5,28 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use App\Models\Reading;
-use App\Models\DeviceConfig;
+use App\Models\Figure;
 
-class ReadingData extends Model
+class Datum extends Model
 {
     use HasFactory;
     use HasUlids;
 
-    protected $table = 'reading_data';
+    protected $table = 'datum';
 
     public $timestamps = true;
 
     protected $fillable = ['name', 'value'];
 
-    public function reading()
+    public function figure()
     {
-        return $this->belongsTo(Reading::class);
-    }
-
-    public function config()
-    {
-        return $this->belongsTo(DeviceConfig::class);
+        return $this->belongsTo(Figure::class);
     }
 
 }

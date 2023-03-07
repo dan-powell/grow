@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\Device;
-use App\Models\ReadingData;
+use App\Models\Datum;
 
-class DeviceConfig extends Model
+class Figure extends Model
 {
     use HasFactory;
     use HasUlids;
 
-    protected $table = 'device_config';
+    protected $table = 'figure';
 
     public $timestamps = false;
 
@@ -24,9 +24,9 @@ class DeviceConfig extends Model
         return $this->belongsTo(Device::class);
     }
 
-    public function reading_data()
+    public function data()
     {
-        return $this->hasMany(ReadingData::class);
+        return $this->hasMany(Datum::class);
     }
 
 }
