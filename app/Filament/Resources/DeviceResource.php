@@ -23,23 +23,34 @@ class DeviceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->required()
-                    ->maxLength(26),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nickname')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('summary')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('location')
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('reading_alert')
-                    ->inline(false),
-                Forms\Components\TextInput::make('reading_alert_time'),
-                Forms\Components\DateTimePicker::make('reading_alert_last'),
+                Forms\Components\Card::make()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('nickname')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('summary')
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('location')
+                            ->maxLength(255),
+                        Forms\Components\FileUpload::make('image'),
+                    ]),
+                Forms\Components\Section::make('Alert configuration')
+                    ->columns(5)
+                    ->schema([
+                        Forms\Components\Toggle::make('reading_alert')->label('Enabled')
+                            ->columnSpan(1)
+                            ->inline(false),
+                        Forms\Components\TextInput::make('reading_alert_time')
+                            ->columnSpan(2)
+                            ->disabled(),
+                        Forms\Components\DateTimePicker::make('reading_alert_last')
+                            ->columnSpan(2)
+                            ->disabled(),
+                    ])
             ]);
     }
 
@@ -47,18 +58,9 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('nickname'),
+                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('summary'),
-                Tables\Columns\TextColumn::make('location'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
-                Tables\Columns\IconColumn::make('reading_alert')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('reading_alert_time'),
-                Tables\Columns\TextColumn::make('reading_alert_last')
+                Tables\Columns\TextColumn::make('last_reading.timestamp')
                     ->dateTime(),
             ])
             ->filters([
@@ -75,8 +77,8 @@ class DeviceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            DeviceResource\RelationManagers\ConfigsRelationManager::class,
-            DeviceResource\RelationManagers\ReadingsRelationManager::class
+            DeviceResource\RelationManagers\FiguresRelationManager::class,
+            DeviceResource\RelationManagers\DataRelationManager::class
         ];
     }
 

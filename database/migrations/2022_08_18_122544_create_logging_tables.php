@@ -17,6 +17,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('name');
             $table->string('nickname');
+            $table->string('image')->nullable();
             $table->string('summary')->nullable();
             $table->string('location')->nullable();
             $table->timestamps();

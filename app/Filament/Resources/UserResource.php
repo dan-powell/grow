@@ -23,20 +23,29 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                    ->dehydrated(fn ($state) => filled($state)),
-                Forms\Components\Toggle::make('receive_alerts')
-                    ->required(),
+                Forms\Components\Card::make()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('name')->label('Name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('email')->label('Email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255)
+                        ]),
+                Forms\Components\Card::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('password')
+                            ->password()
+                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                            ->dehydrated(fn ($state) => filled($state)),
+                    ]),
+                Forms\Components\Card::make()
+                    ->schema([
+                        Forms\Components\Toggle::make('receive_alerts')
+                            ->required(),
+                    ])
             ]);
     }
 
