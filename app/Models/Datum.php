@@ -25,6 +25,7 @@ class Datum extends Model
     protected $appends = [
         'timestamp_formatted',
         'value_calibrated',
+        'value_string',
         'range_percentage',
     ];
 
@@ -66,6 +67,11 @@ class Datum extends Model
     protected function valueCalibrated(): Attribute
     {
         return Attribute::get(fn () => $this->calibrateDataValue($this->figure, $this->value));
+    }
+
+    protected function valueString(): Attribute
+    {
+        return Attribute::get(fn () => $this->figure->prefix . $this->value_calibrated . $this->figure->suffix);
     }
 
     protected function createdAtFormatted(): Attribute

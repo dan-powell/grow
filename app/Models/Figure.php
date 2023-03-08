@@ -17,7 +17,7 @@ class Figure extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'key', 'summary', 'location', 'icon', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color'];
+    protected $fillable = ['name', 'key', 'summary', 'location', 'icon', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color'];
 
     protected $appends = [
         'last_reading',
@@ -41,9 +41,8 @@ class Figure extends Model
                     if ($this->last_reading->value > $this->range_max) {
                         return 100;
                     }
-                    $range = $this->range_max - $this->range_min;
 
-                    return 100 / $this->range_max * ($this->last_reading->value - $this->range_min);
+                    return 100 / ($this->range_max - $this->range_min) * ($this->last_reading->value - $this->range_min);
                 }
 
                 return null;

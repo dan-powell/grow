@@ -4,7 +4,7 @@
         <div>
             <section class="columns is-multiline" v-for="device in devices_with_configs" v-bind:key="device">
                 <article class="tile is-child box">
-                    <a class="" :href="route('device.show', device)"></a>
+                    <a class="" :href="route('device.show', device)">Link</a>
                     <p class="">{{ device.name }}</p>
                     <p class="">{{ device.description }}</p>
                     <p class="">{{ device.last_reading?.timestamp_formatted }}</p>
@@ -16,7 +16,7 @@
                             <img :src="figure.icon"/>
                             <h3>{{ figure.name }}</h3>
                             <h4>{{ figure.last_reading?.timestamp_formatted }}</h4>
-                            <h4>{{ figure.last_reading?.value }}</h4>
+                            <h4>{{ figure.last_reading?.value_string }}</h4>
                             <div class="Bar" style="width: 100px; height: 100px; border: 1px solid red; display: flex; align-items: flex-end;">
                                 <div :style="{'height': figure.last_reading?.range_percentage + '%'}" style="background: red; width: 100%"></div>
                             </div>

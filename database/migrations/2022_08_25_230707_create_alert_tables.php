@@ -14,7 +14,7 @@ return new class () extends Migration {
     {
         Schema::table('device', function (Blueprint $table) {
             $table->boolean('reading_alert')->default(false)->comment('Enables alerts.');
-            $table->integer('reading_alert_time')->nullable()->comment('Time since last reading before raising alert.');
+            $table->integer('reading_alert_timeout')->nullable()->comment('Time since last reading before raising alert.');
             $table->datetime('reading_alert_last')->nullable()->comment('Last time alert was raised.');
         });
 

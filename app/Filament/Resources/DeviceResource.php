@@ -12,7 +12,7 @@ class DeviceResource extends Resource
 {
     protected static ?string $model = Device::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-chip';
 
     public static function form(Form $form): Form
     {
@@ -36,13 +36,18 @@ class DeviceResource extends Resource
                 Forms\Components\Section::make('Alert configuration')
                     ->columns(5)
                     ->schema([
-                        Forms\Components\Toggle::make('reading_alert')->label('Enabled')
+                        Forms\Components\Toggle::make('reading_alert')
+                            ->label('Enabled')
+                            ->reactive()
                             ->columnSpan(1)
                             ->inline(false),
-                        Forms\Components\TextInput::make('reading_alert_time')
-                            ->columnSpan(2)
-                            ->disabled(),
+                        Forms\Components\TextInput::make('reading_alert_timeout')
+                            ->label('Alert Timeout')
+                            ->suffix('mins')
+                            ->required(fn (Device $device, \Closure $get) => $get('reading_alert'))
+                            ->columnSpan(2),
                         Forms\Components\DateTimePicker::make('reading_alert_last')
+                            ->label('Last Alert')
                             ->columnSpan(2)
                             ->disabled(),
                     ]),

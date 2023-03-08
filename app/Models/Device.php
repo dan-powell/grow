@@ -17,7 +17,7 @@ class Device extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'reading_alert'];
+    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'reading_alert', 'reading_alert_timeout'];
 
     protected $casts = [
         'alerted' => 'datetime',

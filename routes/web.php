@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\{DashboardController, DeviceController};
-use App\Models\{Device, DeviceConfig};
+use App\Models\{Device, Figure};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,8 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [DashboardController::class, 'show'])->name('dashboard.show')->breadcrumb('Dashboard');
-Route::get('/devices', [DeviceController::class, 'index'])->name('device.index')->breadcrumb('Devices', 'dashboard.show');
-Route::get('/devices/{device:id}', [DeviceController::class, 'show'])->name('device.show')->breadcrumb(fn (Device $device) => $device->name, 'device.index');
-Route::get('/devices/{device:id}/configdata/{config:id}', [DeviceController::class, 'configdata'])
-    ->name('device.config')
-    ->breadcrumb(fn (Device $device, DeviceConfig $config) => $config->name, 'device.show');
+Route::get('/devices/{device:id}', [DeviceController::class, 'show'])->name('device.show')->breadcrumb(fn (Device $device) => $device->name);
+Route::get('/devices/{device:id}/history/{figure:id}', [DeviceController::class, 'history'])
+    ->name('device.figure.history')
+    ->breadcrumb(fn (Device $device, Figure $figure) => $figure->name, 'device.show');

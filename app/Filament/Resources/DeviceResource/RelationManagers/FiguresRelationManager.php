@@ -5,6 +5,7 @@ namespace App\Filament\Resources\DeviceResource\RelationManagers;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\{Form, Table};
 use Filament\{Forms, Tables};
+use App\Models\Figure;
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class FiguresRelationManager extends RelationManager
@@ -50,16 +51,17 @@ class FiguresRelationManager extends RelationManager
                                 Forms\Components\Toggle::make('calibrate')
                                     ->label('Enabled')
                                     ->required()
+                                    ->reactive()
                                     ->inline(false)
                                     ->columnSpan(1),
                                 Forms\Components\Toggle::make('calibrate_percentage')
                                     ->label('Percentage?')
-                                    ->required()
                                     ->inline(false)
                                     ->columnSpan(1),
                                 Forms\Components\TextInput::make('calibrate_value')
                                     ->label('Value')
                                     ->hint('The amount to adjust raw value by')
+                                    ->required(fn (Figure $figure, \Closure $get) => $get('calibrate'))
                                     ->numeric()
                                     ->columnSpan(4),
                             ]),

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\{Device, DeviceConfig};
+use App\Models\{Device, Figure};
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -41,8 +41,8 @@ class RouteServiceProvider extends ServiceProvider
             return Device::where('id', $value)->firstOrFail();
         });
 
-        Route::bind('config', function ($value) {
-            return DeviceConfig::where('id', $value)->firstOrFail();
+        Route::bind('figure', function ($value) {
+            return Figure::where('id', $value)->firstOrFail();
         });
     }
 

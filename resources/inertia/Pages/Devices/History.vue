@@ -25,7 +25,6 @@
         TimeSeriesScale,
         PointElement,
         CategoryScale,
-        Plugin
     } from 'chart.js'
     import 'chartjs-adapter-moment';
     ChartJS.register(
@@ -46,11 +45,11 @@
             VueTableLite,
             Line
         },
-        props: [
-            'device',
-            'readings',
-            'config'
-        ],
+        props: {
+            'device': Object,
+            'readings': Array,
+            'figure': Object
+        },
         computed: {
             chartData: function() {
                 return {
@@ -64,17 +63,15 @@
             },
             dataset1: function() {
                 let array = [];
-                let config = this.config
+                console.log(this.readings);
                 this.readings.forEach(function(reading) {
-                    if(typeof reading.datapoints[config.key] != 'undefined') {
-                        array.push({
-                            x: reading.timestamp,
-                            y: reading.datapoints[config.key].value
-                        })
-                    }
+                    array.push({
+                        x: reading.timestamp,
+                        y: reading.value_calibrated
+                    })
                 })
                 return {
-                    label: this.config.name,
+                    label: this.figure.name,
                     data: array
                 }
             },
