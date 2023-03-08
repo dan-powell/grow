@@ -1,33 +1,38 @@
 <template>
     <LayoutDefault>
-        <h2 class="title s-3">Latest reading</h2>
-        <div class="card">
-            <header class="card-header">
-                <h2 class="card-header-title">
-                    <p><strong>{{ reading_latest.timestamp_formatted }}</strong> Received: {{ reading_latest.created_at_formatted }}</p>
-                </h2>
-                <div class="card-header-title is-justify-content-end"><p><strong> {{ reading_latest.device.name }}</strong></p></div>
-            </header>
-            <div class="card-content">
-                <section class="columns is-multiline is-centered">
-                    <div class="column is-one-quarter tile is-parent has-text-centered" v-for="datapoint in reading_latest.datapoints" v-bind:key="datapoint">
-                        <article class="tile is-child box">
-                            <p class="title">{{ datapoint.value_formatted }}</p>
-                            <p class="subtitle">{{ datapoint.name }}</p>
-                        </article>
-                    </div>
-                </section>
-            </div>
-        </div>
         <h2 class="title">Devices</h2>
-        <section class="columns is-multiline">
-            <a class="column tile is-parent has-text-centered" v-for="device in devices" v-bind:key="device" :href="route('device.show', device)">
+        <div>
+            <section class="columns is-multiline" v-for="device in devices_with_configs" v-bind:key="device">
                 <article class="tile is-child box">
-                    <p class="title">{{ device.name }}</p>
-                    <p class="subtitle">Last reading: {{ device.reading_latest[0]?.timestamp_formatted }}</p>
+                    <a class="" :href="route('device.show', device)"></a>
+                    <p class="">{{ device.name }}</p>
+                    <p class="">{{ device.description }}</p>
+                    <p class="">{{ device.last_reading?.timestamp_formatted }}</p>
+                    <img :src="device.img"/>
                 </article>
-            </a>
-        </section>
+                <aside>
+                    <template v-for="figure in device.figures" v-bind:key="figure">
+                        <div v-if="figure.dashboard && figure.last_reading">
+                            <img :src="figure.icon"/>
+                            <h3>{{ figure.name }}</h3>
+                            <h4>{{ figure.last_reading?.timestamp_formatted }}</h4>
+                            <h4>{{ figure.last_reading?.value }}</h4>
+                            <div class="Bar" style="width: 100px; height: 100px; border: 1px solid red; display: flex; align-items: flex-end;">
+                                <div :style="{'height': figure.last_reading?.range_percentage + '%'}" style="background: red; width: 100%"></div>
+                            </div>
+                        </div>
+                    </template>
+                </aside>
+            </section>
+        </div>
+        <h2 class="title">More Devices</h2>
+            <article class="tile is-child box" v-for="device in devices_without_configs" v-bind:key="device">
+                <a class="" :href="route('device.show', device)"></a>
+                <p class="">{{ device.name }}</p>
+                <p class="">{{ device.description }}</p>
+                <p class="">{{ device.last_reading?.timestamp_formatted }}</p>
+                <img :src="device.img"/>
+            </article>
     </LayoutDefault>
 </template>
 
@@ -45,8 +50,8 @@
             Link,
         },
         props: [
-            'devices',
-            'reading_latest'
+            'devices_with_configs',
+            'devices_without_configs',
         ],
         data() {
             return {}

@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreignUlid('device_id')->constrained('device')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
             $table->string('key');
+            $table->string('icon')->nullable();
             $table->string('summary')->nullable();
             $table->string('chart')->nullable();
             $table->string('location')->nullable();
@@ -35,6 +36,11 @@ return new class extends Migration
             $table->boolean('calibrate')->default(false);
             $table->decimal('calibrate_value', 8, 2)->nullable();
             $table->boolean('calibrate_percentage')->default(false);
+            $table->float('range_min', 16, 4)->nullable();
+            $table->float('range_max', 16, 4)->nullable();
+            $table->string('range_min_color')->nullable();
+            $table->string('range_max_color')->nullable();
+            $table->boolean('dashboard')->default(false);
         });
 
         Schema::create('datum', function (Blueprint $table) {
