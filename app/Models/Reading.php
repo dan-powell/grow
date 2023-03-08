@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\{Device, ReadingData};
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use App\Models\Device;
-use App\Models\ReadingData;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\{Builder, Model};
 
 class Reading extends Model
 {
@@ -21,16 +19,16 @@ class Reading extends Model
     protected $fillable = ['timestamp'];
 
     protected $hidden = [
-        'data'
+        'data',
     ];
 
     protected $casts = [
-        'timestamp' => 'datetime'
+        'timestamp' => 'datetime',
     ];
 
     protected $appends = [
         'timestamp_formatted',
-        'created_at_formatted'
+        'created_at_formatted',
     ];
 
     /**
@@ -56,10 +54,10 @@ class Reading extends Model
         static::retrieved(function (self $reading) {
             // Collect datapoints to add to model as attributes
             $datapoints = [];
-            foreach($reading->data as $datum) {
+            foreach ($reading->data as $datum) {
                 // Find the relevant config
                 $config = $reading->device->configs->keyBy('key')[$datum->key] ?? null;
-                if($config) {
+                if ($config) {
                     // If we have config, then
                     $datapoint = $config;
                     // Calibrate the value
@@ -86,15 +84,16 @@ class Reading extends Model
     protected function calibrateDataValue($config, $value)
     {
         // Does the value require adjustment?
-        if($config->calibrate && $config->calibrate_value) {
-            if($config->calibrate_percentage) {
+        if ($config->calibrate && $config->calibrate_value) {
+            if ($config->calibrate_percentage) {
                 // Adjust by a percentage
-                $value += ($value/100)*$config->calibrate_value;
+                $value += ($value / 100) * $config->calibrate_value;
             } else {
                 // Adjust by a simple value
                 $value += $config->calibrate_value;
             }
         }
+
         return $value;
     }
 

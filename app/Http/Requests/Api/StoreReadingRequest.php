@@ -26,7 +26,7 @@ class StoreReadingRequest extends FormRequest
         return [
             'nickname' => 'required|string',
             'timestamp' => 'required|date',
-            'readings' => 'required|array'
+            'readings' => 'required|array',
         ];
     }
 }

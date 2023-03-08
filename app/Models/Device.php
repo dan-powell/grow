@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Models\Figure;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{HasMany, HasManyThrough};
+use Illuminate\Database\Eloquent\{Builder, Model};
 
 class Device extends Model
 {
@@ -23,7 +20,7 @@ class Device extends Model
     protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'reading_alert'];
 
     protected $casts = [
-        'alerted' => 'datetime'
+        'alerted' => 'datetime',
     ];
 
     protected $appends = [
@@ -46,14 +43,13 @@ class Device extends Model
     protected function lastReading(): Attribute
     {
         $this->loadMissing('data.figure');
-        return Attribute::get(
-            fn () => $this->data?->sortByDesc('created_at')->sortByDesc('timestamp')->first(),
-        );
+
+        return Attribute::get(fn () => $this->data?->sortByDesc('created_at')->sortByDesc('timestamp')->first());
     }
 
     public function scopeDashboard($query)
     {
-        $query->whereHas('figures', function($query) {
+        $query->whereHas('figures', function ($query) {
             $query->where('dashboard', true);
         });
     }
@@ -67,5 +63,4 @@ class Device extends Model
     {
         return $this->through('figures')->has('data');
     }
-
 }

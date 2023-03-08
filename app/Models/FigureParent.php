@@ -2,13 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\{Datum, Device};
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\Device;
-use App\Models\Datum;
+use Illuminate\Database\Eloquent\{Builder, Model};
 
 class FigureParent extends Model
 {
@@ -17,5 +13,4 @@ class FigureParent extends Model
     protected $table = 'figure';
 
     public $timestamps = false;
-
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Device;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
 
 /**
@@ -36,7 +36,7 @@ class DeviceFactory extends Factory
         return $this->state(function (array $attributes) use ($name) {
             return [
                 'name' => $name,
-                'nickname' => Str::slug($name)
+                'nickname' => Str::slug($name),
             ];
         });
     }

@@ -2,14 +2,10 @@
 
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
-use Filament\Tables;
-use App\Models\Figure;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\{Form, Table};
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class FiguresRelationManager extends RelationManager
 {
@@ -73,8 +69,7 @@ class FiguresRelationManager extends RelationManager
                                 Forms\Components\TextInput::make('range_min')
                                     ->label('Min')
                                     ->lt('range_max')
-                                    ->numeric()
-                                    ,
+                                    ->numeric(),
                                 Forms\Components\TextInput::make('range_max')
                                     ->label('Max')
                                     ->gt('range_min')
@@ -83,13 +78,13 @@ class FiguresRelationManager extends RelationManager
                                     ->label('Min Color'),
                                 Forms\Components\ColorPicker::make('range_max_color')
                                     ->label('Max Color'),
-                            ])
-                        ]),
+                            ]),
+                    ]),
                 Forms\Components\Card::make()
                     ->schema([
                         Forms\Components\Toggle::make('dashboard')
                             ->required(),
-                    ])
+                    ]),
             ]);
     }
 
@@ -101,7 +96,6 @@ class FiguresRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('last_reading.created_at')->datetime(),
             ])
             ->filters([
-                //
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),

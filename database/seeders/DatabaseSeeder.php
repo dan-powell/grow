@@ -3,11 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\{Datum, Device, Figure, User};
 use Illuminate\Database\Seeder;
-use App\Models\Device;
-use App\Models\Figure;
-use App\Models\Datum;
-use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
         // Create a test device using fixed values
         Device::factory()
             ->name('Test 1')
@@ -27,15 +23,11 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         Device::factory()
-            ->count(fake()->numberBetween(2,6))
-            ->has(
-                Figure::factory()
-                    ->count(fake()->numberBetween(6,10))
-                    ->has(
-                        Datum::factory()
-                            ->count(fake()->numberBetween(0,10))
-                    , 'data')
-                , 'figures')
+            ->count(fake()->numberBetween(2, 6))
+            ->has(Figure::factory()
+                    ->count(fake()->numberBetween(6, 10))
+                    ->has(Datum::factory()
+                            ->count(fake()->numberBetween(0, 10)), 'data'), 'figures')
             ->create();
 
         User::factory()->create([
@@ -43,6 +35,4 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
     }
-
-
 }

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\{Device, Reading};
 use Inertia\Inertia;
-use App\Models\Device;
-use App\Models\Reading;
 
 class DashboardController extends Controller
 {
@@ -17,7 +15,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'devices_with_configs' => $devices_with_configs,
-            'devices_without_configs' => $devices_without_configs
+            'devices_without_configs' => $devices_without_configs,
         ]);
     }
 }

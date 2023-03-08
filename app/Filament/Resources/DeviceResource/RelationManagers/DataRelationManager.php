@@ -2,14 +2,11 @@
 
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
-use Filament\Tables;
 use App\Models\Datum;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\{Form, Table};
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class DataRelationManager extends RelationManager
 {
@@ -42,7 +39,6 @@ class DataRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('timestamp')->label('Timestamp')->sortable()->datetime(),
             ])
             ->filters([
-                //
             ])
             ->headerActions([
             ])

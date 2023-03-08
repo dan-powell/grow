@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Datum;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Device>
@@ -21,7 +21,7 @@ class DatumFactory extends Factory
     {
         return [
             'value' => fake()->randomFloat(2, 1, 1000),
-            'timestamp' => fake()->dateTime()
+            'timestamp' => fake()->dateTime(),
         ];
     }
 
@@ -33,5 +33,4 @@ class DatumFactory extends Factory
             ];
         });
     }
-
 }

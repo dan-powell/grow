@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Figure;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
 
 /**
@@ -34,9 +34,8 @@ class FigureFactory extends Factory
         return $this->state(function (array $attributes) use ($name) {
             return [
                 'name' => $name,
-                'key' => Str::slug($name)
+                'key' => Str::slug($name),
             ];
         });
     }
-
 }

@@ -2,16 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Resources\UserResource\{Pages, RelationManagers};
 use App\Models\User;
-use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
-use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\{Form, Resource, Table};
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class UserResource extends Resource
 {
@@ -32,8 +27,8 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('email')->label('Email')
                             ->email()
                             ->required()
-                            ->maxLength(255)
-                        ]),
+                            ->maxLength(255),
+                    ]),
                 Forms\Components\Card::make()
                     ->schema([
                         Forms\Components\TextInput::make('password')
@@ -45,7 +40,7 @@ class UserResource extends Resource
                     ->schema([
                         Forms\Components\Toggle::make('receive_alerts')
                             ->required(),
-                    ])
+                    ]),
             ]);
     }
 
@@ -62,7 +57,6 @@ class UserResource extends Resource
                     ->boolean(),
             ])
             ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -75,7 +69,6 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 

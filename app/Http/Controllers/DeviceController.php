@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Device;
 
 class DeviceController extends Controller
 {

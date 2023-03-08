@@ -2,16 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DeviceResource\Pages;
-use App\Filament\Resources\DeviceResource\RelationManagers;
+use App\Filament\Resources\DeviceResource\{Pages, RelationManagers};
 use App\Models\Device;
-use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
-use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\{Form, Resource, Table};
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class DeviceResource extends Resource
 {
@@ -50,7 +45,7 @@ class DeviceResource extends Resource
                         Forms\Components\DateTimePicker::make('reading_alert_last')
                             ->columnSpan(2)
                             ->disabled(),
-                    ])
+                    ]),
             ]);
     }
 
@@ -64,7 +59,6 @@ class DeviceResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -78,7 +72,7 @@ class DeviceResource extends Resource
     {
         return [
             DeviceResource\RelationManagers\FiguresRelationManager::class,
-            DeviceResource\RelationManagers\DataRelationManager::class
+            DeviceResource\RelationManagers\DataRelationManager::class,
         ];
     }
 

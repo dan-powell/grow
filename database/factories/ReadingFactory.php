@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Reading;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Device>
@@ -25,8 +25,7 @@ class ReadingFactory extends Factory
     public function definition()
     {
         return [
-            'timestamp' => fake()->dateTime()
+            'timestamp' => fake()->dateTime(),
         ];
     }
-
 }

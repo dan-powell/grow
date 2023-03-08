@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreReadingRequest;
-use Log;
-
-use App\Models\Device;
-use App\Models\Datum;
+use App\Models\{Datum, Device};
 
 class ReadingController extends Controller
 {
@@ -16,17 +13,18 @@ class ReadingController extends Controller
         $messages = collect([]);
         $device = Device::where('nickname', $request->input('nickname'))->with(['figures'])->first();
 
-        if(!$device) {
+        if (!$device) {
             $messages[] = 'Device not found.';
+
             return response()->json([
                 'status' => 'FAIL',
-                'messages' => $messages
+                'messages' => $messages,
             ], 404);
         }
 
-        foreach($request->input('readings') as $key => $value) {
+        foreach ($request->input('readings') as $key => $value) {
             $figure = $device->figures->where('key', $key)->first();
-            if($figure) {
+            if ($figure) {
                 $datum = new Datum();
                 $datum->value = $value;
                 $datum->timestamp = $request->input('timestamp');
@@ -36,9 +34,10 @@ class ReadingController extends Controller
                 $messages[] = $key . ' figure not found - data ignored.';
             }
         }
+
         return response()->json([
             'status' => 'OK',
-            'messages' => $messages
+            'messages' => $messages,
         ], 200);
     }
 }
