@@ -10,9 +10,10 @@
         </style>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 
-        <link href="{{ mix('/css/bulma.css') }}" rel="stylesheet" />
-        <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
-        <script src="{{ mix('/js/app.js') }}" defer></script>
+        <link href="{{ asset('/css/bulma.css') }}" rel="stylesheet" />
+        {{-- <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
+        <script src="{{ mix('/js/app.js') }}" defer></script> --}}
+        @vite(['resources/css/app.css', 'resources/inertia/app.js'])
         @routes
         @inertiaHead
     </head>
