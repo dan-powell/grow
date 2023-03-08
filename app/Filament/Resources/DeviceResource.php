@@ -60,7 +60,7 @@ class DeviceResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('summary'),
-                Tables\Columns\TextColumn::make('last_reading.timestamp')
+                Tables\Columns\TextColumn::make('last_reading.created_at')
                     ->dateTime(),
             ])
             ->filters([

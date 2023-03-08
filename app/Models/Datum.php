@@ -70,6 +70,13 @@ class Datum extends Model
         );
     }
 
+    protected function createdAtFormatted(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->created_at->toDateTimeString(),
+        );
+    }
+
     protected function timestampFormatted(): Attribute
     {
         return Attribute::get(

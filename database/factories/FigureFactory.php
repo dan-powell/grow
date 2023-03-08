@@ -22,7 +22,10 @@ class FigureFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'key' => fake()->slug()
+            'key' => fake()->slug(),
+            'dashboard' => fake()->boolean(),
+            'range_min' => fake()->randomFloat(2, 1, 250),
+            'range_max' => fake()->randomFloat(2, 750, 1000),
         ];
     }
 

@@ -30,7 +30,7 @@ class Figure extends Model
     {
         $this->loadMissing('data');
         return Attribute::get(
-            fn () => $this->data?->sortByDesc('timestamp')->first(),
+            fn () => $this->data?->sortByDesc('created_at')->sortByDesc('timestamp')->first(),
         );
     }
 

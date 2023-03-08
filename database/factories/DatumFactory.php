@@ -20,7 +20,7 @@ class DatumFactory extends Factory
     public function definition()
     {
         return [
-            'value' => fake()->randomFloat(),
+            'value' => fake()->randomFloat(2, 1, 1000),
             'timestamp' => fake()->dateTime()
         ];
     }

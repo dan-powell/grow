@@ -98,7 +98,7 @@ class FiguresRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('last_reading.timestamp')->datetime(),
+                Tables\Columns\TextColumn::make('last_reading.created_at')->datetime(),
             ])
             ->filters([
                 //

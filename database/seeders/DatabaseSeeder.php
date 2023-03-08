@@ -26,38 +26,17 @@ class DatabaseSeeder extends Seeder
             ->has(Figure::factory()->name('Pressure'), 'figures')
             ->create();
 
-
-        $devices = Device::factory()
-            ->count(rand(1,3))
+        Device::factory()
+            ->count(fake()->numberBetween(2,6))
             ->has(
                 Figure::factory()
+                    ->count(fake()->numberBetween(6,10))
                     ->has(
                         Datum::factory()
-                            ->count(rand(0,20))
+                            ->count(fake()->numberBetween(0,10))
                     , 'data')
                 , 'figures')
             ->create();
-
-        // foreach($devices as $device) {
-
-        //     $readings = Reading::factory()
-        //         ->count(rand(10,100))
-        //         ->make();
-
-        //     $readings = $device->readings()->saveMany($readings);
-
-        //     foreach($readings as $reading) {
-        //         foreach($device->configs as $config) {
-        //             $reading->data()->saveMany(
-        //                 ReadingData::factory()
-        //                     ->key($config->key)
-        //                     ->config($config->id)
-        //                     ->count(1)
-        //                     ->make()
-        //                 );
-        //         }
-        //     }
-        // }
 
         User::factory()->create([
             'name' => 'Test User',
