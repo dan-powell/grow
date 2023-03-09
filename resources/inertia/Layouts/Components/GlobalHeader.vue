@@ -1,8 +1,8 @@
 
 <template>
-    <div>
-        <NavTop/>
-        <div class="container">
+    <div class="GlobalHeader">
+        <div class="GlobalHeader-stamp">Grow Log</div>
+        <div class="GlobalHeader-breadcrumbs">
             <Breadcrumbs/>
         </div>
     </div>

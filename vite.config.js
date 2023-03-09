@@ -7,7 +7,6 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                // 'resources/css/bulma.css',
                 'resources/css/app.css',
                 'resources/inertia/app.js',
             ],
@@ -55,6 +54,6 @@ export default defineConfig({
         },
     },
     css: {
-        devSourcemap: true
+        devSourcemap: true,
     }
 });

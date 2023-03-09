@@ -25,6 +25,7 @@ class Device extends Model
 
     protected $appends = [
         'last_reading',
+        'image_src'
     ];
 
     /**
@@ -45,6 +46,11 @@ class Device extends Model
         $this->loadMissing('data.figure');
 
         return Attribute::get(fn () => $this->data?->sortByDesc('created_at')->sortByDesc('timestamp')->first());
+    }
+
+    protected function imageSrc(): Attribute
+    {
+        return Attribute::get(fn () => asset('storage/' . $this->image));
     }
 
     public function scopeDashboard($query)

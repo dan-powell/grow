@@ -1,10 +1,11 @@
 <template>
     <LayoutDefault>
-        <h2 class="title">Devices</h2>
-        <div>
-            <section class="columns is-multiline" v-for="device in devices_with_configs" v-bind:key="device">
-                <DeviceExcerpt :device="device"/>
-                <aside>
+        <div class="Section is-stack">
+            <section class="DeviceGroup" v-for="device in devices_with_configs" v-bind:key="device">
+                <main class="DeviceGroup-device">
+                    <DeviceExcerpt :device="device"/>
+                </main>
+                <aside class="DeviceGroup-figures">
                     <template v-for="figure in device.figures" v-bind:key="figure">
                         <div v-if="figure.dashboard && figure.last_reading">
                             <FigureExcerpt :figure="figure" :device="device"/>
@@ -13,10 +14,13 @@
                 </aside>
             </section>
         </div>
-        <h2 class="title">More Devices</h2>
-            <div class="tile is-child box" v-for="device in devices_without_configs" v-bind:key="device">
-                <DeviceExcerpt :device="device"/>
+        <div class="Section">
+            <div class="Devices">
+                <template v-for="device in devices_without_configs" v-bind:key="device">
+                    <DeviceExcerpt :device="device"/>
+                </template>
             </div>
+        </div>
     </LayoutDefault>
 </template>
 

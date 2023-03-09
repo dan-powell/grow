@@ -1,12 +1,12 @@
 <template>
-    <article class="tile is-child box">
-        <Link class="column is-one-quarter tile is-parent has-text-centered" :href="route('device.show', device)">
-            Link
-        </Link>
-        <p class="">{{ device.name }}</p>
-        <p class="">{{ device.description }}</p>
-        <p class="">{{ device.last_reading?.timestamp_formatted }}</p>
-        <img :src="device.img"/>
+    <article class="DeviceExcerpt">
+        <Link class="DeviceExcerpt-link" :href="route('device.show', device)"></Link>
+        <div class="DeviceExcerpt-inner">
+            <p class="DeviceExcerpt-name">{{ device.name }}</p>
+            <p class="DeviceExcerpt-summary">{{ device.summary }}</p>
+            <p class="DeviceExcerpt-timestamp">{{ device.last_reading?.timestamp_formatted }}</p>
+        </div>
+        <img class="DeviceExcerpt-img" :src="device.image_src"/>
     </article>
 </template>
 
