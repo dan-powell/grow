@@ -7,6 +7,7 @@ use Filament\Resources\{Form, Table};
 use Filament\{Forms, Tables};
 use App\Models\Figure;
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
+use App\Enum\Icons;
 
 class FiguresRelationManager extends RelationManager
 {
@@ -34,7 +35,9 @@ class FiguresRelationManager extends RelationManager
                             ->maxLength(255),
                         Forms\Components\TextInput::make('chart')
                             ->maxLength(255),
-                        Forms\Components\FileUpload::make('icon'),
+                        Forms\Components\Select::make('icon')
+                            ->options(array_combine(Icons::names(),Icons::names())),
+                        Forms\Components\FileUpload::make('icon_custom'),
                         Forms\Components\TextInput::make('location')
                             ->maxLength(255),
                     ]),
@@ -77,8 +80,10 @@ class FiguresRelationManager extends RelationManager
                                     ->gt('range_min')
                                     ->numeric(),
                                 Forms\Components\ColorPicker::make('range_min_color')
+                                    ->rgb()
                                     ->label('Min Color'),
                                 Forms\Components\ColorPicker::make('range_max_color')
+                                    ->rgb()
                                     ->label('Max Color'),
                             ]),
                     ]),

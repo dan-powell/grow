@@ -23,9 +23,14 @@ class FigureFactory extends Factory
         return [
             'name' => fake()->name(),
             'key' => fake()->slug(),
+            'summary' => fake()->name(),
             'dashboard' => fake()->boolean(),
-            'range_min' => fake()->randomFloat(2, 1, 250),
-            'range_max' => fake()->randomFloat(2, 750, 1000),
+            'prefix' => fake()->randomElement([null, '£', '^']),
+            'suffix' => fake()->randomElement([null, '℃', '%']),
+            'range_min' => fake()->randomFloat(2, 1, 2500),
+            'range_max' => fake()->randomFloat(2, 750, 10000),
+            'range_min_color' => rand(0,1) ? fake()->rgbCssColor() : null,
+            'range_max_color' => rand(0,1) ? fake()->rgbCssColor() : null,
         ];
     }
 

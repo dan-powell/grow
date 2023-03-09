@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
+use App\Enum\Icons;
 
 class Figure extends Model
 {
@@ -17,11 +18,11 @@ class Figure extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'key', 'summary', 'location', 'icon', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color'];
+    protected $fillable = ['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color'];
 
     protected $appends = [
         'last_reading',
-        // 'last_reading_range_value',
+        'icon_src',
     ];
 
     protected function lastReading(): Attribute
@@ -45,6 +46,19 @@ class Figure extends Model
                     return 100 / ($this->range_max - $this->range_min) * ($this->last_reading->value - $this->range_min);
                 }
 
+                return null;
+            });
+    }
+
+    protected function iconSrc(): Attribute
+    {
+        return Attribute::get(function () {
+                if($this->icon_custom) {
+                    return asset('storage/' . $this->icon_custom);
+                }
+                if($this->icon) {
+                    return asset(Icons::fromName($this->icon)());
+                }
                 return null;
             });
     }

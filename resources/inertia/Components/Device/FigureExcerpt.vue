@@ -2,14 +2,20 @@
 <template>
     <div class="FigureExcerpt">
         <Link class="FigureExcerpt-link" :href="route('device.figure.history', [device, figure])"></Link>
-        <img class="FigureExcerpt-icon-img" :src="figure.icon_src"/>
-        <div class="FigureExcerpt-inner">
-            <h3 class="FigureExcerpt-name">{{ figure.name }}</h3>
-            <h4 class="FigureExcerpt-timestamp">{{ figure.last_reading?.timestamp_formatted }}</h4>
-            <h4 class="FigureExcerpt-value">{{ figure.last_reading?.value_string }}</h4>
+        <figure class="FigureExcerpt-icon" v-if="figure.icon_src">
+            <img class="FigureExcerpt-icon-img" :src="figure.icon_src"/>
+        </figure>
+        <div class="FigureExcerpt-title">
+            <h2 class="FigureExcerpt-name">{{ figure.name }}</h2>
+            <p class="FigureExcerpt-summary" v-if="figure.summary">{{ figure.summary }}</p>
         </div>
-        <div class="FigureExcerpt-chart">
-            <div class="FigureExcerpt-chart-bar" :style="{'height': figure.last_reading?.range_percentage + '%'}"></div>
+        <h4 class="FigureExcerpt-time" v-if="figure.last_reading">
+            <span class="fa-solid fa-clock"></span>
+            {{ figure.last_reading.time_formatted }}
+        </h4>
+        <h4 class="FigureExcerpt-value" v-if="figure.last_reading">{{ figure.last_reading.value_string }}</h4>
+        <div class="FigureExcerpt-chart" v-if="figure.last_reading">
+            <div class="FigureExcerpt-chart-bar" :style="{'height': figure.last_reading?.range_percentage + '%', 'background': figure.last_reading?.range_color}"></div>
         </div>
     </div>
 </template>
@@ -19,15 +25,54 @@
         /* background: var(--color-primary); */
         /* color: var(--color-positive); */
         /* border: 2px solid var(--color-primary); */
-        &-inner {
-            padding: 1em;
+        width: 240px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 1.5em;
+        position: relative;
+        padding-top: 1rem;
+        > * {
+            width: 100%;
             text-align: center;
         }
+        &-link {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            &:hover {
+                background: rgba(0,0,0,0.025);
+            }
+        }
+        &-icon {
+            &-img {
+                margin: auto;
+                max-height: 80px;
+                max-width: 120px;
+            }
+        }
+        &-title {
+        }
+        &-name {
+            padding: 0 0.5rem;
+            font-size: 1.2em;
+        }
+        &-summary {
+            margin-top: 0.5em;
+        }
+        &-time {
+            margin-top: auto;
+            padding: 0 0.5rem;
+        }
         &-value {
-            font-size: 3em;
+            padding: 0 0.5rem;
+            font-size: 2.6em;
         }
         &-chart {
-            width: 240px;
+            width: 100%;
             height: 100px;
             min-height: 100px;
             background: var(--color-neutral);

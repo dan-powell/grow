@@ -50,7 +50,7 @@ class Device extends Model
 
     protected function imageSrc(): Attribute
     {
-        return Attribute::get(fn () => asset('storage/' . $this->image));
+        return Attribute::get(fn () => $this->image ? asset('storage/' . $this->image) : null);
     }
 
     public function scopeDashboard($query)

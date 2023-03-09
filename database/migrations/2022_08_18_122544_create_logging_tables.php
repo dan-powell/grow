@@ -20,6 +20,7 @@ return new class () extends Migration {
             $table->string('summary')->nullable();
             $table->string('location')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('figure', function (Blueprint $table) {
@@ -28,6 +29,7 @@ return new class () extends Migration {
             $table->string('name');
             $table->string('key');
             $table->string('icon')->nullable();
+            $table->string('icon_custom')->nullable();
             $table->string('summary')->nullable();
             $table->string('chart')->nullable();
             $table->string('location')->nullable();
@@ -41,11 +43,13 @@ return new class () extends Migration {
             $table->string('range_min_color')->nullable();
             $table->string('range_max_color')->nullable();
             $table->boolean('dashboard')->default(false);
+            $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('datum', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('figure_id')->nullable()->constrained('figure')->setNullOnDelete()->cascadeOnUpdate();
+            $table->foreignUlid('figure_id')->constrained('figure')->cascadeOnDelete()->cascadeOnUpdate();
             $table->float('value', 16, 4);
             $table->datetime('timestamp');
             $table->timestamps();
