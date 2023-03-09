@@ -1,28 +1,81 @@
 {
-  "_FigureExcerpt-c49eaa42.js": {
-    "file": "assets/FigureExcerpt-c49eaa42.js",
+  "FigureExcerpt.css": {
+    "file": "assets/FigureExcerpt-51d28c57.css",
+    "src": "FigureExcerpt.css"
+  },
+  "LayoutDefault.css": {
+    "file": "assets/LayoutDefault-842684f2.css",
+    "src": "LayoutDefault.css"
+  },
+  "_FigureExcerpt-1a5fb87f.js": {
+    "css": [
+      "assets/FigureExcerpt-51d28c57.css"
+    ],
+    "file": "assets/FigureExcerpt-1a5fb87f.js",
     "imports": [
-      "_LayoutDefault-1bb0b9d5.js",
+      "_LayoutDefault-d50c04cc.js",
       "resources/inertia/app.js"
     ]
   },
-  "_LayoutDefault-1bb0b9d5.js": {
-    "file": "assets/LayoutDefault-1bb0b9d5.js",
+  "_LayoutDefault-d50c04cc.js": {
+    "css": [
+      "assets/LayoutDefault-842684f2.css"
+    ],
+    "file": "assets/LayoutDefault-d50c04cc.js",
     "imports": [
       "resources/inertia/app.js"
     ]
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
+    "file": "assets/fa-brands-400-2ef6fdde.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2": {
+    "file": "assets/fa-brands-400-f4617423.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf": {
+    "file": "assets/fa-regular-400-12dea17b.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2": {
+    "file": "assets/fa-regular-400-7ba24c41.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": {
+    "file": "assets/fa-solid-900-67a880b4.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": {
+    "file": "assets/fa-solid-900-e2c5cf54.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf": {
+    "file": "assets/fa-v4compatibility-8d9500e8.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2": {
+    "file": "assets/fa-v4compatibility-7c377405.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-979534f7.css",
+    "file": "assets/app-2927ee08.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
+  "resources/inertia/Pages/Dashboard.css": {
+    "file": "assets/Dashboard-5e29c244.css",
+    "src": "resources/inertia/Pages/Dashboard.css"
+  },
   "resources/inertia/Pages/Dashboard.vue": {
-    "file": "assets/Dashboard-21712e0f.js",
+    "css": [
+      "assets/Dashboard-5e29c244.css"
+    ],
+    "file": "assets/Dashboard-8bd04a74.js",
     "imports": [
-      "_LayoutDefault-1bb0b9d5.js",
+      "_LayoutDefault-d50c04cc.js",
       "resources/inertia/app.js",
-      "_FigureExcerpt-c49eaa42.js"
+      "_FigureExcerpt-1a5fb87f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Dashboard.vue"
@@ -35,20 +88,20 @@
     "css": [
       "assets/History-97ceb16e.css"
     ],
-    "file": "assets/History-3d468585.js",
+    "file": "assets/History-94b05028.js",
     "imports": [
-      "_LayoutDefault-1bb0b9d5.js",
+      "_LayoutDefault-d50c04cc.js",
       "resources/inertia/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Devices/History.vue"
   },
   "resources/inertia/Pages/Devices/Show.vue": {
-    "file": "assets/Show-f153a4bb.js",
+    "file": "assets/Show-2805a0a5.js",
     "imports": [
-      "_LayoutDefault-1bb0b9d5.js",
+      "_LayoutDefault-d50c04cc.js",
       "resources/inertia/app.js",
-      "_FigureExcerpt-c49eaa42.js"
+      "_FigureExcerpt-1a5fb87f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Devices/Show.vue"
@@ -59,7 +112,7 @@
       "resources/inertia/Pages/Devices/History.vue",
       "resources/inertia/Pages/Devices/Show.vue"
     ],
-    "file": "assets/app-884ea1ba.js",
+    "file": "assets/app-bf938caa.js",
     "isEntry": true,
     "src": "resources/inertia/app.js"
   }
