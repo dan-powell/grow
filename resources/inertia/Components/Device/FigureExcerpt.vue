@@ -4,6 +4,7 @@
         <Link class="FigureExcerpt-link" :href="route('device.figure.history', [device, figure])"></Link>
         <figure class="FigureExcerpt-icon" v-if="figure.icon_src">
             <img class="FigureExcerpt-icon-img" :src="figure.icon_src"/>
+            <img class="FigureExcerpt-icon-small" :src="figure.icon_small_src"/>
         </figure>
         <div class="FigureExcerpt-title">
             <h2 class="FigureExcerpt-name">{{ figure.name }}</h2>
@@ -43,15 +44,25 @@
             top: 0;
             width: 100%;
             height: 100%;
+            z-index: 2;
             &:hover {
                 background: rgba(0,0,0,0.025);
             }
         }
         &-icon {
+            position: relative;
             &-img {
                 margin: auto;
-                max-height: 80px;
+                max-height: 96px;
                 max-width: 120px;
+            }
+            &-small {
+                margin: auto;
+                max-height: 32px;
+                max-width: 32px;
+                position: absolute;
+                right: 0;
+                bottom: 0;
             }
         }
         &-title {

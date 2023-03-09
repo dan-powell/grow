@@ -30,6 +30,7 @@ return new class () extends Migration {
             $table->string('key');
             $table->string('icon')->nullable();
             $table->string('icon_custom')->nullable();
+            $table->string('icon_small')->nullable();
             $table->string('summary')->nullable();
             $table->string('chart')->nullable();
             $table->string('location')->nullable();

@@ -18,11 +18,12 @@ class Figure extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color'];
+    protected $fillable = ['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'icon_small', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color'];
 
     protected $appends = [
         'last_reading',
         'icon_src',
+        'icon_small_src',
     ];
 
     protected function lastReading(): Attribute
@@ -58,6 +59,17 @@ class Figure extends Model
             }
             if ($this->icon) {
                 return asset(Icons::fromName($this->icon)());
+            }
+
+            return null;
+        });
+    }
+
+    protected function iconSmallSrc(): Attribute
+    {
+        return Attribute::get(function () {
+            if ($this->icon_small) {
+                return asset(Icons::fromName($this->icon_small)());
             }
 
             return null;

@@ -39,6 +39,8 @@ class FiguresRelationManager extends RelationManager
                         Forms\Components\Select::make('icon')
                             ->options(array_combine(Icons::names(), Icons::names())),
                         Forms\Components\FileUpload::make('icon_custom'),
+                        Forms\Components\Select::make('icon_small')
+                            ->options(array_combine(Icons::names(), Icons::names())),
                         Forms\Components\TextInput::make('location')
                             ->maxLength(255),
                     ]),

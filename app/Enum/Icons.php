@@ -22,6 +22,6 @@ enum Icons: string
     case LETTUCE = 'assets/icons/lettuce.png';
     case PEPPER = 'assets/icons/paprika.png';
     case SPINACH = 'assets/icons/spinach.png';
-    case PAKCHOI = 'assets/icons/bok-choi.png';
+    case PAKCHOI = 'assets/icons/bok-choy.png';
     case CHILLI = 'assets/icons/chili-pepper.png';
 }
