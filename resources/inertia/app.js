@@ -1,4 +1,4 @@
-require('./bootstrap');
+import './bootstrap';
 
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'
@@ -9,7 +9,10 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 import clickOutside from './Directives/ClickOutside';
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => import(`./Pages/${name}.vue`),
+    resolve: async (name) => {
+        const pages = import.meta.glob('./Pages/**/*.vue');
+        return (await pages[`./Pages/${name}.vue`]()).default;
+    },
     setup({ el, app, props, plugin }) {
         return createApp({ render: () => h(app, props) })
             .use(plugin)
@@ -23,3 +26,10 @@ InertiaProgress.init({
     color: '#ff0000',
     showSpinner: true
 })
+
+
+
+// createInertiaApp({
+//     // resolve: name => import(`./Pages/${name}.svelte`),
+//     resolve: name => resolvePageComponent( `./Pages/${name}.svelte`, import.meta.glob("./Pages/**/*.svelte")),
+//     setup({ el, App, props }) { new App({ target: el, props }) }, })

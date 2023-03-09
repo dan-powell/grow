@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\Reading;
-use App\Models\DeviceConfig;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{HasMany, HasManyThrough};
+use Illuminate\Database\Eloquent\{Builder, Model};
 
 class Device extends Model
 {
@@ -18,25 +17,50 @@ class Device extends Model
 
     public $timestamps = true;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'reading_alert', 'reading_alert_timeout'];
 
     protected $casts = [
-        'alerted' => 'datetime'
+        'alerted' => 'datetime',
     ];
 
-    public function reading_latest()
+    protected $appends = [
+        'last_reading',
+    ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
     {
-        return $this->hasMany(Reading::class)->orderBy('timestamp', 'desc')->limit(1);
+        // Always eager-load data
+        // static::addGlobalScope('eager', function (Builder $builder) {
+        //     $builder->with(['figures.data.figure']);
+        // });
     }
 
-    public function readings()
+    protected function lastReading(): Attribute
     {
-        return $this->hasMany(Reading::class)->orderBy('timestamp', 'desc')->limit(144);
+        $this->loadMissing('data.figure');
+
+        return Attribute::get(fn () => $this->data?->sortByDesc('created_at')->sortByDesc('timestamp')->first());
     }
 
-    public function configs()
+    public function scopeDashboard($query)
     {
-        return $this->hasMany(DeviceConfig::class);
+        $query->whereHas('figures', function ($query) {
+            $query->where('dashboard', true);
+        });
     }
 
+    public function figures(): HasMany
+    {
+        return $this->hasMany(Figure::class);
+    }
+
+    public function data(): HasManyThrough
+    {
+        return $this->through('figures')->has('data');
+    }
 }

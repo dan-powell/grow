@@ -2,44 +2,55 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DeviceResource\Pages;
-use App\Filament\Resources\DeviceResource\RelationManagers;
+use App\Filament\Resources\DeviceResource\{Pages, RelationManagers};
 use App\Models\Device;
-use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
-use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\{Form, Resource, Table};
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class DeviceResource extends Resource
 {
     protected static ?string $model = Device::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-chip';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nickname')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('summary')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('location')
-                    ->maxLength(255),
-                Forms\Components\Section::make('Alerts')
+                Forms\Components\Card::make()
                     ->columns(2)
                     ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('nickname')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('summary')
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('location')
+                            ->maxLength(255),
+                        Forms\Components\FileUpload::make('image'),
+                    ]),
+                Forms\Components\Section::make('Alert configuration')
+                    ->columns(5)
+                    ->schema([
                         Forms\Components\Toggle::make('reading_alert')
+                            ->label('Enabled')
+                            ->reactive()
+                            ->columnSpan(1)
                             ->inline(false),
-                        Forms\Components\TextInput::make('reading_alert_time')->suffix('mins'),
-                    ])
+                        Forms\Components\TextInput::make('reading_alert_timeout')
+                            ->label('Alert Timeout')
+                            ->suffix('mins')
+                            ->required(fn (Device $device, \Closure $get) => $get('reading_alert'))
+                            ->columnSpan(2),
+                        Forms\Components\DateTimePicker::make('reading_alert_last')
+                            ->label('Last Alert')
+                            ->columnSpan(2)
+                            ->disabled(),
+                    ]),
             ]);
     }
 
@@ -47,22 +58,12 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('nickname'),
+                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('summary'),
-                Tables\Columns\TextColumn::make('location'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
-                Tables\Columns\IconColumn::make('reading_alert')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('reading_alert_time'),
-                Tables\Columns\TextColumn::make('reading_alert_last')
+                Tables\Columns\TextColumn::make('last_reading.created_at')
                     ->dateTime(),
             ])
             ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -75,8 +76,8 @@ class DeviceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            DeviceResource\RelationManagers\ConfigsRelationManager::class,
-            DeviceResource\RelationManagers\ReadingsRelationManager::class
+            DeviceResource\RelationManagers\FiguresRelationManager::class,
+            DeviceResource\RelationManagers\DataRelationManager::class,
         ];
     }
 

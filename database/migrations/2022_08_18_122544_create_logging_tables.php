@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -17,16 +16,18 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('name');
             $table->string('nickname');
+            $table->string('image')->nullable();
             $table->string('summary')->nullable();
             $table->string('location')->nullable();
             $table->timestamps();
         });
 
-        Schema::create('device_config', function (Blueprint $table) {
+        Schema::create('figure', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('device_id')->constrained('device')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
             $table->string('key');
+            $table->string('icon')->nullable();
             $table->string('summary')->nullable();
             $table->string('chart')->nullable();
             $table->string('location')->nullable();
@@ -35,24 +36,20 @@ return new class extends Migration
             $table->boolean('calibrate')->default(false);
             $table->decimal('calibrate_value', 8, 2)->nullable();
             $table->boolean('calibrate_percentage')->default(false);
+            $table->float('range_min', 16, 4)->nullable();
+            $table->float('range_max', 16, 4)->nullable();
+            $table->string('range_min_color')->nullable();
+            $table->string('range_max_color')->nullable();
+            $table->boolean('dashboard')->default(false);
         });
 
-        Schema::create('reading', function (Blueprint $table) {
+        Schema::create('datum', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('device_id')->constrained('device')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUlid('figure_id')->nullable()->constrained('figure')->setNullOnDelete()->cascadeOnUpdate();
+            $table->float('value', 16, 4);
             $table->datetime('timestamp');
             $table->timestamps();
         });
-
-        Schema::create('reading_data', function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->foreignUlid('reading_id')->constrained('reading')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUlid('config_id')->nullable()->constrained('device_config')->setNullOnDelete()->cascadeOnUpdate();
-            $table->string('key');
-            $table->float('value', 16, 4);
-            $table->timestamps();
-        });
-
     }
 
     /**
@@ -62,9 +59,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reading_data');
-        Schema::dropIfExists('reading');
-        Schema::dropIfExists('device_config');
+        Schema::dropIfExists('datum');
+        Schema::dropIfExists('figure');
         Schema::dropIfExists('device');
     }
 };

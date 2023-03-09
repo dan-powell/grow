@@ -1,4 +1,4 @@
-<template>  
+<template>
     <!-- START NAV -->
     <nav class="navbar is-white">
         <div class="container">
@@ -14,9 +14,6 @@
                 <div class="navbar-start">
                     <a class="navbar-item" :href="route('dashboard.show')">
                         Dashboard
-                    </a>
-                    <a class="navbar-item" :href="route('device.index')">
-                        Devices
                     </a>
                 </div>
             </div>

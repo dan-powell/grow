@@ -2,33 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Device;
 
 class DeviceController extends Controller
 {
-    public function index(Request $request)
-    {
-        return Inertia::render('Devices/Index', [
-            'devices' => Device::with(['configs'])->get(),
-        ]);
-    }
-
     public function show($device, Request $request)
     {
+        $device->loadMissing('figures.data.figure');
         return Inertia::render('Devices/Show', [
             'device' => $device,
-            'configs' => $device->configs,
         ]);
     }
 
-    public function configdata($device, $config, Request $request)
+    public function history($device, $figure, Request $request)
     {
-        return Inertia::render('Devices/Reading', [
+        $figure->loadMissing('data.figure');
+        return Inertia::render('Devices/History', [
             'device' => $device,
-            'readings' => $device->readings,
-            'config' => $config,
+            'figure' => $figure,
+            'readings' => array_values($figure->data->sortByDesc('timestamp')->toArray()),
         ]);
     }
 }

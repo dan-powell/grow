@@ -2,13 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\{Device, Figure};
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
-use App\Models\Device;
-use App\Models\DeviceConfig;
+use Illuminate\Support\Facades\{RateLimiter, Route};
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -43,8 +41,8 @@ class RouteServiceProvider extends ServiceProvider
             return Device::where('id', $value)->firstOrFail();
         });
 
-        Route::bind('config', function ($value) {
-            return DeviceConfig::where('id', $value)->firstOrFail();
+        Route::bind('figure', function ($value) {
+            return Figure::where('id', $value)->firstOrFail();
         });
     }
 

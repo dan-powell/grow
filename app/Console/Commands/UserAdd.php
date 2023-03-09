@@ -3,8 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{DB, Hash};
 
 class UserAdd extends Command
 {
@@ -29,17 +28,16 @@ class UserAdd extends Command
      */
     public function handle()
     {
-        $newuser  = array(
+        $newuser = [
             'email' => $this->argument('username'),
             'name' => $this->argument('username'),
-            'password' => Hash::make($this->argument('password'))
-        );
+            'password' => Hash::make($this->argument('password')),
+        ];
 
         if ($this->option('overwrite') == false) {
             DB::table('users')->insert($newuser);
             $this->line('User "' . $this->argument('username') . '" added');
         } else {
-
             $builder = DB::table('users')->where('id', '=', $this->argument('username'));
 
             if ($builder->get()) {

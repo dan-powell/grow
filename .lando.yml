@@ -19,7 +19,7 @@ services:
       password: grow
       database: grow
   node:
-    type: node:14
+    type: node:16
     build:
       - npm install
     scanner: false
@@ -47,9 +47,15 @@ tooling:
       - "php artisan db:wipe"
       - "php artisan migrate"
       - "php artisan db:seed"
+  csfixer:
+    service: appserver
+    description: Run PHP Coding Standards Fixer.
+    cmd: /app/vendor/bin/php-cs-fixer --config=cs-fixer.php
+    env:
+      PHP_CS_FIXER_IGNORE_ENV: 1
 proxy:
   node:
-    - bs.grow.lndo.site:3000
+    - node.grow.lndo.site:80
   pma:
     - pma.grow.lndo.site
   mailhog:
