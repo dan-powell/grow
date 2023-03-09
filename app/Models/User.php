@@ -17,9 +17,6 @@ class User extends Authenticatable implements FilamentUser
     use HasUlids;
     use Notifiable;
 
-<<<<<<< HEAD
-    protected $guarded = [];
-=======
     /**
      * The attributes that are mass assignable.
      *
@@ -31,7 +28,6 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'receive_alerts',
     ];
->>>>>>> master
 
     /**
      * The attributes that should be hidden for serialization.
@@ -54,6 +50,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessFilament(): bool
     {
-        return $this->admin;
+        return $this->admin ? true : false;
     }
 }
