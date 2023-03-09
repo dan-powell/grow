@@ -2,11 +2,14 @@
 
 namespace App\Enum;
 
-use ArchTech\Enums\{InvokableCases, Names, Options, From};
+use ArchTech\Enums\{From, InvokableCases, Names, Options};
 
 enum Icons: string
 {
-    use InvokableCases, Names, Options, From;
+    use From;
+    use InvokableCases;
+    use Names;
+    use Options;
 
     case TEMPERATURE = 'assets/icons/thermometer.png';
     case PRESSURE = 'assets/icons/atmospheric-pressure.png';

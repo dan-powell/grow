@@ -6,8 +6,8 @@ use App\Filament\Resources\UserResource\{Pages, RelationManagers};
 use App\Models\User;
 use Filament\Resources\{Form, Resource, Table};
 use Filament\{Forms, Tables};
-use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 use Hash;
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class UserResource extends Resource
 {

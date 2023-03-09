@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Enum\Icons;
 use App\Models\{Datum, Device};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
-use App\Enum\Icons;
 
 class Figure extends Model
 {
@@ -35,32 +35,33 @@ class Figure extends Model
     protected function lastReadingRangeValue(): Attribute
     {
         return Attribute::get(function () {
-                if (isset($this->range_min, $this->range_max) && $this->last_reading) {
-                    if ($this->last_reading->value < $this->range_min) {
-                        return 0;
-                    }
-                    if ($this->last_reading->value > $this->range_max) {
-                        return 100;
-                    }
-
-                    return 100 / ($this->range_max - $this->range_min) * ($this->last_reading->value - $this->range_min);
+            if (isset($this->range_min, $this->range_max) && $this->last_reading) {
+                if ($this->last_reading->value < $this->range_min) {
+                    return 0;
+                }
+                if ($this->last_reading->value > $this->range_max) {
+                    return 100;
                 }
 
-                return null;
-            });
+                return 100 / ($this->range_max - $this->range_min) * ($this->last_reading->value - $this->range_min);
+            }
+
+            return null;
+        });
     }
 
     protected function iconSrc(): Attribute
     {
         return Attribute::get(function () {
-                if($this->icon_custom) {
-                    return asset('storage/' . $this->icon_custom);
-                }
-                if($this->icon) {
-                    return asset(Icons::fromName($this->icon)());
-                }
-                return null;
-            });
+            if ($this->icon_custom) {
+                return asset('storage/' . $this->icon_custom);
+            }
+            if ($this->icon) {
+                return asset(Icons::fromName($this->icon)());
+            }
+
+            return null;
+        });
     }
 
     public function device()

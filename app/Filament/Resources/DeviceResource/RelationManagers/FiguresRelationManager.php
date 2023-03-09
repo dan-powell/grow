@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
+use App\Enum\Icons;
+use App\Models\Figure;
+use Closure;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\{Form, Table};
 use Filament\{Forms, Tables};
-use App\Models\Figure;
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
-use App\Enum\Icons;
 
 class FiguresRelationManager extends RelationManager
 {
@@ -36,7 +37,7 @@ class FiguresRelationManager extends RelationManager
                         Forms\Components\TextInput::make('chart')
                             ->maxLength(255),
                         Forms\Components\Select::make('icon')
-                            ->options(array_combine(Icons::names(),Icons::names())),
+                            ->options(array_combine(Icons::names(), Icons::names())),
                         Forms\Components\FileUpload::make('icon_custom'),
                         Forms\Components\TextInput::make('location')
                             ->maxLength(255),
@@ -64,7 +65,7 @@ class FiguresRelationManager extends RelationManager
                                 Forms\Components\TextInput::make('calibrate_value')
                                     ->label('Value')
                                     ->hint('The amount to adjust raw value by')
-                                    ->required(fn (Figure $figure, \Closure $get) => $get('calibrate'))
+                                    ->required(fn (Figure $figure, Closure $get) => $get('calibrate'))
                                     ->numeric()
                                     ->columnSpan(4),
                             ]),

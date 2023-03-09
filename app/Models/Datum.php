@@ -29,7 +29,7 @@ class Datum extends Model
         'value_calibrated',
         'value_string',
         'range_percentage',
-        'range_color'
+        'range_color',
     ];
 
     protected function calibrateDataValue($config, $value)
@@ -51,22 +51,21 @@ class Datum extends Model
     protected function rangePercentage(): Attribute
     {
         return Attribute::get(function () {
-                if (isset($this->figure->range_min, $this->figure->range_max)) {
-                    if ($this->value_calibrated < $this->figure->range_min) {
-                        return 0;
-                    }
-                    if ($this->value_calibrated > $this->figure->range_max) {
-                        return 100;
-                    }
-                    $range = $this->figure->range_max - $this->figure->range_min;
-
-                    return 100 / $this->figure->range_max * ($this->value_calibrated - $this->figure->range_min);
+            if (isset($this->figure->range_min, $this->figure->range_max)) {
+                if ($this->value_calibrated < $this->figure->range_min) {
+                    return 0;
                 }
+                if ($this->value_calibrated > $this->figure->range_max) {
+                    return 100;
+                }
+                $range = $this->figure->range_max - $this->figure->range_min;
 
-                return null;
-            });
+                return 100 / $this->figure->range_max * ($this->value_calibrated - $this->figure->range_min);
+            }
+
+            return null;
+        });
     }
-
 
     /**
      * mix
@@ -77,11 +76,10 @@ class Datum extends Model
      *
      * @return void
      */
-    function mix($color_1 = 'rgb(0, 0, 0)', $color_2 = 'rgb(0, 0, 0)', $weight = 0.5)
+    public function mix($color_1 = 'rgb(0, 0, 0)', $color_2 = 'rgb(0, 0, 0)', $weight = 0.5)
     {
-
-        $color_1 = sscanf($color_1, "rgb(%d, %d, %d)");
-        $color_2 = sscanf($color_2, "rgb(%d, %d, %d)");
+        $color_1 = sscanf($color_1, 'rgb(%d, %d, %d)');
+        $color_2 = sscanf($color_2, 'rgb(%d, %d, %d)');
 
         $f = function ($x) use ($weight) {
             return $weight * $x;
@@ -102,15 +100,16 @@ class Datum extends Model
     {
         return Attribute::get(function (): string {
             $default = 'rgb(144, 163, 90)';
-            if($this->figure->range_min_color && $this->figure->range_max_color) {
+            if ($this->figure->range_min_color && $this->figure->range_max_color) {
                 return $this->mix($this->figure->range_min_color, $this->figure->range_max_color, $this->figure->rangePercentage / 100);
             }
-            if(!$this->figure->range_min_color && $this->figure->range_max_color) {
+            if (!$this->figure->range_min_color && $this->figure->range_max_color) {
                 return $this->mix($default, $this->figure->range_max_color, $this->figure->rangePercentage / 100);
             }
-            if($this->figure->range_min_color && !$this->figure->range_max_color) {
+            if ($this->figure->range_min_color && !$this->figure->range_max_color) {
                 return $this->mix($this->figure->range_min_color, $default, $this->figure->rangePercentage / 100);
             }
+
             return $default;
         });
     }

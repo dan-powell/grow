@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DeviceResource\{Pages, RelationManagers};
 use App\Models\Device;
+use Closure;
 use Filament\Resources\{Form, Resource, Table};
 use Filament\{Forms, Tables};
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
@@ -44,7 +45,7 @@ class DeviceResource extends Resource
                         Forms\Components\TextInput::make('reading_alert_timeout')
                             ->label('Alert Timeout')
                             ->suffix('mins')
-                            ->required(fn (Device $device, \Closure $get) => $get('reading_alert'))
+                            ->required(fn (Device $device, Closure $get) => $get('reading_alert'))
                             ->columnSpan(2),
                         Forms\Components\DateTimePicker::make('reading_alert_last')
                             ->label('Last Alert')

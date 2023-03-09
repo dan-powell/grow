@@ -25,7 +25,7 @@ class Device extends Model
 
     protected $appends = [
         'last_reading',
-        'image_src'
+        'image_src',
     ];
 
     /**
