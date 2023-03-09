@@ -11,6 +11,24 @@
     </nav>
 </template>
 
+<style lang="postcss">
+    .Breadcrumbs {
+        color: var(--color-positive);
+        &-list {
+            display: flex;
+        }
+        &-link {
+            display: block;
+            padding: 1em;
+            color: var(--color-positive);
+            text-decoration: none;
+            &:hover {
+                background: var(--color-primary-alt);
+            }
+        }
+    }
+</style>
+
 <script>
     import { defineComponent } from 'vue'
     import Link from '@/Components/Link.vue'

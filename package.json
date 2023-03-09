@@ -19,7 +19,7 @@
         "popper.js": "^1.12",
         "postcss": "^8.1.14",
         "postcss-import": "^12.0.1",
-        "postcss-mixins": "^9.0.1",
+        "postcss-mixins": "^9.0.4",
         "postcss-nested": "^5.0.6",
         "resolve-url-loader": "^2.3.1",
         "vite": "^4.1.4",

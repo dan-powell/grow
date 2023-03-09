@@ -1,0 +1,21 @@
+.DeviceGroup {
+    display: flex;
+    &-device {
+        flex: 0 0 320px;
+        > * {
+            height: 100%;
+        }
+    }
+    &-figures {
+        flex: 1 1 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+.Devices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+

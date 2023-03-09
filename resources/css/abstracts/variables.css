@@ -1,0 +1,23 @@
+:root {
+    --color-primary: #90A35A;
+    --color-primary-alt: #576C1C;
+
+    --color-positive: #fff;
+
+    --color-neutral: #eee;
+
+
+    --font-size-base: 1em;
+    --line-height-content: 1.4;
+
+    /* Set a ratio for headings and other bits of typography */
+    --headingRatio: 1.2;
+    /* Golden Ratio = 1.618 */
+    /* A More sensible ratio is 1.2 */
+    --h6: var(--font-size-base);
+    --h5: var(--font-size-base);
+    --h4: calc(var(--font-size-base) * var(--headingRatio));
+    --h3: calc(var(--h4) * var(--headingRatio));
+    --h2: calc(var(--h3) * var(--headingRatio));
+    --h1: calc(var(--h2) * var(--headingRatio));
+}

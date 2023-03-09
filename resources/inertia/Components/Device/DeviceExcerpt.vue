@@ -10,6 +10,20 @@
     </article>
 </template>
 
+<style lang="postcss">
+    .DeviceExcerpt {
+        background: var(--color-primary);
+        color: var(--color-positive);
+        border: 2px solid var(--color-primary);
+        &-inner {
+            padding: 1em;
+        }
+        &-img {
+            /* max-width: 320px; */
+        }
+    }
+</style>
+
 <script>
     import { defineComponent } from 'vue'
     import Link from '@/Components/Link.vue'

@@ -8,6 +8,22 @@
     </div>
 </template>
 
+<style lang="postcss">
+    .GlobalHeader {
+        display: flex;
+        background: var(--color-primary);
+        color: var(--color-positive);
+        &-stamp {
+            background: var(--color-primary-alt);
+            padding: 1em;
+            font-weight: bold;
+        }
+        &-breadcrumbs {
+            flex: 1 1 auto;
+        }
+    }
+</style>
+
 <script>
     import { defineComponent } from 'vue'
     import NavTop from '@/Layouts/Components/NavTop.vue'
