@@ -1,20 +1,20 @@
 <template>
     <LayoutDefault>
-        <div class="Section is-stack">
+        <div class="Section is-stack" v-if="devices_with_configs.length">
             <section class="DeviceGroup" v-for="device in devices_with_configs" v-bind:key="device">
                 <main class="DeviceGroup-device">
                     <DeviceExcerpt :device="device"/>
                 </main>
                 <aside class="DeviceGroup-figures">
                     <template v-for="figure in device.figures" v-bind:key="figure">
-                        <div v-if="figure.dashboard && figure.last_reading">
+                        <div v-if="figure.dashboard">
                             <FigureExcerpt :figure="figure" :device="device"/>
                         </div>
                     </template>
                 </aside>
             </section>
         </div>
-        <div class="Section">
+        <div class="Section" v-if="devices_without_configs.length">
             <div class="Devices">
                 <template v-for="device in devices_without_configs" v-bind:key="device">
                     <DeviceExcerpt :device="device"/>

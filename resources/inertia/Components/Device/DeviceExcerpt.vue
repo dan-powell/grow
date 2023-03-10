@@ -1,10 +1,14 @@
 <template>
     <article class="DeviceExcerpt">
         <Link class="DeviceExcerpt-link" :href="route('device.show', device)"></Link>
-        <h2 class="DeviceExcerpt-name">{{ device.name }}</h2>
-        <p class="DeviceExcerpt-summary" v-if="device.summary">{{ device.summary }}</p>
-        <div class="DeviceExcerpt-timestamp" v-if="device.last_reading">
-            <Timestamp :date="device.last_reading.date_formatted" :time="device.last_reading.time_formatted"/>
+        <div class="DeviceExcerpt-details">
+            <div class="FigureExcerpt-title">
+                <h2 class="DeviceExcerpt-name">{{ device.name }}</h2>
+                <p class="DeviceExcerpt-summary" v-if="device.summary">{{ device.summary }}</p>
+            </div>
+            <div class="DeviceExcerpt-timestamp" v-if="device.last_reading">
+                <Timestamp :date="device.last_reading.created_at_date" :time="device.last_reading.created_at_time" :diff="device.last_reading.created_at_diff"/>
+            </div>
         </div>
         <div class="DeviceExcerpt-image" v-if="device.image_src">
             <img class="DeviceExcerpt-image-img" :src="device.image_src"/>
@@ -14,37 +18,84 @@
 
 <style lang="postcss">
     .DeviceExcerpt {
+        --gap: 1rem;
+        --padding: 2rem;
         background: var(--color-primary);
         color: var(--color-positive);
-        border: 2px solid var(--color-primary);
+        /* border: 2px solid var(--color-primary); */
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        gap: 1.5em;
+        gap: var(--gap);
         position: relative;
-        padding-top: 1rem;
-        &-img {
-            /* max-width: 320px; */
-        }
+        /* padding-top: var(--padding); */
         &-link {
             position: absolute;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
+            z-index: 2;
             &:hover {
-                background: rgba(0,0,0,0.025);
+                background: rgba(0,0,0,0.1);
             }
         }
+        &-details {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: var(--gap);
+            position: relative;
+            padding-top: 1rem;
+            padding: var(--padding);
+        }
         &-name {
-            padding: 0 0.5rem;
             font-size: 1.8em;
         }
         &-summary {
             margin-top: 0.5em;
         }
         &-timestamp {
-            padding: 0 0.5rem;
+
+        }
+        &-image {
+            margin-top: auto;
+            &-img {
+                display: block;
+            }
+        }
+        @media screen and (max-width: 1280px) {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            &-details {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+        }
+        &.is-horizontal {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            &-details {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+        }
+        &.is-horizontal & {
+            &-details {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
         }
     }
 </style>

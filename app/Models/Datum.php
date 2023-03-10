@@ -23,13 +23,18 @@ class Datum extends Model
     ];
 
     protected $appends = [
-        'timestamp_formatted',
-        'time_formatted',
-        'date_formatted',
         'value_calibrated',
         'value_string',
         'range_percentage',
         'range_color',
+        'timestamp_formatted',
+        'timestamp_date',
+        'timestamp_time',
+        'timestamp_diff',
+        'created_at_formatted',
+        'created_at_date',
+        'created_at_time',
+        'created_at_diff',
     ];
 
     protected function calibrateDataValue($config, $value)
@@ -58,8 +63,6 @@ class Datum extends Model
                 if ($this->value_calibrated > $this->figure->range_max) {
                     return 100;
                 }
-                $range = $this->figure->range_max - $this->figure->range_min;
-
                 return 100 / $this->figure->range_max * ($this->value_calibrated - $this->figure->range_min);
             }
 
@@ -68,15 +71,14 @@ class Datum extends Model
     }
 
     /**
-     * mix
+     * Take two RGB colour strings and mix them together
      *
-     * @param  mixed $color_1
-     * @param  mixed $color_2
-     * @param  mixed $weight
-     *
-     * @return void
+     * @param string $color_1
+     * @param string $color_2
+     * @param float $weight
+     * @return string
      */
-    public function mix($color_1 = 'rgb(0, 0, 0)', $color_2 = 'rgb(0, 0, 0)', $weight = 0.5)
+    private function mix($color_1 = 'rgb(0, 0, 0)', $color_2 = 'rgb(255, 255, 255)', $weight = 0.5): string
     {
         $color_1 = sscanf($color_1, 'rgb(%d, %d, %d)');
         $color_2 = sscanf($color_2, 'rgb(%d, %d, %d)');
@@ -100,16 +102,17 @@ class Datum extends Model
     {
         return Attribute::get(function (): string {
             $default = 'rgb(144, 163, 90)';
+            $tint = 'rgb(255, 255, 255)';
+            $shade = 'rgb(255, 255, 255)';
             if ($this->figure->range_min_color && $this->figure->range_max_color) {
-                return $this->mix($this->figure->range_min_color, $this->figure->range_max_color, $this->figure->rangePercentage / 100);
+                return $this->mix($this->figure->range_min_color, $this->figure->range_max_color, ($this->range_percentage / 100));
             }
             if (!$this->figure->range_min_color && $this->figure->range_max_color) {
-                return $this->mix($default, $this->figure->range_max_color, $this->figure->rangePercentage / 100);
+                return $this->mix($shade, $this->figure->range_max_color, $this->range_percentage / 100);
             }
             if ($this->figure->range_min_color && !$this->figure->range_max_color) {
-                return $this->mix($this->figure->range_min_color, $default, $this->figure->rangePercentage / 100);
+                return $this->mix($this->figure->range_min_color, $tint, $this->range_percentage / 100);
             }
-
             return $default;
         });
     }
@@ -121,27 +124,47 @@ class Datum extends Model
 
     protected function valueString(): Attribute
     {
-        return Attribute::get(fn () => $this->figure->prefix . $this->value_calibrated . $this->figure->suffix);
+        return Attribute::get(fn (): string => $this->figure->prefix . $this->value_calibrated . $this->figure->suffix);
     }
 
     protected function createdAtFormatted(): Attribute
     {
-        return Attribute::get(fn () => $this->created_at->toDateTimeString());
+        return Attribute::get(fn (): string => $this->created_at->toDateTimeString());
+    }
+
+    protected function createdAtDate(): Attribute
+    {
+        return Attribute::get(fn (): string => $this->created_at->format('jS M o'));
+    }
+
+    protected function createdAtTime(): Attribute
+    {
+        return Attribute::get(fn (): string => $this->created_at->format('h:ia'));
+    }
+
+    protected function createdAtDiff(): Attribute
+    {
+        return Attribute::get(fn (): string => $this->created_at->diffForHumans());
     }
 
     protected function timestampFormatted(): Attribute
     {
-        return Attribute::get(fn () => $this->timestamp->toDateTimeString());
+        return Attribute::get(fn (): string => $this->timestamp->toDateTimeString());
     }
 
-    protected function dateFormatted(): Attribute
+    protected function timestampDate(): Attribute
     {
-        return Attribute::get(fn () => $this->timestamp->format('jS M o'));
+        return Attribute::get(fn (): string => $this->timestamp->format('jS M o'));
     }
 
-    protected function timeFormatted(): Attribute
+    protected function timestampTime(): Attribute
     {
-        return Attribute::get(fn () => $this->timestamp->format('h:ia'));
+        return Attribute::get(fn (): string => $this->timestamp->format('h:ia'));
+    }
+
+    protected function timestampDiff(): Attribute
+    {
+        return Attribute::get(fn (): string => $this->timestamp->diffForHumans());
     }
 
     public function figure()

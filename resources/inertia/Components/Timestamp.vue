@@ -1,15 +1,26 @@
 <template>
     <div class="Timestamp">
-        <p class="Timestamp-time" v-if="time">{{ time }}</p>
-        <p class="Timestamp-date" v-if="date">{{ date }}</p>
+        <i class="Timestamp-icon fa-solid fa-calendar"></i>
+        <div class="Timestamp-details">
+            <p class="Timestamp-time" v-if="time">{{ time }}</p>
+            <p class="Timestamp-date" v-if="date">{{ date }}</p>
+            <p class="Timestamp-date" v-if="diff">({{ diff }})</p>
+        </div>
     </div>
 </template>
 
 <style lang="postcss">
     .Timestamp {
         display: flex;
-        flex-direction: column;
         gap: 0.5em;
+        &-icon {
+            font-size: 1.6em;
+        }
+        &-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
         &-time {
             font-size: 1.6em;
         }
@@ -26,7 +37,8 @@
         },
         props: {
             'date': String,
-            'time': String
+            'time': String,
+            'diff': String
         },
     })
 </script>

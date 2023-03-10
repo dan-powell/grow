@@ -1,11 +1,13 @@
 <template>
     <LayoutDefault>
-        <Line
-            :chart-data="chartData"
-            :chart-options="options"
-            :width=800
-            :height=800
-        />
+        <div class="Section">
+            <Line
+                :chart-data="chartData"
+                :chart-options="options"
+                :width=800
+                :height=400
+            />
+        </div>
     </LayoutDefault>
 </template>
 

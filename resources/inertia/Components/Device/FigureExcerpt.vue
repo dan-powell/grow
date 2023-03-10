@@ -6,15 +6,18 @@
             <img class="FigureExcerpt-icon-img" :src="figure.icon_src"/>
             <img class="FigureExcerpt-icon-small" :src="figure.icon_small_src"/>
         </figure>
-        <div class="FigureExcerpt-title">
-            <h2 class="FigureExcerpt-name">{{ figure.name }}</h2>
-            <p class="FigureExcerpt-summary" v-if="figure.summary">{{ figure.summary }}</p>
+        <div class="FigureExcerpt-details">
+            <div class="FigureExcerpt-title">
+                <h2 class="FigureExcerpt-name">{{ figure.name }}</h2>
+                <p class="FigureExcerpt-summary" v-if="figure.summary">{{ figure.summary }}</p>
+            </div>
+            <h4 class="FigureExcerpt-time" v-if="figure.last_reading">
+                <span class="fa-solid fa-clock"></span>
+                {{ figure.last_reading.timestamp_time }}
+                <small>{{ figure.last_reading.timestamp_date }}</small>
+            </h4>
+            <h4 class="FigureExcerpt-value" v-if="figure.last_reading">{{ figure.last_reading.value_string }}</h4>
         </div>
-        <h4 class="FigureExcerpt-time" v-if="figure.last_reading">
-            <span class="fa-solid fa-clock"></span>
-            {{ figure.last_reading.time_formatted }}
-        </h4>
-        <h4 class="FigureExcerpt-value" v-if="figure.last_reading">{{ figure.last_reading.value_string }}</h4>
         <div class="FigureExcerpt-chart" v-if="figure.last_reading">
             <div class="FigureExcerpt-chart-bar" :style="{'height': figure.last_reading?.range_percentage + '%', 'background': figure.last_reading?.range_color}"></div>
         </div>
@@ -26,7 +29,7 @@
         /* background: var(--color-primary); */
         /* color: var(--color-positive); */
         /* border: 2px solid var(--color-primary); */
-        width: 240px;
+        /* width: 240px; */
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -46,7 +49,7 @@
             height: 100%;
             z-index: 2;
             &:hover {
-                background: rgba(0,0,0,0.025);
+                background: rgba(144, 163, 90, 0.25);
             }
         }
         &-icon {
@@ -65,10 +68,20 @@
                 bottom: 0;
             }
         }
+        &-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 1.5em;
+            position: relative;
+            padding-top: 1rem;
+            flex: 1 1 auto;
+            padding: 0.5rem;
+        }
         &-title {
         }
         &-name {
-            padding: 0 0.5rem;
+            /* padding: 0 0.5rem; */
             font-size: 1.2em;
         }
         &-summary {
@@ -76,10 +89,15 @@
         }
         &-time {
             margin-top: auto;
-            padding: 0 0.5rem;
+            /* padding: 0 0.5rem; */
+            small {
+                margin-top: 0.5em;
+                font-size: 0.8em;
+                display: block;
+            }
         }
         &-value {
-            padding: 0 0.5rem;
+            /* padding: 0 0.5rem; */
             font-size: 2.6em;
         }
         &-chart {
@@ -93,6 +111,9 @@
                 background: var(--color-primary);
                 width: 100%;
             }
+        }
+        @media screen and (max-width: 640px) {
+            width: 100%;
         }
     }
 </style>

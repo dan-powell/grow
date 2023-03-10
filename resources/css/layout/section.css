@@ -2,7 +2,15 @@
     padding: 3rem;
     &.is-stack {
         display: flex;
-        gap: 2rem;
+        gap: 3rem;
         flex-direction: column;
+    }
+    &.is-row {
+        display: flex;
+        gap: 3rem;
+        /* flex-direction: column; */
+    }
+    @media screen and (max-width: 640px) {
+        padding: 1.5rem;
     }
 }
