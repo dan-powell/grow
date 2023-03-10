@@ -83,8 +83,10 @@ class FiguresRelationManager extends RelationManager
                                     ->gt('range_min')
                                     ->numeric(),
                                 Forms\Components\ColorPicker::make('range_min_color')
+                                    ->rgb()
                                     ->label('Min Color'),
                                 Forms\Components\ColorPicker::make('range_max_color')
+                                    ->rgb()
                                     ->label('Max Color'),
                             ]),
                     ]),

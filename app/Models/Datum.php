@@ -105,7 +105,7 @@ class Datum extends Model
             $tint = 'rgb(255, 255, 255)';
             $shade = 'rgb(255, 255, 255)';
             if ($this->figure->range_min_color && $this->figure->range_max_color) {
-                return $this->mix($this->figure->range_min_color, $this->figure->range_max_color, ($this->range_percentage / 100));
+                return $this->mix($this->figure->range_min_color, $this->figure->range_max_color, $this->range_percentage / 100);
             }
             if (!$this->figure->range_min_color && $this->figure->range_max_color) {
                 return $this->mix($shade, $this->figure->range_max_color, $this->range_percentage / 100);
