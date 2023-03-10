@@ -7,21 +7,21 @@
     "file": "assets/LayoutDefault-333a5364.css",
     "src": "LayoutDefault.css"
   },
-  "_FigureExcerpt-7bd800f5.js": {
+  "_FigureExcerpt-7fad031a.js": {
     "css": [
       "assets/FigureExcerpt-56f56e9c.css"
     ],
-    "file": "assets/FigureExcerpt-7bd800f5.js",
+    "file": "assets/FigureExcerpt-7fad031a.js",
     "imports": [
-      "_LayoutDefault-67815abb.js",
+      "_LayoutDefault-cf177b32.js",
       "resources/inertia/app.js"
     ]
   },
-  "_LayoutDefault-67815abb.js": {
+  "_LayoutDefault-cf177b32.js": {
     "css": [
       "assets/LayoutDefault-333a5364.css"
     ],
-    "file": "assets/LayoutDefault-67815abb.js",
+    "file": "assets/LayoutDefault-cf177b32.js",
     "imports": [
       "resources/inertia/app.js"
     ]
@@ -64,11 +64,11 @@
     "src": "resources/css/app.css"
   },
   "resources/inertia/Pages/Dashboard.vue": {
-    "file": "assets/Dashboard-01677526.js",
+    "file": "assets/Dashboard-d965b962.js",
     "imports": [
-      "_LayoutDefault-67815abb.js",
+      "_LayoutDefault-cf177b32.js",
       "resources/inertia/app.js",
-      "_FigureExcerpt-7bd800f5.js"
+      "_FigureExcerpt-7fad031a.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Dashboard.vue"
@@ -81,19 +81,19 @@
     "css": [
       "assets/History-97ceb16e.css"
     ],
-    "file": "assets/History-04275727.js",
+    "file": "assets/History-43e50a9a.js",
     "imports": [
-      "_LayoutDefault-67815abb.js",
+      "_LayoutDefault-cf177b32.js",
       "resources/inertia/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Devices/History.vue"
   },
   "resources/inertia/Pages/Devices/Show.vue": {
-    "file": "assets/Show-052df741.js",
+    "file": "assets/Show-45a1c2ed.js",
     "imports": [
-      "_LayoutDefault-67815abb.js",
-      "_FigureExcerpt-7bd800f5.js",
+      "_LayoutDefault-cf177b32.js",
+      "_FigureExcerpt-7fad031a.js",
       "resources/inertia/app.js"
     ],
     "isDynamicEntry": true,
@@ -105,7 +105,7 @@
       "resources/inertia/Pages/Devices/History.vue",
       "resources/inertia/Pages/Devices/Show.vue"
     ],
-    "file": "assets/app-98e42970.js",
+    "file": "assets/app-18b94056.js",
     "isEntry": true,
     "src": "resources/inertia/app.js"
   }
