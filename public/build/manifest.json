@@ -1,27 +1,27 @@
 {
   "FigureExcerpt.css": {
-    "file": "assets/FigureExcerpt-51d28c57.css",
+    "file": "assets/FigureExcerpt-56f56e9c.css",
     "src": "FigureExcerpt.css"
   },
   "LayoutDefault.css": {
-    "file": "assets/LayoutDefault-842684f2.css",
+    "file": "assets/LayoutDefault-333a5364.css",
     "src": "LayoutDefault.css"
   },
-  "_FigureExcerpt-1a5fb87f.js": {
+  "_FigureExcerpt-7bd800f5.js": {
     "css": [
-      "assets/FigureExcerpt-51d28c57.css"
+      "assets/FigureExcerpt-56f56e9c.css"
     ],
-    "file": "assets/FigureExcerpt-1a5fb87f.js",
+    "file": "assets/FigureExcerpt-7bd800f5.js",
     "imports": [
-      "_LayoutDefault-d50c04cc.js",
+      "_LayoutDefault-67815abb.js",
       "resources/inertia/app.js"
     ]
   },
-  "_LayoutDefault-d50c04cc.js": {
+  "_LayoutDefault-67815abb.js": {
     "css": [
-      "assets/LayoutDefault-842684f2.css"
+      "assets/LayoutDefault-333a5364.css"
     ],
-    "file": "assets/LayoutDefault-d50c04cc.js",
+    "file": "assets/LayoutDefault-67815abb.js",
     "imports": [
       "resources/inertia/app.js"
     ]
@@ -59,23 +59,16 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-2927ee08.css",
+    "file": "assets/app-224d8b12.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
-  "resources/inertia/Pages/Dashboard.css": {
-    "file": "assets/Dashboard-5e29c244.css",
-    "src": "resources/inertia/Pages/Dashboard.css"
-  },
   "resources/inertia/Pages/Dashboard.vue": {
-    "css": [
-      "assets/Dashboard-5e29c244.css"
-    ],
-    "file": "assets/Dashboard-8bd04a74.js",
+    "file": "assets/Dashboard-01677526.js",
     "imports": [
-      "_LayoutDefault-d50c04cc.js",
+      "_LayoutDefault-67815abb.js",
       "resources/inertia/app.js",
-      "_FigureExcerpt-1a5fb87f.js"
+      "_FigureExcerpt-7bd800f5.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Dashboard.vue"
@@ -88,20 +81,20 @@
     "css": [
       "assets/History-97ceb16e.css"
     ],
-    "file": "assets/History-94b05028.js",
+    "file": "assets/History-04275727.js",
     "imports": [
-      "_LayoutDefault-d50c04cc.js",
+      "_LayoutDefault-67815abb.js",
       "resources/inertia/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Devices/History.vue"
   },
   "resources/inertia/Pages/Devices/Show.vue": {
-    "file": "assets/Show-2805a0a5.js",
+    "file": "assets/Show-052df741.js",
     "imports": [
-      "_LayoutDefault-d50c04cc.js",
-      "resources/inertia/app.js",
-      "_FigureExcerpt-1a5fb87f.js"
+      "_LayoutDefault-67815abb.js",
+      "_FigureExcerpt-7bd800f5.js",
+      "resources/inertia/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Devices/Show.vue"
@@ -112,7 +105,7 @@
       "resources/inertia/Pages/Devices/History.vue",
       "resources/inertia/Pages/Devices/Show.vue"
     ],
-    "file": "assets/app-bf938caa.js",
+    "file": "assets/app-98e42970.js",
     "isEntry": true,
     "src": "resources/inertia/app.js"
   }
