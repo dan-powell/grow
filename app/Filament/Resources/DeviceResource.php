@@ -35,20 +35,24 @@ class DeviceResource extends Resource
                         Forms\Components\FileUpload::make('image'),
                     ]),
                 Forms\Components\Section::make('Alert configuration')
-                    ->columns(5)
+                    ->columns(6)
                     ->schema([
-                        Forms\Components\Toggle::make('reading_alert')
+                        Forms\Components\Toggle::make('alert_enabled')
                             ->label('Enabled')
                             ->reactive()
                             ->columnSpan(1)
                             ->inline(false),
-                        Forms\Components\TextInput::make('reading_alert_timeout')
+                        Forms\Components\TextInput::make('alert_timeout')
                             ->label('Alert Timeout')
                             ->suffix('mins')
-                            ->required(fn (Device $device, Closure $get) => $get('reading_alert'))
+                            ->required(fn (Device $device, Closure $get) => $get('alert_enabled'))
                             ->columnSpan(2),
-                        Forms\Components\DateTimePicker::make('reading_alert_last')
-                            ->label('Last Alert')
+                        Forms\Components\Toggle::make('alert_email')
+                            ->label('Send Emails')
+                            ->columnSpan(1)
+                            ->inline(false),
+                        Forms\Components\DateTimePicker::make('alert_activated')
+                            ->label('Alert Triggered')
                             ->columnSpan(2)
                             ->disabled(),
                     ]),

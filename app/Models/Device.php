@@ -17,10 +17,10 @@ class Device extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'reading_alert', 'reading_alert_timeout'];
+    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email'];
 
     protected $casts = [
-        'alerted' => 'datetime',
+        'alert_activated' => 'datetime',
     ];
 
     protected $appends = [

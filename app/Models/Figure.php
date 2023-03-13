@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enum\Icons;
-use App\Models\{Datum, Device};
+use App\Models\{Datum, Device, FigureAlert};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +25,12 @@ class Figure extends Model
         'icon_src',
         'icon_small_src',
     ];
+
+    protected function label(): Attribute
+    {
+        $this->loadMissing('device');
+        return Attribute::get(fn (): string => $this->device->name . ' - ' . $this->name);
+    }
 
     protected function lastReading(): Attribute
     {
@@ -79,6 +85,11 @@ class Figure extends Model
     public function device()
     {
         return $this->belongsTo(Device::class);
+    }
+
+    public function alerts()
+    {
+        return $this->hasMany(FigureAlert::class);
     }
 
     public function data()
