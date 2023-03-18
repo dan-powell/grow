@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enum\Icons;
 use App\Models\Figure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
-use App\Enum\Icons;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Device>

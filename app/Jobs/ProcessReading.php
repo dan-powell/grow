@@ -2,23 +2,25 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use App\Models\{Datum, Device, User};
-use Illuminate\Support\Facades\Notification;
 use App\Notifications\DeviceAlertLateReadingResolved;
-use App\Jobs\ProcessReadingDatum;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\{ShouldBeUnique, ShouldQueue};
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
+use Illuminate\Support\Facades\Notification;
 
 class ProcessReading implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     private string $nickname;
+
     private array $readings;
+
     private string $timestamp;
 
     /**
@@ -40,7 +42,7 @@ class ProcessReading implements ShouldQueue
         $users = User::where('receive_alerts', true)->get();
 
         // Handle device timeout alerts
-        if($device->alert_activated) {
+        if ($device->alert_activated) {
             // Alert timeout was activated, but we just recieved a reading so we should resolve it
             foreach ($users as $user) {
                 Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReadingResolved($device));

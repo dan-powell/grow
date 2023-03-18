@@ -63,6 +63,7 @@ class Datum extends Model
                 if ($this->value_calibrated > $this->figure->range_max) {
                     return 100;
                 }
+
                 return 100 / $this->figure->range_max * ($this->value_calibrated - $this->figure->range_min);
             }
 
@@ -76,6 +77,7 @@ class Datum extends Model
      * @param string $color_1
      * @param string $color_2
      * @param float $weight
+     *
      * @return string
      */
     private function mix($color_1 = 'rgb(0, 0, 0)', $color_2 = 'rgb(255, 255, 255)', $weight = 0.5): string
@@ -113,6 +115,7 @@ class Datum extends Model
             if ($this->figure->range_min_color && !$this->figure->range_max_color) {
                 return $this->mix($this->figure->range_min_color, $tint, $this->range_percentage / 100);
             }
+
             return $default;
         });
     }

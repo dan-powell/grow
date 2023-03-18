@@ -2,17 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FigureAlertResource\Pages;
-use App\Filament\Resources\FigureAlertResource\RelationManagers;
-use App\Models\FigureAlert;
-use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
-use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Models\Figure;
+use App\Filament\Resources\FigureAlertResource\{Pages, RelationManagers};
+use App\Models\{Figure, FigureAlert};
+use Filament\Resources\{Form, Resource, Table};
+use Filament\{Forms, Tables};
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class FigureAlertResource extends Resource
 {
@@ -58,7 +52,6 @@ class FigureAlertResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -71,7 +64,6 @@ class FigureAlertResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 

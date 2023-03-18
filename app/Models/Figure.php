@@ -29,6 +29,7 @@ class Figure extends Model
     protected function label(): Attribute
     {
         $this->loadMissing('device');
+
         return Attribute::get(fn (): string => $this->device->name . ' - ' . $this->name);
     }
 
