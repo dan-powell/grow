@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{HasMany, HasManyThrough};
 use Illuminate\Database\Eloquent\{Builder, Model};
+use App\Models\{Datum};
 
 class Device extends Model
 {
@@ -43,9 +44,9 @@ class Device extends Model
 
     protected function lastReading(): Attribute
     {
-        $this->loadMissing('data.figure');
-
-        return Attribute::get(fn () => $this->data?->sortByDesc('created_at')->sortByDesc('timestamp')->first());
+        return Attribute::get(function () {
+            return $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->first();
+        });
     }
 
     protected function imageSrc(): Attribute
