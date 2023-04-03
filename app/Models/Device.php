@@ -43,9 +43,12 @@ class Device extends Model
 
     protected function lastReading(): Attribute
     {
-        $this->loadMissing('data.figure');
-
-        return Attribute::get(fn () => $this->data?->sortByDesc('created_at')->sortByDesc('timestamp')->first());
+        // $this->loadMissing('data.figure');
+        return Attribute::get(function() {
+            return $this->figures()->whereHas('data', function($query) {
+                $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
+            })->limit(1)->get()->first()?->last_reading;
+        });
     }
 
     protected function imageSrc(): Attribute
@@ -65,8 +68,10 @@ class Device extends Model
         return $this->hasMany(Figure::class);
     }
 
-    public function data(): HasManyThrough
+    public function data()
     {
-        return $this->through('figures')->has('data');
+        return $this->figures()->whereHas('data', function($query) {
+            $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
+        });
     }
 }

@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ->has(Figure::factory()
                     ->count(fake()->numberBetween(6, 10))
                     ->has(Datum::factory()
-                            ->count(fake()->numberBetween(0, 10)), 'data'), 'figures')
+                            ->count(fake()->numberBetween(1000, 2000)), 'data'), 'figures')
             ->create();
 
         User::factory()->create([
