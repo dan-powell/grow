@@ -35,8 +35,8 @@ class Figure extends Model
 
     protected function lastReading(): Attribute
     {
-        return Attribute::get(function () {
-            return $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->first();
+        return Attribute::get(function() {
+            return $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1)->first();
         });
     }
 

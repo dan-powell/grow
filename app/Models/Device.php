@@ -44,8 +44,10 @@ class Device extends Model
 
     protected function lastReading(): Attribute
     {
-        return Attribute::get(function () {
-            return $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->first();
+        return Attribute::get(function() {
+            return $this->figures()->whereHas('data', function($query) {
+                $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
+            })->limit(1)->get()->first()?->last_reading;
         });
     }
 
@@ -66,8 +68,10 @@ class Device extends Model
         return $this->hasMany(Figure::class);
     }
 
-    public function data(): HasManyThrough
+    public function data()
     {
-        return $this->through('figures')->has('data');
+        return $this->figures()->whereHas('data', function($query) {
+            $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
+        });
     }
 }

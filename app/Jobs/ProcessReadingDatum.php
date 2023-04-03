@@ -20,14 +20,14 @@ class ProcessReadingDatum implements ShouldQueue
 
     private Figure $figure;
 
-    private int $value;
+    private float $value;
 
     private string $timestamp;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Figure $figure, int $value, string $timestamp)
+    public function __construct(Figure $figure, float $value, string $timestamp)
     {
         $this->figure = $figure;
         $this->value = $value;
