@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Datum extends Model
 {
@@ -130,6 +131,11 @@ class Datum extends Model
         return Attribute::get(fn (): string => $this->figure->prefix . $this->value_calibrated . $this->figure->suffix);
     }
 
+    protected function createdAt(): Attribute
+    {
+        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone('Europe/London'));
+    }
+
     protected function createdAtFormatted(): Attribute
     {
         return Attribute::get(fn (): string => $this->created_at->toDateTimeString());
@@ -148,6 +154,11 @@ class Datum extends Model
     protected function createdAtDiff(): Attribute
     {
         return Attribute::get(fn (): string => $this->created_at->diffForHumans());
+    }
+
+    protected function timestamp(): Attribute
+    {
+        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone('Europe/London'));
     }
 
     protected function timestampFormatted(): Attribute
