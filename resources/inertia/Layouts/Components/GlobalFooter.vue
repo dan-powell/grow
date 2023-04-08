@@ -13,6 +13,7 @@
             <p><a target="_blank" href="https://icons8.com/icon/12865/carrot">Carrot</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
             <p><a target="_blank" href="https://icons8.com/icon/18102/tomato">Tomato</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
             <p><a target="_blank" href="https://icons8.com/icon/15573/chili-pepper">Chili Pepper</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
+            <p><a target="_blank" href="https://icons8.com/icon/73818/pipelines">Pipelines</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
         </div>
     </footer>
 </template>

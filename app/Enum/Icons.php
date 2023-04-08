@@ -16,6 +16,7 @@ enum Icons: string
     case HUMIDITY = 'assets/icons/hygrometer.png';
     case LIGHT = 'assets/icons/sun.png';
     case MOISTURE = 'assets/icons/moisture.png';
+    case PIPES = 'assets/icons/pipes.png';
     case TOMATO = 'assets/icons/tomato.png';
     case CARROT = 'assets/icons/carrot.png';
     case POTATO = 'assets/icons/potato.png';
