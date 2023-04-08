@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class DataRelationManager extends RelationManager
 {
-    protected static string $relationship = 'data';
+    protected static string $relationship = 'datum';
 
     protected static ?string $recordTitleAttribute = 'timestamp';
 

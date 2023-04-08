@@ -18,7 +18,7 @@ class Device extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email'];
+    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email', 'order'];
 
     protected $casts = [
         'alert_activated' => 'datetime',
@@ -65,7 +65,7 @@ class Device extends Model
 
     public function figures(): HasMany
     {
-        return $this->hasMany(Figure::class);
+        return $this->hasMany(Figure::class)->orderBy('order');
     }
 
     public function data()
@@ -73,5 +73,10 @@ class Device extends Model
         return $this->figures()->whereHas('data', function($query) {
             $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
         });
+    }
+
+    public function datum()
+    {
+        return $this->through('figures')->has('data');
     }
 }

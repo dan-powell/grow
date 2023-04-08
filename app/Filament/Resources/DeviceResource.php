@@ -68,6 +68,7 @@ class DeviceResource extends Resource
                 Tables\Columns\TextColumn::make('last_reading.created_at')
                     ->dateTime(),
             ])
+            ->defaultSort('order')
             ->filters([
             ])
             ->actions([
@@ -94,4 +95,5 @@ class DeviceResource extends Resource
             'edit' => Pages\EditDevice::route('/{record}/edit'),
         ];
     }
+
 }

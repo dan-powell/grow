@@ -16,4 +16,9 @@ class ListDevices extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getTableReorderColumn(): ?string
+    {
+        return 'order';
+    }
 }

@@ -105,6 +105,7 @@ class FiguresRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('last_reading.created_at')->datetime(),
             ])
+            ->defaultSort('order')
             ->filters([
             ])
             ->headerActions([
@@ -117,5 +118,10 @@ class FiguresRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    protected function getTableReorderColumn(): ?string
+    {
+        return 'order';
     }
 }
