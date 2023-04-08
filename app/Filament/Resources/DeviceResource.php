@@ -32,7 +32,12 @@ class DeviceResource extends Resource
                             ->maxLength(255),
                         Forms\Components\TextInput::make('location')
                             ->maxLength(255),
-                        Forms\Components\FileUpload::make('image'),
+                        Forms\Components\FileUpload::make('image')
+                            ->disk('public')
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('4:3')
+                            ->imageResizeTargetWidth('1024')
+                            ->imageResizeTargetHeight('768'),
                     ]),
                 Forms\Components\Section::make('Alert configuration')
                     ->columns(6)
