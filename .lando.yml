@@ -30,6 +30,8 @@ services:
   pma:
     type: phpmyadmin
     hosts: database
+  redis:
+    type: redis:6
 tooling:
   node:
     service: node
