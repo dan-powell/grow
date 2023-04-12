@@ -7,6 +7,7 @@ use App\Notifications\DeviceAlertLateReading;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
+use App\Facades\LogHelper;
 
 class CheckLastReading extends Command
 {
@@ -56,7 +57,7 @@ class CheckLastReading extends Command
                                     Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReading($device, $reading));
                                 }
                             }
-
+                            LogHelper::create('Late Reading', 'Device reading delayed, check batteries.', $device->id);
                             $device->alert_activated = now();
                             $device->save();
                         }

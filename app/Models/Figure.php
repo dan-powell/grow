@@ -24,6 +24,7 @@ class Figure extends Model
         'last_reading',
         'icon_src',
         'icon_small_src',
+        'active_alerts'
     ];
 
     protected function label(): Attribute
@@ -55,6 +56,13 @@ class Figure extends Model
             }
 
             return null;
+        });
+    }
+
+    protected function activeAlerts(): Attribute
+    {
+        return Attribute::get(function () {
+            return $this->alerts()->whereNotNull('activated')->get();
         });
     }
 

@@ -27,6 +27,8 @@ class Device extends Model
     protected $appends = [
         'last_reading',
         'image_src',
+        'alerted',
+        'alert_activated_formatted'
     ];
 
     /**
@@ -54,6 +56,16 @@ class Device extends Model
     protected function imageSrc(): Attribute
     {
         return Attribute::get(fn () => $this->image ? asset('storage/' . $this->image) : null);
+    }
+
+    protected function alerted(): Attribute
+    {
+        return Attribute::get(fn (): bool => $this->alert_enabled && $this->alert_activated);
+    }
+
+    protected function alertActivatedFormatted(): Attribute
+    {
+        return Attribute::get(fn (): ?string => $this->alert_activated?->toDateTimeString());
     }
 
     public function scopeDashboard($query)
