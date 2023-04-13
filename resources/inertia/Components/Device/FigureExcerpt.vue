@@ -2,6 +2,11 @@
 <template>
     <div class="FigureExcerpt">
         <Link class="FigureExcerpt-link" :href="route('device.figure.history', [device, figure])"></Link>
+        <div class="FigureExcerpt-alerts" v-if="figure.active_alerts">
+            <div class="FigureExcerpt-alerts-alert" v-for="alert in figure.active_alerts">
+                <i class="fa-solid fa-triangle-exclamation" :title="alert.activated_formatted"></i>
+            </div>
+        </div>
         <figure class="FigureExcerpt-icon" v-if="figure.icon_src">
             <img class="FigureExcerpt-icon-img" :src="figure.icon_src"/>
             <img class="FigureExcerpt-icon-small" :src="figure.icon_small_src"/>
@@ -50,6 +55,19 @@
             z-index: 2;
             &:hover {
                 background: rgba(144, 163, 90, 0.25);
+            }
+        }
+        &-alerts {
+            display: inline-block;
+            width: auto;
+            position: absolute;
+            right: 0.5em;
+            top: 0.5em;
+            font-size: 2rem;
+            color: orangered;
+            z-index: 10;
+            &-alert {
+
             }
         }
         &-icon {

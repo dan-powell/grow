@@ -5,6 +5,11 @@
         <div class="GlobalHeader-breadcrumbs">
             <Breadcrumbs/>
         </div>
+        <div class="GlobalHeader-controls">
+            <Link class="GlobalHeader-controls-button" :href="route('log.index')">
+                <span class="fa-solid fa-list-check"></span>
+            </Link>
+        </div>
     </div>
 </template>
 
@@ -21,6 +26,17 @@
         &-breadcrumbs {
             flex: 1 1 auto;
         }
+        &-controls {
+            display: flex;
+            &-button {
+                background: var(--color-primary-alt);
+                padding: 1em;
+                font-weight: bold;
+                &:hover {
+                    background: var(--color-primary);
+                }
+            }
+        }
     }
 </style>
 
@@ -28,10 +44,12 @@
     import { defineComponent } from 'vue'
     import NavTop from '@/Layouts/Components/NavTop.vue'
     import Breadcrumbs from '@/Layouts/Components/Breadcrumbs.vue'
+    import Link from '@/Components/Link.vue'
     export default defineComponent({
         components: {
             NavTop,
-            Breadcrumbs
+            Breadcrumbs,
+            Link
         },
     })
 </script>

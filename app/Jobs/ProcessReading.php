@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\{ShouldBeUnique, ShouldQueue};
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
 use Illuminate\Support\Facades\Notification;
+use App\Facades\LogHelper;
 
 class ProcessReading implements ShouldQueue
 {
@@ -47,6 +48,7 @@ class ProcessReading implements ShouldQueue
             foreach ($users as $user) {
                 Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReadingResolved($device));
             }
+            LogHelper::create('Late Reading Resolved', 'Device delayed reading resolved.', $device->id);
             $device->alert_activated = null;
             $device->save();
         }

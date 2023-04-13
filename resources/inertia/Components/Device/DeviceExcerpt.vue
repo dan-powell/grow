@@ -1,6 +1,9 @@
 <template>
     <article class="DeviceExcerpt">
         <Link class="DeviceExcerpt-link" :href="route('device.show', device)"></Link>
+        <div class="DeviceExcerpt-alerted" v-if="device.alerted">
+            <span class="fa-solid fa-warning" :title="device.alert_activated_formatted"></span>
+        </div>
         <div class="DeviceExcerpt-details">
             <div class="FigureExcerpt-title">
                 <h2 class="DeviceExcerpt-name">{{ device.name }}</h2>
@@ -39,6 +42,14 @@
             &:hover {
                 background: rgba(0,0,0,0.1);
             }
+        }
+        &-alerted {
+            position: absolute;
+            right: 0.5em;
+            top: 0.5em;
+            font-size: 2rem;
+            color: yellow;
+            z-index: 10;
         }
         &-details {
             flex: 1 1 auto;

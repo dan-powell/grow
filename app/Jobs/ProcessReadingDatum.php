@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\{ShouldBeUnique, ShouldQueue};
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
 use Illuminate\Support\Facades\Notification;
+use App\Facades\LogHelper;
 
 class ProcessReadingDatum implements ShouldQueue
 {
@@ -60,6 +61,7 @@ class ProcessReadingDatum implements ShouldQueue
                     // Alert activated
                     $alert->activated = now();
                     $alert->save();
+                    LogHelper::create('Alert Triggered', 'The reading value "' . $datum->value . '" has ' . ($alert->lower ? 'subceeded' : 'exceeded') . ' the alert by ' . ($alert->lower ? ($alert->value - $datum->value) : ($datum->value - $alert->value)), $alert->figure->device->id);
                     if ($alert->email) {
                         foreach ($users as $user) {
                             Notification::route('mail', [$user->email])->notify(new FigureAlertTriggered($this->figure, $alert, $datum));
@@ -74,6 +76,7 @@ class ProcessReadingDatum implements ShouldQueue
                     // Alert timeout was activated, but we just recieved a reading so we should resolve it
                     $alert->activated = null;
                     $alert->save();
+                    LogHelper::create('Alert Resolved', 'An alert for ' . $this->figure->name . ' (' . $this->figure->device->name . ') has been resolved', $alert->figure->device->id);
                     if ($alert->email) {
                         foreach ($users as $user) {
                             Notification::route('mail', [$user->email])->notify(new FigureAlertResolved($this->figure, $alert, $datum));
