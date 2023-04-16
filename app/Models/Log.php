@@ -13,4 +13,8 @@ class Log extends Model
     protected $table = 'log';
 
     public $timestamps = true;
+
+    protected $fillable = [
+        'name', 'summary', 'device_id', 'icon'
+    ];
 }
