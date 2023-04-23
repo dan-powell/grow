@@ -48,7 +48,7 @@ class ProcessReading implements ShouldQueue
             foreach ($users as $user) {
                 Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReadingResolved($device));
             }
-            LogHelper::create('Late Reading Resolved', 'Device delayed reading resolved.', $device->id);
+            LogHelper::success()->name('Late Reading Resolved')->summary('Device delayed reading resolved.')->device($device)->save();
             $device->alert_activated = null;
             $device->save();
         }
@@ -60,5 +60,7 @@ class ProcessReading implements ShouldQueue
                 ProcessReadingDatum::dispatch($figure, $value, $this->timestamp);
             }
         }
+
+        LogHelper::info()->name('Reading received')->device($device)->save();
     }
 }

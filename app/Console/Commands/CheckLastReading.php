@@ -57,7 +57,7 @@ class CheckLastReading extends Command
                                     Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReading($device, $reading));
                                 }
                             }
-                            LogHelper::create('Late Reading', 'Device reading delayed, check batteries.', $device->id);
+                            LogHelper::warning()->name('Late Reading')->summary('Device reading delayed, check batteries.')->device($device)->save();
                             $device->alert_activated = now();
                             $device->save();
                         }
