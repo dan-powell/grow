@@ -41,3 +41,7 @@ before('artisan:route:cache', 'artisan:breadcrumbs:cache');
 after('deploy:failed', 'deploy:unlock');
 
 after('deploy:symlink', 'artisan:queue:restart');
+
+// Restart Horizon & purge rogue processes
+before('deploy:publish', 'artisan:horizon:purge');
+before('deploy:publish', 'artisan:horizon:terminate');
