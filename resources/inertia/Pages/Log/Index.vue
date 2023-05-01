@@ -65,7 +65,7 @@
     import LayoutDefault from '@/Layouts/LayoutDefault.vue'
     import LogExcerpt from '@/Components/Log/Excerpt.vue'
     import Pagination from '@/Components/Pagination.vue'
-    import { Link } from '@inertiajs/inertia-vue3';
+    import { Link } from '@inertiajs/vue3'
     export default defineComponent({
         layout: Layout,
         components: {

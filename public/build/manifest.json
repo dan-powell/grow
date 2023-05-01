@@ -11,33 +11,33 @@
     "file": "assets/Timestamp-5920a699.css",
     "src": "Timestamp.css"
   },
-  "_FigureExcerpt-ddb914ad.js": {
+  "_FigureExcerpt-1cd0d215.js": {
     "css": [
       "assets/FigureExcerpt-e80056cb.css"
     ],
-    "file": "assets/FigureExcerpt-ddb914ad.js",
+    "file": "assets/FigureExcerpt-1cd0d215.js",
     "imports": [
-      "_LayoutDefault-827a8cf2.js",
-      "_Timestamp-115b803b.js",
+      "_LayoutDefault-b28fd55f.js",
+      "_Timestamp-9b0db0d2.js",
       "resources/inertia/app.js"
     ]
   },
-  "_LayoutDefault-827a8cf2.js": {
+  "_LayoutDefault-b28fd55f.js": {
     "css": [
       "assets/LayoutDefault-432d381d.css"
     ],
-    "file": "assets/LayoutDefault-827a8cf2.js",
+    "file": "assets/LayoutDefault-b28fd55f.js",
     "imports": [
       "resources/inertia/app.js"
     ]
   },
-  "_Timestamp-115b803b.js": {
+  "_Timestamp-9b0db0d2.js": {
     "css": [
       "assets/Timestamp-5920a699.css"
     ],
-    "file": "assets/Timestamp-115b803b.js",
+    "file": "assets/Timestamp-9b0db0d2.js",
     "imports": [
-      "_LayoutDefault-827a8cf2.js",
+      "_LayoutDefault-b28fd55f.js",
       "resources/inertia/app.js"
     ]
   },
@@ -79,12 +79,12 @@
     "src": "resources/css/app.css"
   },
   "resources/inertia/Pages/Dashboard.vue": {
-    "file": "assets/Dashboard-6e76a722.js",
+    "file": "assets/Dashboard-bcb14454.js",
     "imports": [
-      "_LayoutDefault-827a8cf2.js",
+      "_LayoutDefault-b28fd55f.js",
       "resources/inertia/app.js",
-      "_FigureExcerpt-ddb914ad.js",
-      "_Timestamp-115b803b.js"
+      "_FigureExcerpt-1cd0d215.js",
+      "_Timestamp-9b0db0d2.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Dashboard.vue"
@@ -97,21 +97,21 @@
     "css": [
       "assets/History-97ceb16e.css"
     ],
-    "file": "assets/History-0ae6fb30.js",
+    "file": "assets/History-e7d6bfc9.js",
     "imports": [
-      "_LayoutDefault-827a8cf2.js",
+      "_LayoutDefault-b28fd55f.js",
       "resources/inertia/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Devices/History.vue"
   },
   "resources/inertia/Pages/Devices/Show.vue": {
-    "file": "assets/Show-5b615b03.js",
+    "file": "assets/Show-5baae75c.js",
     "imports": [
-      "_LayoutDefault-827a8cf2.js",
-      "_FigureExcerpt-ddb914ad.js",
+      "_LayoutDefault-b28fd55f.js",
+      "_FigureExcerpt-1cd0d215.js",
       "resources/inertia/app.js",
-      "_Timestamp-115b803b.js"
+      "_Timestamp-9b0db0d2.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/inertia/Pages/Devices/Show.vue"
@@ -124,10 +124,10 @@
     "css": [
       "assets/Index-ea462339.css"
     ],
-    "file": "assets/Index-35f11a66.js",
+    "file": "assets/Index-23218b7a.js",
     "imports": [
-      "_LayoutDefault-827a8cf2.js",
-      "_Timestamp-115b803b.js",
+      "_LayoutDefault-b28fd55f.js",
+      "_Timestamp-9b0db0d2.js",
       "resources/inertia/app.js"
     ],
     "isDynamicEntry": true,
@@ -140,7 +140,7 @@
       "resources/inertia/Pages/Devices/Show.vue",
       "resources/inertia/Pages/Log/Index.vue"
     ],
-    "file": "assets/app-5a358761.js",
+    "file": "assets/app-cc5863f5.js",
     "isEntry": true,
     "src": "resources/inertia/app.js"
   }
