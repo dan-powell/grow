@@ -17,6 +17,23 @@ Below we check those strings and replace with icons.
         </template>
     </div>
 </template>
+
+<style lang="postcss">
+    .Pagination {
+        display: inline-flex;
+        &-item {
+            display: inline-block;
+            padding: 0.5em;
+            border: 1px solid var(--color-primary);
+            &.is-link {
+                &:hover {
+                    background: var(--color-primary);
+                }
+            }
+        }
+    }
+</style>
+
 <script>
     import { defineComponent } from 'vue'
     import { Link } from '@inertiajs/inertia-vue3';
@@ -35,7 +52,7 @@ Below we check those strings and replace with icons.
                 }
                 if(label == 'Next') {
                     return '<span class="fas fa-chevron-right"></span>';
-                } 
+                }
                 return label;
             }
         }
