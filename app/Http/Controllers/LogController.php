@@ -16,7 +16,7 @@ class LogController extends Controller
         if($request->get('severity')) {
             $query->where('severity', $request->get('severity'));
         }
-        $logs = $query->paginate(2);
+        $logs = $query->paginate(16);
 
         return Inertia::render('Log/Index', [
             'logs' => $logs,
