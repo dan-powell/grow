@@ -50,11 +50,7 @@ before('deploy:publish', 'artisan:horizon:terminate');
 task('assets:deploy', function () {
     // Build frontend assets locally and push to server
     // NPM must be built from Lando
-    // runLocally('lando npm install');
-    // runLocally('lando npm run prod');
     $config = [];
-    upload('public/build/', '{{ release_path }}/public/', $config);
-    upload('public/css/', '{{ release_path }}/public/css', $config);
-    upload('public/js/', '{{ release_path }}/public/js', $config);
+    upload('public/build/', '{{ release_path }}/public/build/', $config);
 });
 before('deploy:shared', 'assets:deploy');
