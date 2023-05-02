@@ -25,4 +25,21 @@ enum Icons: string
     case SPINACH = 'assets/icons/spinach.png';
     case PAKCHOI = 'assets/icons/bok-choy.png';
     case CHILLI = 'assets/icons/chili-pepper.png';
+    case SPROUT = 'assets/icons/sprout.png';
+    case BATTERY = 'assets/icons/charging-battery.png';
+    case PUMP = 'assets/icons/pumphouse.png';
+    case SCALLIONS = 'assets/icons/scallions.png';
+    case ONION = 'assets/icons/onion.png';
+    case POTTED = 'assets/icons/potted-plant.png';
+    case PEAS = 'assets/icons/peas.png';
+    case CABBAGE = 'assets/icons/cabbage.png';
+    case BAG = 'assets/icons/vegetables-bag.png';
+    case BROCOLLI = 'assets/icons/broccoli.png';
+    case THYME = 'assets/icons/thyme.png';
+    case WATERMELON = 'assets/icons/whole-watermelon.png';
+    case STRAWBERRY = 'assets/icons/strawberry.png';
+    case CUCUMBER = 'assets/icons/cucumber.png';
+    case MINT = 'assets/icons/mint.png';
+    case BASIL = 'assets/icons/basil.png';
+    case PARSLEY = 'assets/icons/parsley.png';
 }

@@ -14,6 +14,25 @@
             <p><a target="_blank" href="https://icons8.com/icon/18102/tomato">Tomato</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
             <p><a target="_blank" href="https://icons8.com/icon/15573/chili-pepper">Chili Pepper</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
             <p><a target="_blank" href="https://icons8.com/icon/73818/pipelines">Pipelines</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
+
+            <a target="_blank" href="https://icons8.com/icon/19656/sprout">Sprout</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/wrgV9nSA6k5f/parsley">Parsley</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/rwvFV6ECv3E0/mint">Mint</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/WRfXwryHkOg0/basil">Basil</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/20758/cucumber">Cucumber</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/Vh5AxBulOk9L/whole-watermelon">Whole Watermelon</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/xrQnyagkvVrx/thyme">Thyme</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+            <a target="_blank" href="https://icons8.com/icon/18042/broccoli">Broccoli</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/6qkfySkko5F9/vegetables-bag">Vegetables Bag</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/20986/cabbage">Cabbage</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/18956/peas">Peas</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/19190/potted-plant">Potted Plant</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/18072/onion">Onion</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/nlIIz9nKHTpf/scallions">Scallions</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+            <a target="_blank" href="https://icons8.com/icon/Swgs9lrgWMvb/pumphouse">Pumphouse</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+            <a target="_blank" href="https://icons8.com/icon/11843/charging-battery">Charging Battery</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
         </div>
     </footer>
 </template>
