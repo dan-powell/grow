@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\{Pages, RelationManagers};
 use App\Models\User;
-use Filament\Resources\{Form, Resource, Table};
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\{Forms, Tables};
 use Hash;
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};

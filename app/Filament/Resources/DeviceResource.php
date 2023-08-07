@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DeviceResource\{Pages, RelationManagers};
 use App\Models\Device;
 use Closure;
-use Filament\Resources\{Form, Resource, Table};
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\{Forms, Tables};
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
@@ -13,7 +15,7 @@ class DeviceResource extends Resource
 {
     protected static ?string $model = Device::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chip';
+    protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
 
     public static function form(Form $form): Form
     {
@@ -50,7 +52,7 @@ class DeviceResource extends Resource
                         Forms\Components\TextInput::make('alert_timeout')
                             ->label('Alert Timeout')
                             ->suffix('mins')
-                            ->required(fn (Device $device, Closure $get) => $get('alert_enabled'))
+                            ->required(fn (Device $device, \Filament\Forms\Get $get) => $get('alert_enabled'))
                             ->columnSpan(2),
                         Forms\Components\Toggle::make('alert_email')
                             ->label('Send Emails')

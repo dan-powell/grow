@@ -10,7 +10,7 @@ class EditFigureAlert extends EditRecord
 {
     protected static string $resource = FigureAlertResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

@@ -4,7 +4,9 @@ namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Models\Datum;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\{Form, Table};
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\{Forms, Tables};
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
@@ -14,7 +16,7 @@ class DataRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'timestamp';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -27,7 +29,7 @@ class DataRelationManager extends RelationManager
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

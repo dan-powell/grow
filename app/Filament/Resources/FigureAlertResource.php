@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\FigureAlertResource\{Pages, RelationManagers};
 use App\Models\{Figure, FigureAlert};
-use Filament\Resources\{Form, Resource, Table};
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\{Forms, Tables};
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
@@ -14,7 +16,7 @@ class FigureAlertResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Alerts';
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {

@@ -10,7 +10,7 @@ class ListDevices extends ListRecords
 {
     protected static string $resource = DeviceResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
