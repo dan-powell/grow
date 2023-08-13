@@ -1,7 +1,7 @@
 
 <template>
     <div class="FigureExcerpt">
-        <Link class="FigureExcerpt-link" :href="route('device.figure.history', [device, figure])"></Link>
+        <Link class="FigureExcerpt-link" :href="route('device.figure.history', [device ?? figure.device, figure])"></Link>
         <div class="FigureExcerpt-alerts" v-if="figure.active_alerts">
             <div class="FigureExcerpt-alerts-alert" v-for="alert in figure.active_alerts">
                 <i class="fa-solid fa-triangle-exclamation" :title="alert.activated_formatted"></i>

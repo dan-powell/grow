@@ -91,6 +91,11 @@ class Figure extends Model
         });
     }
 
+    public function scopeDashboard($query)
+    {
+        $query->where('dashboard', true);
+    }
+
     public function device()
     {
         return $this->belongsTo(Device::class);

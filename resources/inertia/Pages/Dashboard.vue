@@ -1,5 +1,14 @@
 <template>
     <LayoutDefault>
+        <div class="Section" v-if="figures.length">
+            <div class="DeviceGroup-figures">
+                <template v-for="figure in figures" v-bind:key="figure">
+                    <div v-if="figure.dashboard">
+                        <FigureExcerpt :figure="figure"/>
+                    </div>
+                </template>
+            </div>
+        </div>
         <div class="Section is-stack" v-if="devices_with_configs.length">
             <section class="DeviceGroup" v-for="device in devices_with_configs" v-bind:key="device">
                 <main class="DeviceGroup-device">
@@ -44,6 +53,7 @@
         props: [
             'devices_with_configs',
             'devices_without_configs',
+            'figures'
         ],
         data() {
             return {}
