@@ -43,7 +43,7 @@ class DeviceAlertLateReading extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-            ->subject('Device alert - ' . $this->device->name . ' late reading')
+            ->subject('🪫 Device alert - ' . $this->device->name . ' late reading')
             ->line($this->device->name . ' has not sent any readings since ' . $this->reading->created_at->toDayDateTimeString())
             ->line($this->device->location ?? '')
             ->line('Please check the devices power.');
