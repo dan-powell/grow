@@ -10,7 +10,7 @@ class ManageLogs extends ManageRecords
 {
     protected static string $resource = LogResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

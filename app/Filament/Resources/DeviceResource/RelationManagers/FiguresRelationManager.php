@@ -6,7 +6,9 @@ use App\Enum\Icons;
 use App\Models\Figure;
 use Closure;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\{Form, Table};
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\{Forms, Tables};
 use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
@@ -16,7 +18,7 @@ class FiguresRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -67,7 +69,7 @@ class FiguresRelationManager extends RelationManager
                                 Forms\Components\TextInput::make('calibrate_value')
                                     ->label('Value')
                                     ->hint('The amount to adjust raw value by')
-                                    ->required(fn (Figure $figure, Closure $get) => $get('calibrate'))
+                                    ->required(fn (Figure $figure, \Filament\Forms\Get $get) => $get('calibrate'))
                                     ->numeric()
                                     ->columnSpan(4),
                             ]),
@@ -98,7 +100,7 @@ class FiguresRelationManager extends RelationManager
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

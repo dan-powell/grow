@@ -42,7 +42,7 @@ class DeviceAlertLateReadingResolved extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())
-            ->subject('Device alert resolved - ' . $this->device->name . ' late reading')
+            ->subject('🔋 Device alert resolved - ' . $this->device->name . ' late reading')
             ->line($this->device->name . ' has just recieved a reading and is operational again.')
             ->line($this->device->location ?? '');
     }
