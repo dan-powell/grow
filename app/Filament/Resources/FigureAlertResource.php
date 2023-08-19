@@ -43,8 +43,7 @@ class FigureAlertResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('figure.name'),
-                Tables\Columns\ToggleColumn::make('enabled')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('enabled'),
                 Tables\Columns\TextColumn::make('value'),
                 Tables\Columns\IconColumn::make('lower')
                     ->boolean(),
