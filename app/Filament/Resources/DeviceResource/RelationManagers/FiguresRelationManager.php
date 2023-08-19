@@ -25,7 +25,7 @@ class FiguresRelationManager extends RelationManager
                 Forms\Components\Select::make('device_id')
                     ->relationship('device', 'name')
                     ->required(),
-                Forms\Components\Card::make()
+                Forms\Components\Section::make()
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('name')
@@ -92,7 +92,7 @@ class FiguresRelationManager extends RelationManager
                                     ->label('Max Color'),
                             ]),
                     ]),
-                Forms\Components\Card::make()
+                Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Toggle::make('dashboard')
                             ->required(),

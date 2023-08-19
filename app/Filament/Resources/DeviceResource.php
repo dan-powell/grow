@@ -74,6 +74,7 @@ class DeviceResource extends Resource
                 Tables\Columns\TextColumn::make('summary'),
                 Tables\Columns\TextColumn::make('last_reading.created_at')
                     ->dateTime(),
+                Tables\Columns\ToggleColumn::make('alert_enabled'),
             ])
             ->defaultSort('order')
             ->reorderable('order')
