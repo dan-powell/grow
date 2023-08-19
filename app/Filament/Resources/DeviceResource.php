@@ -76,6 +76,7 @@ class DeviceResource extends Resource
                     ->dateTime(),
             ])
             ->defaultSort('order')
+            ->reorderable('order')
             ->filters([
             ])
             ->actions([

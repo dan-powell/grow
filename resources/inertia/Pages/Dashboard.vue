@@ -4,7 +4,7 @@
             <div class="DeviceGroup-figures">
                 <template v-for="figure in figures" v-bind:key="figure">
                     <div v-if="figure.dashboard">
-                        <FigureExcerpt :figure="figure"/>
+                        <FigureExcerpt :figure="figure" :show_device="true"/>
                     </div>
                 </template>
             </div>

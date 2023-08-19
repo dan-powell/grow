@@ -68,15 +68,15 @@ class Figure extends Model
 
     protected function iconSrc(): Attribute
     {
-        return Attribute::get(function () {
+        return Attribute::get(function (): string {
             if ($this->icon_custom) {
                 return asset('storage/' . $this->icon_custom);
             }
             if ($this->icon) {
                 return asset(Icons::fromName($this->icon)());
             }
-
-            return null;
+            // Default to sprout icon
+            return asset(Icons::fromName('SPROUT')());
         });
     }
 

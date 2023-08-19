@@ -12,7 +12,7 @@ class DashboardController extends Controller
         $devices_with_configs = Device::dashboard()->with(['figures'])->orderBy('order')->get();
         $devices_without_configs = Device::whereNotIn('id', $devices_with_configs->pluck('id'))->orderBy('order')->get();
 
-        $figures = Figure::dashboard()->with(['device'])->get();
+        $figures = Figure::dashboard()->with(['device'])->orderBy('order')->get();
 
         return Inertia::render('Dashboard', [
             'devices_with_configs' => $devices_with_configs,

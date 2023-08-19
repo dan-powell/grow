@@ -105,9 +105,12 @@ class FiguresRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('summary')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('key')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('last_reading.created_at')->datetime(),
             ])
             ->defaultSort('order')
+            ->reorderable('order')
             ->filters([
             ])
             ->headerActions([

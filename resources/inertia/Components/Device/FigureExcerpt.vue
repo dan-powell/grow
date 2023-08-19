@@ -8,18 +8,18 @@
             </div>
         </div>
         <figure class="FigureExcerpt-icon" v-if="figure.icon_src">
-            <img class="FigureExcerpt-icon-img" :src="figure.icon_src"/>
+        <img class="FigureExcerpt-icon-img" :src="figure.icon_src"/>
             <img class="FigureExcerpt-icon-small" :src="figure.icon_small_src"/>
         </figure>
         <div class="FigureExcerpt-details">
             <div class="FigureExcerpt-title">
                 <h2 class="FigureExcerpt-name">{{ figure.name }}</h2>
                 <p class="FigureExcerpt-summary" v-if="figure.summary">{{ figure.summary }}</p>
+                <p class="FigureExcerpt-device" v-if="show_device && figure.device.name"><span class="fa-solid fa-microchip"></span> {{ figure.device.name }}</p>
             </div>
             <h4 class="FigureExcerpt-time" v-if="figure.last_reading">
-                <span class="fa-solid fa-clock"></span>
-                {{ figure.last_reading.timestamp_time }}
-                <small>{{ figure.last_reading.timestamp_date }}</small>
+                <span class="fa-solid fa-clock"></span> {{ figure.last_reading.timestamp_time }}
+                <small><span class="fa-solid fa-calendar"></span> {{ figure.last_reading.timestamp_date }}</small>
             </h4>
             <h4 class="FigureExcerpt-value" v-if="figure.last_reading">{{ figure.last_reading.value_string }}</h4>
         </div>
@@ -97,6 +97,9 @@
             padding: 0.5rem;
         }
         &-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3em;
         }
         &-name {
             /* padding: 0 0.5rem; */
@@ -144,6 +147,7 @@
             Link,
         },
         props: {
+            'show_device': false,
             'figure': Object,
             'device': Object
         },
