@@ -42,7 +42,9 @@ class FigureAlertResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('figure.name'),
+                Tables\Columns\TextColumn::make('figure.name')->label('Figure'),
+                Tables\Columns\TextColumn::make('figure.key')->label('Key'),
+                Tables\Columns\TextColumn::make('figure.device.name')->label('Device'),
                 Tables\Columns\ToggleColumn::make('enabled'),
                 Tables\Columns\TextColumn::make('value'),
                 Tables\Columns\IconColumn::make('lower')

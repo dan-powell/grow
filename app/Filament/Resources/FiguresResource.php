@@ -107,7 +107,7 @@ class FiguresResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('nickname')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('key')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('summary')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('device.name')->sortable()->searchable(),
                 Tables\Columns\ToggleColumn::make('dashboard'),
