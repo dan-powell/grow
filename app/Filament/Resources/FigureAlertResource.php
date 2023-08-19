@@ -34,7 +34,7 @@ class FigureAlertResource extends Resource
                     ->required(),
                 Forms\Components\Toggle::make('email')
                     ->required(),
-                Forms\Components\DateTimePicker::make('active'),
+                Forms\Components\DateTimePicker::make('active')->readonly(),
             ]);
     }
 
@@ -43,7 +43,7 @@ class FigureAlertResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('figure.name'),
-                Tables\Columns\IconColumn::make('enabled')
+                Tables\Columns\ToggleColumn::make('enabled')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('value'),
                 Tables\Columns\IconColumn::make('lower')
