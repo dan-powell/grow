@@ -71,7 +71,7 @@ class DeviceResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('summary'),
+                Tables\Columns\TextColumn::make('summary')->sortable(),
                 Tables\Columns\TextColumn::make('last_reading.created_at')
                     ->dateTime(),
                 Tables\Columns\ToggleColumn::make('alert_enabled'),

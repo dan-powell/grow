@@ -42,10 +42,10 @@ class FigureAlertResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('figure.name')->label('Figure'),
-                Tables\Columns\TextColumn::make('figure.key')->label('Key'),
-                Tables\Columns\TextColumn::make('figure.device.name')->label('Device'),
-                Tables\Columns\ToggleColumn::make('enabled'),
+                Tables\Columns\TextColumn::make('figure.name')->label('Figure')->sortable(),
+                Tables\Columns\TextColumn::make('figure.key')->label('Key')->sortable(),
+                Tables\Columns\TextColumn::make('figure.device.name')->label('Device')->sortable(),
+                Tables\Columns\ToggleColumn::make('enabled')->sortable(),
                 Tables\Columns\TextColumn::make('value'),
                 Tables\Columns\IconColumn::make('lower')
                     ->boolean(),
