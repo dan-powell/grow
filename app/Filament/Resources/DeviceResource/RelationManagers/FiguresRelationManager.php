@@ -22,9 +22,9 @@ class FiguresRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('device_id')
-                    ->relationship('device', 'name')
-                    ->required(),
+                // Forms\Components\Select::make('device_id')
+                //     ->relationship('device', 'name')
+                //     ->required(),
                 Forms\Components\Section::make()
                     ->columns(2)
                     ->schema([

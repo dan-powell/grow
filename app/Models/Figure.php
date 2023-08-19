@@ -31,7 +31,7 @@ class Figure extends Model
     {
         $this->loadMissing('device');
 
-        return Attribute::get(fn (): string => $this->device->name . ' - ' . $this->name);
+        return Attribute::get(fn (): string => $this->device->name . ' - ' . $this->name . ' - ' . $this->key);
     }
 
     protected function lastReading(): Attribute
