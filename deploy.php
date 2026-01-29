@@ -29,6 +29,10 @@ import('hosts.yml');
 
 set('default_stage', 'production');
 
+set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} laravel_php composer');
+
+set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} laravel_php php');
+
 // Tasks
 
 task('artisan:breadcrumbs:cache', function () {
