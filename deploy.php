@@ -19,19 +19,23 @@ add('shared_dirs', [
 ]);
 
 // Writable dirs by web server
-// set('writable_mode', 'chown');
-// set('http_user', 'http_user');
+set('writable_mode', 'chown');
+set('writable_use_sudo', true);
+set('writable_recursive', true);
+set('http_user', 'www-data');
 
-set('writable_dirs', []);
+set('writable_dirs', [
+    '{{release_or_current_path}}/storage'
+]);
 
 // Hosts
 import('hosts.yml');
 
 set('default_stage', 'production');
 
-set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} laravel_php composer');
+set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} laravel_nginx composer');
 
-set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} laravel_php php');
+set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} laravel_nginx php');
 
 // Tasks
 
