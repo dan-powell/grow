@@ -62,3 +62,10 @@ task('assets:deploy', function () {
     upload('public/build/', '{{ release_path }}/public/build/', $config);
 });
 before('deploy:shared', 'assets:deploy');
+
+
+
+task('environment:upload', function () {
+    upload('.env.production', '{{deploy_path}}/shared/.env', ['progress_bar' => false]);
+    run('{{bin/php}} {{release_path}}/artisan config:cache');
+});

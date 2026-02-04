@@ -1,6 +1,9 @@
 all:
   hosts:
     test.ansibletest.autumnrain.co.uk:
+      ansible_host: ansibletest.autumnrain.co.uk
+      ansible_port: 11986
+      ansible_user: webmaster
       id: test
       database:
         enabled: true

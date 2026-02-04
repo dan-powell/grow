@@ -1,10 +1,6 @@
 ---
 - name: Provision containers
   hosts: all
-  vars:
-      ansible_host: ansibletest.autumnrain.co.uk
-      ansible_port: 11986
-      ansible_user: webmaster
   roles:
     - role: autumnrain.docker.laravel
   tasks:
@@ -12,4 +8,3 @@
       ansible.builtin.include_role:
         name: autumnrain.docker.laravel
         tasks_from: base
-      tags: nginx 
