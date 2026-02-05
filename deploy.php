@@ -19,10 +19,12 @@ add('shared_dirs', [
 ]);
 
 // Writable dirs by web server
-set('writable_mode', 'chown');
+set('writable_mode', 'chmod');
+set('writable_chmod_mode', 775);
 set('writable_use_sudo', true);
 set('writable_recursive', true);
 set('http_user', 'www-data');
+set('http_group', 'www-data');
 
 set('writable_dirs', [
     '{{release_or_current_path}}/storage'
@@ -38,6 +40,13 @@ set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_cu
 set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_http php');
 
 // Tasks
+
+task('deploy:fix_storage_permissions', function () {
+    run('sudo chgrp -R www-data {{deploy_path}}/shared/storage');
+    run('sudo chmod -R g+s {{deploy_path}}/shared/storage'); 
+});
+
+after('deploy:writable', 'deploy:fix_storage_permissions');
 
 task('artisan:breadcrumbs:cache', function () {
     run('{{bin/php}} {{release_path}}/artisan breadcrumbs:cache');
@@ -65,7 +74,10 @@ before('deploy:shared', 'assets:deploy');
 
 
 
-task('environment:upload', function () {
+task('env:pull', function () {
+    download('{{deploy_path}}/shared/.env', '.env.production', ['progress_bar' => false]);
+});
+
+task('env:push', function () {
     upload('.env.production', '{{deploy_path}}/shared/.env', ['progress_bar' => false]);
-    run('{{bin/php}} {{release_path}}/artisan config:cache');
 });

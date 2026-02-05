@@ -20,3 +20,6 @@ public/build
 public/css
 public/js
 credentials
+**/caddy
+frankenphp
+frankenphp-worker.php
