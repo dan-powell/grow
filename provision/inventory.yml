@@ -1,14 +1,13 @@
 all:
   hosts:
     test.ansibletest.autumnrain.co.uk:
+      id: test # Must be unique across all sites
       ansible_host: ansibletest.autumnrain.co.uk
       ansible_port: 11986
       ansible_user: webmaster
-      id: test
       database:
-        enabled: true
+        host: database
       redis:
-        enabled: true
         version: "7"
       php:
         version: "8.2"

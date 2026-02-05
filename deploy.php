@@ -33,9 +33,9 @@ import('hosts.yml');
 
 set('default_stage', 'production');
 
-set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_nginx composer');
+set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_http composer');
 
-set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_nginx php');
+set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_http php');
 
 // Tasks
 

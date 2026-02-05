@@ -4,7 +4,11 @@
   roles:
     - role: autumnrain.docker.laravel
   tasks:
-    - name: Run base site provision tasks
+    - name: Run base provision tasks
       ansible.builtin.include_role:
         name: autumnrain.docker.laravel
         tasks_from: base
+    - name: Run Database provision tasks
+      ansible.builtin.include_role:
+        name: autumnrain.docker.laravel
+        tasks_from: database
