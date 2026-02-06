@@ -2,6 +2,8 @@
 
 namespace Deployer;
 
+use Symfony\Component\Console\Input\InputOption; 
+
 require 'recipe/laravel.php';
 
 // Project name
@@ -35,9 +37,43 @@ import('hosts.yml');
 
 set('default_stage', 'production');
 
-set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_http composer');
+set('docker_compose_path', '/home/webmaster/docker/compose/sites/test');
 
-set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_http php');
+function getDockerRunCommand($cmd) {
+    // Ensure this path matches where Ansible puts the file
+    $composeFile = get('docker_compose_path') . '/docker-compose.yml';
+    
+    return sprintf(
+        'sudo /usr/bin/docker compose -f %s run --rm -u $(id -u):$(id -g) -w {{release_or_current_path}} deploy %s',
+        $composeFile,
+        $cmd
+    );
+}
+
+option('fresh', null, InputOption::VALUE_NONE, 'Fresh deployment: pushes local .env to remote');
+
+task('deploy:check_fresh', function () {
+    if (input()->getOption('fresh')) {
+        writeln('<info>Fresh flag detected: Pushing .env file...</info>');
+        invoke('env:push');
+    }
+});
+
+// 3. Inject it into the flow
+// We run this after 'deploy:shared' to ensure the shared/ directory exists
+after('deploy:shared', 'deploy:check_fresh');
+
+// set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_schedulr composer');
+// set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_schedulr php');
+
+// Set the binaries to use the helper function
+set('bin/composer', function () {
+    return getDockerRunCommand('composer');
+});
+
+set('bin/php', function () {
+    return getDockerRunCommand('php');
+});
 
 // Tasks
 
@@ -52,6 +88,11 @@ task('artisan:breadcrumbs:cache', function () {
     run('{{bin/php}} {{release_path}}/artisan breadcrumbs:cache');
 });
 
+task('artisan:octane:install', function () {
+    run('{{bin/php}} {{release_path}}/artisan octane:install');
+});
+
+
 before('artisan:route:cache', 'artisan:breadcrumbs:cache');
 
 // [Optional] if deploy fails automatically unlock.
@@ -62,6 +103,7 @@ after('deploy:symlink', 'artisan:queue:restart');
 // Restart Horizon & purge rogue processes
 before('deploy:publish', 'artisan:horizon:purge');
 before('deploy:publish', 'artisan:horizon:terminate');
+before('deploy:publish', 'artisan:octane:install');
 
 // Handle frontend assets
 task('assets:deploy', function () {
