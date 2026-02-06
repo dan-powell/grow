@@ -37,7 +37,7 @@ import('hosts.yml');
 
 set('default_stage', 'production');
 
-set('docker_compose_path', '/home/webmaster/docker/compose/sites/test');
+set('docker_compose_path', '/home/webmaster/docker/sites/test');
 
 function getDockerRunCommand($cmd) {
     // Ensure this path matches where Ansible puts the file
