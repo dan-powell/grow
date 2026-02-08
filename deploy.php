@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-use Symfony\Component\Console\Input\InputOption; 
+use Symfony\Component\Console\Input\InputOption;
 
 require 'recipe/laravel.php';
 
@@ -42,7 +42,7 @@ set('docker_compose_path', '/home/webmaster/docker/sites/test');
 function getDockerRunCommand($cmd) {
     // Ensure this path matches where Ansible puts the file
     $composeFile = get('docker_compose_path') . '/docker-compose.yml';
-    
+
     return sprintf(
         'sudo /usr/bin/docker compose -f %s run --rm -u $(id -u):$(id -g) -w {{release_or_current_path}} deploy %s',
         $composeFile,
@@ -79,7 +79,7 @@ set('bin/php', function () {
 
 task('deploy:fix_storage_permissions', function () {
     run('sudo chgrp -R www-data {{deploy_path}}/shared/storage');
-    run('sudo chmod -R g+s {{deploy_path}}/shared/storage'); 
+    run('sudo chmod -R g+s {{deploy_path}}/shared/storage');
 });
 
 after('deploy:writable', 'deploy:fix_storage_permissions');
@@ -91,7 +91,6 @@ task('artisan:breadcrumbs:cache', function () {
 task('artisan:octane:install', function () {
     run('{{bin/php}} {{release_path}}/artisan octane:install');
 });
-
 
 before('artisan:route:cache', 'artisan:breadcrumbs:cache');
 
@@ -114,12 +113,15 @@ task('assets:deploy', function () {
 });
 before('deploy:shared', 'assets:deploy');
 
-
-
 task('env:pull', function () {
     download('{{deploy_path}}/shared/.env', '.env.production', ['progress_bar' => false]);
 });
 
 task('env:push', function () {
     upload('.env.production', '{{deploy_path}}/shared/.env', ['progress_bar' => false]);
+});
+
+// Add a standalone task to run composer install with dev dependencies
+task('composer:install:dev', function () {
+    run('{{bin/composer}} install --prefer-dist --optimize-autoloader');
 });
