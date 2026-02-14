@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 require 'recipe/laravel.php';
 
 // Project name
-set('application', 'grow.dan-powell.uk');
+set('application', 'grow.autumnrain.co.uk');
 
 // Project repository
 set('repository', 'git@github.com:dan-powell/grow.git');
@@ -17,8 +17,7 @@ set('git_tty', true);
 
 // Shared files/dirs between deploys
 add('shared_files', []);
-add('shared_dirs', [
-]);
+add('shared_dirs', []);
 
 // Writable dirs by web server
 set('writable_mode', 'chmod');
@@ -37,12 +36,8 @@ import('hosts.yml');
 
 set('default_stage', 'production');
 
-set('docker_compose_path', '/home/webmaster/docker/sites/test');
-
 function getDockerRunCommand($cmd) {
-    // Ensure this path matches where Ansible puts the file
-    $composeFile = get('docker_compose_path') . '/docker-compose.yml';
-
+    $composeFile = get('docker_path') . '/docker-compose.yml';
     return sprintf(
         'sudo /usr/bin/docker compose -f %s run --rm -u $(id -u):$(id -g) -w {{release_or_current_path}} deploy %s',
         $composeFile,
@@ -59,12 +54,7 @@ task('deploy:check_fresh', function () {
     }
 });
 
-// 3. Inject it into the flow
-// We run this after 'deploy:shared' to ensure the shared/ directory exists
 after('deploy:shared', 'deploy:check_fresh');
-
-// set('bin/composer', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_schedulr composer');
-// set('bin/php', 'sudo docker exec -u $(id -u):$(id -g) -i -w {{release_or_current_path}} test_schedulr php');
 
 // Set the binaries to use the helper function
 set('bin/composer', function () {
@@ -92,6 +82,11 @@ task('artisan:octane:install', function () {
     run('{{bin/php}} {{release_path}}/artisan octane:install');
 });
 
+task('artisan:octane:reload', function () {
+    run('{{bin/php}} {{release_path}}/artisan octane:reload');
+});
+
+
 before('artisan:route:cache', 'artisan:breadcrumbs:cache');
 
 // [Optional] if deploy fails automatically unlock.
@@ -103,6 +98,8 @@ after('deploy:symlink', 'artisan:queue:restart');
 before('deploy:publish', 'artisan:horizon:purge');
 before('deploy:publish', 'artisan:horizon:terminate');
 before('deploy:publish', 'artisan:octane:install');
+before('deploy:publish', 'artisan:octane:reload');
+
 
 // Handle frontend assets
 task('assets:deploy', function () {
