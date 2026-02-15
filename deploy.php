@@ -118,6 +118,17 @@ task('env:push', function () {
     upload('.env.production', '{{deploy_path}}/shared/.env', ['progress_bar' => false]);
 });
 
+// Task to restart the http container
+task('docker:restart:http', function () {
+    $composeFile = get('docker_path') . '/docker-compose.yml';
+    
+    // We use 'restart' on the service name defined in docker-compose
+    run("sudo /usr/bin/docker compose -f $composeFile restart http");
+    run("sudo /usr/bin/docker compose -f $composeFile restart scheduler");
+    run("sudo /usr/bin/docker compose -f $composeFile restart horizon");
+});
+after('deploy:symlink', 'docker:restart:http');
+
 // Add a standalone task to run composer install with dev dependencies
 task('composer:install:dev', function () {
     run('{{bin/composer}} install --prefer-dist --optimize-autoloader');

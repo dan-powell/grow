@@ -1,6 +1,7 @@
 ---
 - name: Provision containers
   hosts: all
+  vars_files: config.yml
   roles:
     - role: autumnrain.docker.common
     - role: autumnrain.docker.laravel
