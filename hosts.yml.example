@@ -3,10 +3,12 @@ staging:
   user: username
   stage: staging
   branch: production
-  deploy_path: ~/www/staging
+  deploy_path: /home/user/sites/grow-staging
+  docker_path: /home/admin/docker/sites/grow-staging
 production:
   hostname: example.com
   user: username
   stage: production
   branch: production
-  deploy_path: ~/www/production
+  deploy_path: /home/user/sites/grow
+  docker_path: /home/admin/docker/sites/grow
