@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Enum\Icons;
-use App\Models\{Datum, Device, FigureAlert};
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Model;
 
 class Figure extends Model
 {
@@ -24,19 +23,19 @@ class Figure extends Model
         'last_reading',
         'icon_src',
         'icon_small_src',
-        'active_alerts'
+        'active_alerts',
     ];
 
     protected function label(): Attribute
     {
         $this->loadMissing('device');
 
-        return Attribute::get(fn (): string => $this->device->name . ' - ' . $this->name . ' - ' . $this->key);
+        return Attribute::get(fn (): string => $this->device->name.' - '.$this->name.' - '.$this->key);
     }
 
     protected function lastReading(): Attribute
     {
-        return Attribute::get(function() {
+        return Attribute::get(function () {
             return $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1)->first();
         });
     }
@@ -70,11 +69,12 @@ class Figure extends Model
     {
         return Attribute::get(function (): string {
             if ($this->icon_custom) {
-                return asset('storage/' . $this->icon_custom);
+                return asset('storage/'.$this->icon_custom);
             }
             if ($this->icon) {
                 return asset(Icons::fromName($this->icon)());
             }
+
             // Default to sprout icon
             return asset(Icons::fromName('SPROUT')());
         });

@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\{Device, Reading, User};
+use App\Facades\LogHelper;
+use App\Models\Device;
+use App\Models\Reading;
+use App\Models\User;
 use App\Notifications\DeviceAlertLateReading;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
-use App\Facades\LogHelper;
 
 class CheckLastReading extends Command
 {
@@ -36,24 +38,24 @@ class CheckLastReading extends Command
         $devices = Device::all();
         $users = User::where('receive_alerts', true)->get();
         foreach ($devices as $device) {
-            $this->info('Checking: ' . $device->name);
+            $this->info('Checking: '.$device->name);
             // Alert enabled & has a timeout setting?
             if ($device->alert_enabled && $device->alert_timeout) {
                 // Get the latest reading
                 $reading = $device->last_reading;
                 // Check if the last reading older than timeout config
-                if (!isset($reading)) {
+                if (! isset($reading)) {
                     $this->info('No Readings Found');
                 } else {
                     if ($reading->created_at->lessThan(Carbon::now()->subMinutes($device->alert_timeout))) {
-                        $this->info($device->name . ' (' . ($device->location ?? '') . ') has not had a reading for ' . $reading->created_at->diffInHours(now()) . ' hours!');
+                        $this->info($device->name.' ('.($device->location ?? '').') has not had a reading for '.$reading->created_at->diffInHours(now()).' hours!');
                         // Check if alert is activated. If it is, then don't send a notification
-                        if (!$device->alert_activated) {
+                        if (! $device->alert_activated) {
                             $this->info('Alert notification triggered');
                             if ($device->alert_email) {
                                 // Send notifications to all subscribed users (If emails are enabled)
                                 foreach ($users as $user) {
-                                    $this->info('Sending alarm notification to ' . $user->email);
+                                    $this->info('Sending alarm notification to '.$user->email);
                                     Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReading($device, $reading));
                                 }
                             }

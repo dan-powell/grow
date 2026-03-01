@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\{Datum, Device, Figure, User};
+use App\Models\Datum;
+use App\Models\Device;
+use App\Models\Figure;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,9 +28,9 @@ class DatabaseSeeder extends Seeder
         Device::factory()
             ->count(fake()->numberBetween(2, 6))
             ->has(Figure::factory()
-                    ->count(fake()->numberBetween(6, 10))
-                    ->has(Datum::factory()
-                            ->count(fake()->numberBetween(1000, 2000)), 'data'), 'figures')
+                ->count(fake()->numberBetween(6, 10))
+                ->has(Datum::factory()
+                    ->count(fake()->numberBetween(1000, 2000)), 'data'), 'figures')
             ->create();
 
         User::factory()->create([

@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\LogResource\Pages;
-use App\Filament\Resources\LogResource\RelationManagers;
 use App\Models\Log;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Table;
 
 class LogResource extends Resource
 {
@@ -45,7 +42,7 @@ class LogResource extends Resource
                 Tables\Columns\TextColumn::make('severity'),
                 Tables\Columns\TextColumn::make('icon'),
                 Tables\Columns\TextColumn::make('created_at')->sortable()
-                ->dateTime(),
+                    ->dateTime(),
                 Tables\Columns\TextColumn::make('device.name'),
             ])
             ->defaultSort('created_at', 'desc')

@@ -2,14 +2,13 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DeviceResource\{Pages, RelationManagers};
+use App\Filament\Resources\DeviceResource\Pages;
 use App\Models\Device;
-use Closure;
+use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\{Forms, Tables};
-use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
+use Filament\Tables;
+use Filament\Tables\Table;
 
 class DeviceResource extends Resource
 {
@@ -104,5 +103,4 @@ class DeviceResource extends Resource
             'edit' => Pages\EditDevice::route('/{record}/edit'),
         ];
     }
-
 }

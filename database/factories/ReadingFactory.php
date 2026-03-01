@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Reading;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Device>
@@ -11,21 +11,24 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ReadingFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Reading::class;
-
-    /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function definition()
     {
         return [
-            'timestamp' => fake()->dateTime(),
+            'nickname' => fake()->companyPrefix.Str::random(5),
+            'timestamp' => fake()->dateTimeBetween('-1 years', 'now'),
+            'readings' => [
+                'temperature' => fake()->randomFloat(2, -30, 50),
+                'humidity' => fake()->randomNumber(2, 0, 100),
+                'pressure' => fake()->randomNumber(3, 900, 1100),
+                'voltage' => fake()->randomFloat(2, 2.00, 6.00),
+                'moisture_a' => fake()->randomNumber(2, 0, 100),
+                'moisture_b' => fake()->randomNumber(2, 0, 100),
+                'moisture_c' => fake()->randomNumber(2, 0, 100),
+            ],
         ];
     }
 }

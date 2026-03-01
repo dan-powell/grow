@@ -3,12 +3,11 @@
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Models\Datum;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\{Forms, Tables};
-use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class DataRelationManager extends RelationManager
 {

@@ -26,7 +26,6 @@ class FigureAlertTriggered extends Notification
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     *
      * @return array
      */
     public function via($notifiable)
@@ -38,26 +37,24 @@ class FigureAlertTriggered extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage())
-            ->subject('Alert Triggered - ' . $this->figure->name . ' (' . $this->figure->device->name . ')')
-            ->line('An alert for ' . $this->figure->name . ' (' . $this->figure->device->name . ') has been triggered')
-            ->line('The reading value "' . $this->datum->value . '" has ' . ($this->alert->lower ? 'subceeded' : 'exceeded') . ' the alert by ' . ($this->alert->lower ? ($this->alert->value - $this->datum->value) : ($this->datum->value - $this->alert->value)))
-            ->line('Device: ' . $this->figure->device->name)
-            ->line('Reading: ' . $this->figure->device->name)
-            ->line('Alert Trigger Value: ' . $this->alert->value)
-            ->line('Reading Value: ' . $this->datum->value_string);
+        return (new MailMessage)
+            ->subject('Alert Triggered - '.$this->figure->name.' ('.$this->figure->device->name.')')
+            ->line('An alert for '.$this->figure->name.' ('.$this->figure->device->name.') has been triggered')
+            ->line('The reading value "'.$this->datum->value.'" has '.($this->alert->lower ? 'subceeded' : 'exceeded').' the alert by '.($this->alert->lower ? ($this->alert->value - $this->datum->value) : ($this->datum->value - $this->alert->value)))
+            ->line('Device: '.$this->figure->device->name)
+            ->line('Reading: '.$this->figure->device->name)
+            ->line('Alert Trigger Value: '.$this->alert->value)
+            ->line('Reading Value: '.$this->datum->value_string);
     }
 
     /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
-     *
      * @return array
      */
     public function toArray($notifiable)

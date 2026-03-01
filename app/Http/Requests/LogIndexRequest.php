@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use App\Enum\Severity;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LogIndexRequest extends FormRequest
 {
@@ -30,10 +29,9 @@ class LogIndexRequest extends FormRequest
         return [
             'severity' => [
                 Rule::in(array_values(Severity::options())),
-            ]
+            ],
         ];
     }
-
 
     protected function failedValidation(Validator $validator)
     {

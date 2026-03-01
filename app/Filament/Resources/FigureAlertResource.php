@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FigureAlertResource\{Pages, RelationManagers};
-use App\Models\{Figure, FigureAlert};
+use App\Filament\Resources\FigureAlertResource\Pages;
+use App\Models\Figure;
+use App\Models\FigureAlert;
+use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\{Forms, Tables};
-use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
+use Filament\Tables;
+use Filament\Tables\Table;
 
 class FigureAlertResource extends Resource
 {

@@ -28,7 +28,7 @@ set('http_user', 'www-data');
 set('http_group', 'www-data');
 
 set('writable_dirs', [
-    '{{release_or_current_path}}/storage'
+    '{{release_or_current_path}}/storage',
 ]);
 
 // Hosts
@@ -36,8 +36,10 @@ import('hosts.yml');
 
 set('default_stage', 'production');
 
-function getDockerRunCommand($cmd) {
-    $composeFile = get('docker_path') . '/docker-compose.yml';
+function getDockerRunCommand($cmd)
+{
+    $composeFile = get('docker_path').'/docker-compose.yml';
+
     return sprintf(
         'sudo /usr/bin/docker compose -f %s run --rm -u $(id -u):$(id -g) -w {{release_or_current_path}} deploy %s',
         $composeFile,
@@ -86,7 +88,6 @@ task('artisan:octane:reload', function () {
     run('{{bin/php}} {{release_path}}/artisan octane:reload');
 });
 
-
 before('artisan:route:cache', 'artisan:breadcrumbs:cache');
 
 // [Optional] if deploy fails automatically unlock.
@@ -99,7 +100,6 @@ before('deploy:publish', 'artisan:horizon:purge');
 before('deploy:publish', 'artisan:horizon:terminate');
 before('deploy:publish', 'artisan:octane:install');
 before('deploy:publish', 'artisan:octane:reload');
-
 
 // Handle frontend assets
 task('assets:deploy', function () {
@@ -120,8 +120,8 @@ task('env:push', function () {
 
 // Task to restart the http container
 task('docker:restart:http', function () {
-    $composeFile = get('docker_path') . '/docker-compose.yml';
-    
+    $composeFile = get('docker_path').'/docker-compose.yml';
+
     // We use 'restart' on the service name defined in docker-compose
     run("sudo /usr/bin/docker compose -f $composeFile restart http");
     run("sudo /usr/bin/docker compose -f $composeFile restart scheduler");

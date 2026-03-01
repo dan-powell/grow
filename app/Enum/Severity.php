@@ -2,7 +2,10 @@
 
 namespace App\Enum;
 
-use ArchTech\Enums\{From, InvokableCases, Names, Options};
+use ArchTech\Enums\From;
+use ArchTech\Enums\InvokableCases;
+use ArchTech\Enums\Names;
+use ArchTech\Enums\Options;
 
 enum Severity: string
 {

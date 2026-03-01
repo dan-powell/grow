@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\{DashboardController, LogController, DeviceController};
-use App\Models\{Device, Figure};
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\LogController;
+use App\Models\Device;
+use App\Models\Figure;
 use Illuminate\Support\Facades\Route;
 
 /*

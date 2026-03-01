@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{HasMany, HasManyThrough};
-use Illuminate\Database\Eloquent\{Builder, Model};
-use App\Models\{Datum};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Device extends Model
 {
@@ -28,7 +28,7 @@ class Device extends Model
         'last_reading',
         'image_src',
         'alerted',
-        'alert_activated_formatted'
+        'alert_activated_formatted',
     ];
 
     /**
@@ -46,8 +46,8 @@ class Device extends Model
 
     protected function lastReading(): Attribute
     {
-        return Attribute::get(function() {
-            return $this->figures()->whereHas('data', function($query) {
+        return Attribute::get(function () {
+            return $this->figures()->whereHas('data', function ($query) {
                 $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
             })->limit(1)->get()->first()?->last_reading;
         });
@@ -55,7 +55,7 @@ class Device extends Model
 
     protected function imageSrc(): Attribute
     {
-        return Attribute::get(fn () => $this->image ? asset('storage/' . $this->image) : null);
+        return Attribute::get(fn () => $this->image ? asset('storage/'.$this->image) : null);
     }
 
     protected function alerted(): Attribute
@@ -82,7 +82,7 @@ class Device extends Model
 
     public function data()
     {
-        return $this->figures()->whereHas('data', function($query) {
+        return $this->figures()->whereHas('data', function ($query) {
             $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
         });
     }

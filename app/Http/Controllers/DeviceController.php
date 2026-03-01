@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use carbon\Carbon;
 
 class DeviceController extends Controller
 {

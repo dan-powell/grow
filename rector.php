@@ -8,11 +8,11 @@ use Rector\Set\ValueObject\SetList;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/app',
-        __DIR__ . '/config',
-        __DIR__ . '/database',
-        __DIR__ . '/routes',
-        __DIR__ . '/tests',
+        __DIR__.'/app',
+        __DIR__.'/config',
+        __DIR__.'/database',
+        __DIR__.'/routes',
+        __DIR__.'/tests',
     ])
     ->withPhpVersion(80400) // PHP 8.4
     ->withSets([
@@ -29,4 +29,4 @@ return RectorConfig::configure()
         \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::class,
         \Rector\Php80\Rector\FunctionLike\MixedTypeRector::class,
     ]);
-    // ->withImportShortClasses(false);
+// ->withImportShortClasses(false);

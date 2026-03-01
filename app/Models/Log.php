@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\{Datum, Device};
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Model;
 
 class Log extends Model
 {
@@ -17,7 +16,7 @@ class Log extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'name', 'summary', 'device_id', 'icon'
+        'name', 'summary', 'device_id', 'icon',
     ];
 
     protected $appends = [

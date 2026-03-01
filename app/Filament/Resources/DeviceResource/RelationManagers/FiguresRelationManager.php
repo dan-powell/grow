@@ -4,13 +4,11 @@ namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Enum\Icons;
 use App\Models\Figure;
-use Closure;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\{Forms, Tables};
-use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 
 class FiguresRelationManager extends RelationManager
 {

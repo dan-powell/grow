@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Datum extends Model
 {
@@ -75,11 +75,9 @@ class Datum extends Model
     /**
      * Take two RGB colour strings and mix them together
      *
-     * @param string $color_1
-     * @param string $color_2
-     * @param float $weight
-     *
-     * @return string
+     * @param  string  $color_1
+     * @param  string  $color_2
+     * @param  float  $weight
      */
     private function mix($color_1 = 'rgb(0, 0, 0)', $color_2 = 'rgb(255, 255, 255)', $weight = 0.5): string
     {
@@ -98,7 +96,7 @@ class Datum extends Model
             return round($x + $y);
         };
 
-        return 'rgb(' . implode(',', array_map($h, array_map($f, $color_1), array_map($g, $color_2))) . ')';
+        return 'rgb('.implode(',', array_map($h, array_map($f, $color_1), array_map($g, $color_2))).')';
     }
 
     protected function rangeColor(): Attribute
@@ -110,10 +108,10 @@ class Datum extends Model
             if ($this->figure->range_min_color && $this->figure->range_max_color) {
                 return $this->mix($this->figure->range_max_color, $this->figure->range_min_color, $this->range_percentage / 100);
             }
-            if (!$this->figure->range_min_color && $this->figure->range_max_color) {
+            if (! $this->figure->range_min_color && $this->figure->range_max_color) {
                 return $this->mix($shade, $this->figure->range_max_color, $this->range_percentage / 100);
             }
-            if ($this->figure->range_min_color && !$this->figure->range_max_color) {
+            if ($this->figure->range_min_color && ! $this->figure->range_max_color) {
                 return $this->mix($this->figure->range_min_color, $tint, $this->range_percentage / 100);
             }
 
@@ -128,7 +126,7 @@ class Datum extends Model
 
     protected function valueString(): Attribute
     {
-        return Attribute::get(fn (): string => $this->figure->prefix . $this->value_calibrated . $this->figure->suffix);
+        return Attribute::get(fn (): string => $this->figure->prefix.$this->value_calibrated.$this->figure->suffix);
     }
 
     protected function createdAt(): Attribute

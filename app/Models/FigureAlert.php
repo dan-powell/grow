@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\{Figure};
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Model;
 
 class FigureAlert extends Model
 {
