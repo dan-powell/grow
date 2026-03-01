@@ -12,7 +12,7 @@ class DeviceAlertLateReading extends Notification
     // use Queueable;
     private Device $device;
 
-    private array $reading;
+    private $reading;
 
     /**
      * Create a new notification instance.
