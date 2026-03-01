@@ -84,9 +84,9 @@ task('artisan:octane:install', function () {
     run('{{bin/php}} {{release_path}}/artisan octane:install');
 });
 
-task('artisan:octane:reload', function () {
-    run('{{bin/php}} {{release_path}}/artisan octane:reload');
-});
+// task('artisan:octane:reload', function () {
+//     run('{{bin/php}} {{release_path}}/artisan octane:reload');
+// });
 
 before('artisan:route:cache', 'artisan:breadcrumbs:cache');
 
@@ -99,7 +99,7 @@ after('deploy:symlink', 'artisan:queue:restart');
 before('deploy:publish', 'artisan:horizon:purge');
 before('deploy:publish', 'artisan:horizon:terminate');
 before('deploy:publish', 'artisan:octane:install');
-before('deploy:publish', 'artisan:octane:reload');
+// before('deploy:publish', 'artisan:octane:reload');
 
 // Handle frontend assets
 task('assets:deploy', function () {
@@ -132,4 +132,8 @@ after('deploy:symlink', 'docker:restart:http');
 // Add a standalone task to run composer install with dev dependencies
 task('composer:install:dev', function () {
     run('{{bin/composer}} install --prefer-dist --optimize-autoloader');
+});
+
+task('artisan:test:notifications', function () {
+    run('{{bin/php}} {{current_path}}/artisan test:notifications');
 });
