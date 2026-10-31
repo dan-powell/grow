@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Models\Datum;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -18,10 +20,10 @@ class DataRelationManager extends RelationManager
     #[\Override]
     protected static ?string $recordTitleAttribute = 'timestamp';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Placeholder::make('Timestamp')
                     ->content(fn (Datum $record) => $record->timestamp->toDateTimeString()),
                 Placeholder::make('Raw Value')
@@ -46,10 +48,10 @@ class DataRelationManager extends RelationManager
             ])
             ->headerActions([
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
             ]);
     }
 

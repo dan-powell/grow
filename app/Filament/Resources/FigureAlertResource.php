@@ -9,14 +9,14 @@ use App\Filament\Resources\FigureAlertResource\Pages\EditFigureAlert;
 use App\Filament\Resources\FigureAlertResource\Pages\ListFigureAlerts;
 use App\Models\Figure;
 use App\Models\FigureAlert;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -31,12 +31,12 @@ class FigureAlertResource extends Resource
     protected static ?string $recordTitleAttribute = 'Alerts';
 
     #[\Override]
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('figure_id')
                     ->relationship('figure', 'name')
                     ->getOptionLabelFromRecordUsing(fn (Figure $record) => "{$record->label}")
@@ -71,10 +71,10 @@ class FigureAlertResource extends Resource
             ])
             ->filters([
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ]);
     }

@@ -19,6 +19,7 @@ yarn-error.log
 public/build
 public/css
 public/js
+public/fonts/filament
 credentials
 **/caddy
 frankenphp

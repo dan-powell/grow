@@ -6,12 +6,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LogResource\Pages\ManageLogs;
 use App\Models\Log;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -21,12 +21,12 @@ class LogResource extends Resource
     protected static ?string $model = Log::class;
 
     #[\Override]
-    protected static ?string $navigationIcon = 'heroicon-o-information-circle';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-information-circle';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -56,11 +56,11 @@ class LogResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ]);
     }

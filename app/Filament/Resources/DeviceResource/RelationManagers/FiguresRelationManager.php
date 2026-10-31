@@ -1,22 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Enum\Icons;
-use App\Models\Figure;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -28,10 +29,10 @@ class FiguresRelationManager extends RelationManager
     #[\Override]
     protected static ?string $recordTitleAttribute = 'name';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 // Forms\Components\Select::make('device_id')
                 //     ->relationship('device', 'name')
                 //     ->required(),
@@ -79,7 +80,7 @@ class FiguresRelationManager extends RelationManager
                                 TextInput::make('calibrate_value')
                                     ->label('Value')
                                     ->hint('The amount to adjust raw value by')
-                                    ->required(fn (Figure $figure, Get $get) => $get('calibrate'))
+                                    ->required(fn (Get $get) => $get('calibrate'))
                                     ->numeric()
                                     ->columnSpan(4),
                             ]),
@@ -126,11 +127,11 @@ class FiguresRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make(),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ]);
     }

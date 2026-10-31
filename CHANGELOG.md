@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `.mailmap` to unify commit author identity.
 - README documentation of the pull request and release process.
 
+### Changed
+
+- Upgraded Filament from v3 to v5 (via v4), bringing Livewire 4. Admin resources were
+  migrated with Filament's Rector upgrade rules, the "View" user menu item moved to the
+  panel configuration, and v3's full-width section layout is preserved.
+
 ### Removed
 
 - Unused StyleCI configuration (style is enforced by Pint).

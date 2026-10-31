@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Enum\Icons;
@@ -7,19 +9,19 @@ use App\Filament\Resources\FiguresResource\Pages\CreateFigures;
 use App\Filament\Resources\FiguresResource\Pages\EditFigures;
 use App\Filament\Resources\FiguresResource\Pages\ListFigures;
 use App\Models\Figure;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -30,12 +32,12 @@ class FiguresResource extends Resource
     protected static ?string $model = Figure::class;
 
     #[\Override]
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('device_id')
                     ->relationship('device', 'name')
                     ->required(),
@@ -83,7 +85,7 @@ class FiguresResource extends Resource
                                 TextInput::make('calibrate_value')
                                     ->label('Value')
                                     ->hint('The amount to adjust raw value by')
-                                    ->required(fn (Figure $figure, Get $get) => $get('calibrate'))
+                                    ->required(fn (Get $get) => $get('calibrate'))
                                     ->numeric()
                                     ->columnSpan(4),
                             ]),
@@ -127,10 +129,10 @@ class FiguresResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
