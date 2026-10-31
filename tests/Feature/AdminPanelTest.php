@@ -64,6 +64,14 @@ class AdminPanelTest extends TestCase
         }
     }
 
+    public function test_user_menu_includes_view_site_link(): void
+    {
+        $this->actingAs(User::factory()->create(['admin' => true]))
+            ->get('/admin')
+            ->assertOk()
+            ->assertSee('fi-dropdown-list-item-label">View</span>', false);
+    }
+
     public function test_admins_can_edit_a_device(): void
     {
         $device = Device::factory()->has(Figure::factory(), 'figures')->create();

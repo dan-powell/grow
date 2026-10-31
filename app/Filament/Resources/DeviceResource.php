@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DeviceResource\Pages\CreateDevice;
@@ -8,17 +10,16 @@ use App\Filament\Resources\DeviceResource\Pages\ListDevices;
 use App\Filament\Resources\DeviceResource\RelationManagers\DataRelationManager;
 use App\Filament\Resources\DeviceResource\RelationManagers\FiguresRelationManager;
 use App\Models\Device;
-use Filament\Forms\Components\Card;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -29,13 +30,13 @@ class DeviceResource extends Resource
     protected static ?string $model = Device::class;
 
     #[\Override]
-    protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cpu-chip';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Card::make()
+        return $schema
+            ->components([
+                Section::make()
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
@@ -66,7 +67,7 @@ class DeviceResource extends Resource
                         TextInput::make('alert_timeout')
                             ->label('Alert Timeout')
                             ->suffix('mins')
-                            ->required(fn (Device $device, Get $get) => $get('alert_enabled'))
+                            ->required(fn (Get $get) => $get('alert_enabled'))
                             ->columnSpan(2),
                         Toggle::make('alert_email')
                             ->label('Send Emails')
@@ -94,10 +95,10 @@ class DeviceResource extends Resource
             ->reorderable('order')
             ->filters([
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ]);
     }

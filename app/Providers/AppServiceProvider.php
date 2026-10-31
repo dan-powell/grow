@@ -6,8 +6,9 @@ namespace App\Providers;
 
 use App\Models\Device;
 use App\Models\Figure;
-use Filament\Facades\Filament;
-use Filament\Navigation\UserMenuItem;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -32,14 +33,9 @@ class AppServiceProvider extends ServiceProvider
 
         Route::bind('figure', fn ($value) => Figure::where('id', $value)->firstOrFail());
 
-        Filament::serving(function () {
-            Filament::registerUserMenuItems([
-                UserMenuItem::make()
-                    ->label('View')
-                    ->url(url('/'))
-                    ->icon('heroicon-s-cog'),
-                // ...
-            ]);
-        });
+        // Filament v4 stopped layout components spanning the full width by default; keep the v3 layout.
+        Fieldset::configureUsing(fn (Fieldset $fieldset) => $fieldset->columnSpanFull());
+        Grid::configureUsing(fn (Grid $grid) => $grid->columnSpanFull());
+        Section::configureUsing(fn (Section $section) => $section->columnSpanFull());
     }
 }
