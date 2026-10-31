@@ -4,16 +4,28 @@ namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Enum\Icons;
 use App\Models\Figure;
-use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class FiguresRelationManager extends RelationManager
 {
+    #[\Override]
     protected static string $relationship = 'figures';
 
+    #[\Override]
     protected static ?string $recordTitleAttribute = 'name';
 
     public function form(Form $form): Form
@@ -23,76 +35,76 @@ class FiguresRelationManager extends RelationManager
                 // Forms\Components\Select::make('device_id')
                 //     ->relationship('device', 'name')
                 //     ->required(),
-                Forms\Components\Section::make()
+                Section::make()
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('key')
+                        TextInput::make('key')
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('summary')
+                        TextInput::make('summary')
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('chart')
+                        TextInput::make('chart')
                             ->maxLength(255),
-                        Forms\Components\Select::make('icon')
+                        Select::make('icon')
                             ->options(array_combine(Icons::names(), Icons::names())),
-                        Forms\Components\FileUpload::make('icon_custom'),
-                        Forms\Components\Select::make('icon_small')
+                        FileUpload::make('icon_custom'),
+                        Select::make('icon_small')
                             ->options(array_combine(Icons::names(), Icons::names())),
-                        Forms\Components\TextInput::make('location')
+                        TextInput::make('location')
                             ->maxLength(255),
                     ]),
-                Forms\Components\Section::make('Data Configuration')
+                Section::make('Data Configuration')
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('prefix')
+                        TextInput::make('prefix')
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('suffix')
+                        TextInput::make('suffix')
                             ->maxLength(255),
-                        Forms\Components\Section::make('Calibration')
+                        Section::make('Calibration')
                             ->columns(6)
                             ->schema([
-                                Forms\Components\Toggle::make('calibrate')
+                                Toggle::make('calibrate')
                                     ->label('Enabled')
                                     ->required()
                                     ->reactive()
                                     ->inline(false)
                                     ->columnSpan(1),
-                                Forms\Components\Toggle::make('calibrate_percentage')
+                                Toggle::make('calibrate_percentage')
                                     ->label('Percentage?')
                                     ->inline(false)
                                     ->columnSpan(1),
-                                Forms\Components\TextInput::make('calibrate_value')
+                                TextInput::make('calibrate_value')
                                     ->label('Value')
                                     ->hint('The amount to adjust raw value by')
-                                    ->required(fn (Figure $figure, \Filament\Forms\Get $get) => $get('calibrate'))
+                                    ->required(fn (Figure $figure, Get $get) => $get('calibrate'))
                                     ->numeric()
                                     ->columnSpan(4),
                             ]),
-                        Forms\Components\Section::make('Range Bar Chart')
+                        Section::make('Range Bar Chart')
                             ->columns(2)
                             ->schema([
-                                Forms\Components\TextInput::make('range_min')
+                                TextInput::make('range_min')
                                     ->label('Min')
                                     ->lt('range_max')
                                     ->numeric(),
-                                Forms\Components\TextInput::make('range_max')
+                                TextInput::make('range_max')
                                     ->label('Max')
                                     ->gt('range_min')
                                     ->numeric(),
-                                Forms\Components\ColorPicker::make('range_min_color')
+                                ColorPicker::make('range_min_color')
                                     ->rgb()
                                     ->label('Min Color'),
-                                Forms\Components\ColorPicker::make('range_max_color')
+                                ColorPicker::make('range_max_color')
                                     ->rgb()
                                     ->label('Max Color'),
                             ]),
                     ]),
-                Forms\Components\Section::make()
+                Section::make()
                     ->schema([
-                        Forms\Components\Toggle::make('dashboard')
+                        Toggle::make('dashboard')
                             ->required(),
                     ]),
             ]);
@@ -102,24 +114,24 @@ class FiguresRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('summary')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('key')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('last_reading.created_at')->datetime(),
+                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('summary')->sortable()->searchable(),
+                TextColumn::make('key')->sortable()->searchable(),
+                TextColumn::make('last_reading.created_at')->datetime(),
             ])
             ->defaultSort('order')
             ->reorderable('order')
             ->filters([
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 

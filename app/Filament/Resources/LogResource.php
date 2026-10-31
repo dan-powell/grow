@@ -1,35 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\LogResource\Pages;
+use App\Filament\Resources\LogResource\Pages\ManageLogs;
 use App\Models\Log;
-use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class LogResource extends Resource
 {
+    #[\Override]
     protected static ?string $model = Log::class;
 
+    #[\Override]
     protected static ?string $navigationIcon = 'heroicon-o-information-circle';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('severity')
+                TextInput::make('severity')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('icon')
+                TextInput::make('icon')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('summary')
+                TextInput::make('summary')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('device.name')
+                TextInput::make('device.name')
                     ->maxLength(26),
             ]);
     }
@@ -38,30 +45,30 @@ class LogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('severity'),
-                Tables\Columns\TextColumn::make('icon'),
-                Tables\Columns\TextColumn::make('created_at')->sortable()
+                TextColumn::make('name'),
+                TextColumn::make('severity'),
+                TextColumn::make('icon'),
+                TextColumn::make('created_at')->sortable()
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('device.name'),
+                TextColumn::make('device.name'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ViewAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageLogs::route('/'),
+            'index' => ManageLogs::route('/'),
         ];
     }
 }

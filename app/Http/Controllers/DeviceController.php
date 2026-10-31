@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use carbon\Carbon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

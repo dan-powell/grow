@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Datum;
+use App\Models\Device;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Device>
+ * @extends Factory<Device>
  */
 class DatumFactory extends Factory
 {
@@ -15,6 +18,7 @@ class DatumFactory extends Factory
      *
      * @var string
      */
+    #[\Override]
     protected $model = Datum::class;
 
     public function definition()
@@ -27,10 +31,8 @@ class DatumFactory extends Factory
 
     public function config($config_id)
     {
-        return $this->state(function (array $attributes) use ($config_id) {
-            return [
-                'config_id' => $config_id,
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'config_id' => $config_id,
+        ]);
     }
 }

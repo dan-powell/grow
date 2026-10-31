@@ -2,20 +2,25 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
+use App\Models\Datum;
+use App\Models\Figure;
+use App\Models\FigureAlert;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class FigureAlertTriggered extends Notification
 {
     // use Queueable;
+    private readonly Figure $figure;
+
+    private readonly FigureAlert $alert;
+
+    private readonly Datum $datum;
 
     /**
      * Create a new notification instance.
-     *
-     * @return void
      */
-    public function __construct($figure, $alert, $datum)
+    public function __construct(Figure $figure, FigureAlert $alert, Datum $datum)
     {
         $this->figure = $figure;
         $this->alert = $alert;
@@ -37,7 +42,7 @@ class FigureAlertTriggered extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {

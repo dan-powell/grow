@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Device>
+ * @extends Factory<Device>
  */
 class DeviceFactory extends Factory
 {
@@ -16,6 +16,7 @@ class DeviceFactory extends Factory
      *
      * @var string
      */
+    #[\Override]
     protected $model = Device::class;
 
     /**
@@ -33,11 +34,9 @@ class DeviceFactory extends Factory
 
     public function name($name)
     {
-        return $this->state(function (array $attributes) use ($name) {
-            return [
-                'name' => $name,
-                'nickname' => Str::slug($name),
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'name' => $name,
+            'nickname' => Str::slug($name),
+        ]);
     }
 }

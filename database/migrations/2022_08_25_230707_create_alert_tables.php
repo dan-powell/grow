@@ -24,7 +24,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('figure_id')->constrained('figure')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('enabled')->default(false)->comment('Enables alert.');
-            $table->float('value', 16, 4)->nullable()->comment('Setting a value here enables alert.');
+            $table->float('value', 16)->nullable()->comment('Setting a value here enables alert.');
             $table->boolean('lower')->default(false)->comment('Alert on readings lower than "value"');
             $table->boolean('email')->default(false)->comment('Send email notification');
             $table->datetime('activated')->nullable()->comment('Last time alert was raised.');

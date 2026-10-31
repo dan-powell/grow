@@ -2,27 +2,17 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+#[Description('Add a new user')]
+#[Signature('user:add {username} {password} {--overwrite}')]
 class UserAdd extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'user:add {username} {password} {--overwrite}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Add a new user';
-
     /**
      * Execute the console command.
      *

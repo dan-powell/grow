@@ -2,46 +2,55 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\Pages\CreateUser;
+use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\User;
-use Filament\Forms;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Hash;
 
 class UserResource extends Resource
 {
+    #[\Override]
     protected static ?string $model = User::class;
 
+    #[\Override]
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()
+                Card::make()
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('name')->label('Name')
+                        TextInput::make('name')->label('Name')
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('email')->label('Email')
+                        TextInput::make('email')->label('Email')
                             ->email()
                             ->required()
                             ->maxLength(255),
                     ]),
-                Forms\Components\Card::make()
+                Card::make()
                     ->schema([
-                        Forms\Components\TextInput::make('password')
+                        TextInput::make('password')
                             ->password()
                             ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                             ->dehydrated(fn ($state) => filled($state)),
                     ]),
-                Forms\Components\Card::make()
+                Card::make()
                     ->schema([
-                        Forms\Components\Toggle::make('receive_alerts')
+                        Toggle::make('receive_alerts')
                             ->required(),
                     ]),
             ]);
@@ -51,21 +60,21 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('id'),
+                TextColumn::make('name'),
+                TextColumn::make('email'),
+                TextColumn::make('email_verified_at')
                     ->dateTime(),
-                Tables\Columns\IconColumn::make('receive_alerts')
+                IconColumn::make('receive_alerts')
                     ->boolean(),
             ])
             ->filters([
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 
@@ -78,9 +87,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }

@@ -4,7 +4,7 @@ php_extensions:
   - bcmath
   - imagick
 http_server: frankenphp
-php_version: "8.4"
+php_version: "8.5"
 redis_version: "7"
 # php_memory_limit: "512M"
 laravel_scheduler: true

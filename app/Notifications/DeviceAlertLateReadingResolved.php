@@ -3,19 +3,16 @@
 namespace App\Notifications;
 
 use App\Models\Device;
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class DeviceAlertLateReadingResolved extends Notification
 {
     // use Queueable;
-    private Device $device;
+    private readonly Device $device;
 
     /**
      * Create a new notification instance.
-     *
-     * @return void
      */
     public function __construct(Device $device)
     {
@@ -37,7 +34,7 @@ class DeviceAlertLateReadingResolved extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {

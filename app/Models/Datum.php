@@ -3,40 +3,37 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[Appends([
+    'value_calibrated',
+    'value_string',
+    'range_percentage',
+    'range_color',
+    'timestamp_formatted',
+    'timestamp_date',
+    'timestamp_time',
+    'timestamp_diff',
+    'created_at_formatted',
+    'created_at_date',
+    'created_at_time',
+    'created_at_diff',
+])]
+#[Fillable(['name', 'value'])]
+#[Table(name: 'datum')]
 class Datum extends Model
 {
     use HasFactory;
     use HasUlids;
 
-    protected $table = 'datum';
-
+    #[\Override]
     public $timestamps = true;
-
-    protected $fillable = ['name', 'value'];
-
-    protected $casts = [
-        'timestamp' => 'datetime',
-    ];
-
-    protected $appends = [
-        'value_calibrated',
-        'value_string',
-        'range_percentage',
-        'range_color',
-        'timestamp_formatted',
-        'timestamp_date',
-        'timestamp_time',
-        'timestamp_diff',
-        'created_at_formatted',
-        'created_at_date',
-        'created_at_time',
-        'created_at_diff',
-    ];
 
     protected function calibrateDataValue($config, $value)
     {
@@ -84,17 +81,11 @@ class Datum extends Model
         $color_1 = sscanf($color_1, 'rgb(%d, %d, %d)');
         $color_2 = sscanf($color_2, 'rgb(%d, %d, %d)');
 
-        $f = function ($x) use ($weight) {
-            return $weight * $x;
-        };
+        $f = (fn ($x) => $weight * $x);
 
-        $g = function ($x) use ($weight) {
-            return (1 - $weight) * $x;
-        };
+        $g = (fn ($x) => (1 - $weight) * $x);
 
-        $h = function ($x, $y) {
-            return round($x + $y);
-        };
+        $h = (fn ($x, $y) => round($x + $y));
 
         return 'rgb('.implode(',', array_map($h, array_map($f, $color_1), array_map($g, $color_2))).')';
     }
@@ -182,5 +173,12 @@ class Datum extends Model
     public function figure()
     {
         return $this->belongsTo(FigureParent::class, 'figure_id');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'timestamp' => 'datetime',
+        ];
     }
 }

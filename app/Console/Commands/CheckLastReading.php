@@ -4,29 +4,18 @@ namespace App\Console\Commands;
 
 use App\Facades\LogHelper;
 use App\Models\Device;
-use App\Models\Reading;
 use App\Models\User;
 use App\Notifications\DeviceAlertLateReading;
 use Carbon\Carbon;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 
+#[Description('Checks last readings for each device')]
+#[Signature('reading:check')]
 class CheckLastReading extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'reading:check';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Checks last readings for each device';
-
     /**
      * Execute the console command.
      *
@@ -48,7 +37,7 @@ class CheckLastReading extends Command
                     $this->info('No Readings Found');
                 } else {
                     if ($reading->created_at->lessThan(Carbon::now()->subMinutes($device->alert_timeout))) {
-                        $this->info($device->name.' ('.($device->location ?? '').') has not had a reading for '.$reading->created_at->diffInHours(now()).' hours!');
+                        $this->info($device->name.' ('.($device->location ?? '').') has not had a reading for '.(int) $reading->created_at->diffInHours(now()).' hours!');
                         // Check if alert is activated. If it is, then don't send a notification
                         if (! $device->alert_activated) {
                             $this->info('Alert notification triggered');

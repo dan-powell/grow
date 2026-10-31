@@ -39,13 +39,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-        Route::bind('device', function ($value) {
-            return Device::where('id', $value)->firstOrFail();
-        });
+        Route::bind('device', fn ($value) => Device::where('id', $value)->firstOrFail());
 
-        Route::bind('figure', function ($value) {
-            return Figure::where('id', $value)->firstOrFail();
-        });
+        Route::bind('figure', fn ($value) => Figure::where('id', $value)->firstOrFail());
     }
 
     /**
@@ -55,8 +51,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
     }
 }

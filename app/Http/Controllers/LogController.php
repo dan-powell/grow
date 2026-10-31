@@ -12,8 +12,8 @@ class LogController extends Controller
     public function index(LogIndexRequest $request)
     {
         $query = Log::orderBy('created_at', 'DESC');
-        if ($request->get('severity')) {
-            $query->where('severity', $request->get('severity'));
+        if ($request->input('severity')) {
+            $query->where('severity', $request->input('severity'));
         }
         $logs = $query->paginate(16);
 

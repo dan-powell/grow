@@ -1,41 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FigureAlertResource\Pages;
+use App\Filament\Resources\FigureAlertResource\Pages\CreateFigureAlert;
+use App\Filament\Resources\FigureAlertResource\Pages\EditFigureAlert;
+use App\Filament\Resources\FigureAlertResource\Pages\ListFigureAlerts;
 use App\Models\Figure;
 use App\Models\FigureAlert;
-use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class FigureAlertResource extends Resource
 {
+    #[\Override]
     protected static ?string $model = FigureAlert::class;
 
+    #[\Override]
     protected static ?string $recordTitleAttribute = 'Alerts';
 
+    #[\Override]
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('figure_id')
+                Select::make('figure_id')
                     ->relationship('figure', 'name')
                     ->getOptionLabelFromRecordUsing(fn (Figure $record) => "{$record->label}")
                     ->preload()
                     ->required(),
-                Forms\Components\Toggle::make('enabled')
+                Toggle::make('enabled')
                     ->required(),
-                Forms\Components\TextInput::make('value'),
-                Forms\Components\Toggle::make('lower')
+                TextInput::make('value'),
+                Toggle::make('lower')
                     ->required(),
-                Forms\Components\Toggle::make('email')
+                Toggle::make('email')
                     ->required(),
-                Forms\Components\DateTimePicker::make('active')->readonly(),
+                DateTimePicker::make('active')->readonly(),
             ]);
     }
 
@@ -43,25 +57,25 @@ class FigureAlertResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('figure.name')->label('Figure')->sortable(),
-                Tables\Columns\TextColumn::make('figure.key')->label('Key')->sortable(),
-                Tables\Columns\TextColumn::make('figure.device.name')->label('Device')->sortable(),
-                Tables\Columns\ToggleColumn::make('enabled')->sortable(),
-                Tables\Columns\TextColumn::make('value'),
-                Tables\Columns\IconColumn::make('lower')
+                TextColumn::make('figure.name')->label('Figure')->sortable(),
+                TextColumn::make('figure.key')->label('Key')->sortable(),
+                TextColumn::make('figure.device.name')->label('Device')->sortable(),
+                ToggleColumn::make('enabled')->sortable(),
+                TextColumn::make('value'),
+                IconColumn::make('lower')
                     ->boolean(),
-                Tables\Columns\IconColumn::make('email')
+                IconColumn::make('email')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('active')
+                TextColumn::make('active')
                     ->dateTime(),
             ])
             ->filters([
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 
@@ -74,9 +88,9 @@ class FigureAlertResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFigureAlerts::route('/'),
-            'create' => Pages\CreateFigureAlert::route('/create'),
-            'edit' => Pages\EditFigureAlert::route('/{record}/edit'),
+            'index' => ListFigureAlerts::route('/'),
+            'create' => CreateFigureAlert::route('/create'),
+            'edit' => EditFigureAlert::route('/{record}/edit'),
         ];
     }
 }

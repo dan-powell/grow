@@ -3,8 +3,11 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\ValueObject\PhpVersion;
+use RectorLaravel\Set\LaravelLevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -14,19 +17,18 @@ return RectorConfig::configure()
         __DIR__.'/routes',
         __DIR__.'/tests',
     ])
-    ->withPhpVersion(80400) // PHP 8.4
+    ->withPhpVersion(PhpVersion::PHP_85)
     ->withSets([
-        LevelSetList::UP_TO_PHP_84,
+        LevelSetList::UP_TO_PHP_85,
+        LaravelLevelSetList::UP_TO_LARAVEL_130,
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
         SetList::EARLY_RETURN,
         // SetList::INSTANTIATION_TO_STATIC_CALL,
         SetList::PRIVATIZATION,
-        SetList::STRICT_BOOLEANS,
     ])
+    ->withImportNames(importShortClasses: false, removeUnusedImports: true)
     ->withSkip([
         // Skip rules that might cause issues
-        \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::class,
-        \Rector\Php80\Rector\FunctionLike\MixedTypeRector::class,
+        ClassPropertyAssignToConstructorPromotionRector::class,
     ]);
-// ->withImportShortClasses(false);

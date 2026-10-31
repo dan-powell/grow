@@ -9,7 +9,7 @@ This document outlines the conventions, build commands, and style guides for age
 All development, testing, and linting operations MUST occur inside the DDEV web container (`ddev-web` service) unless the command is explicitly designed to run on the host (e.g., running `ddev` itself, or host-level Node installation if DDEV's Node environment is insufficient/conflicting).
 
 - **Container Service:** `web` (Invoked via `ddev exec -s web ...`).
-- **PHP Version:** 8.4 (In container).
+- **PHP Version:** 8.5 (In container).
 - **Node Version:** 16 (In container, managed by DDEV).
 - **Document Root:** `public` (Laravel's entry point).
 - **Container Code Path:** `/var/www/html` (The standard working directory for DDEV commands).
@@ -21,9 +21,10 @@ All shell commands requiring the project environment (PHP, Composer, Node) must 
 | Purpose | Command Example (within DDEV) | Single Test/Lint Equivalent | Notes |
 | :--- | :--- | :--- | :--- |
 | **Run All Tests (PHP)** | `vendor/bin/phpunit` | `vendor/bin/phpunit --filter <FQCN>` | PHPUnit is the standard. FQCN = Fully Qualified Class Name. |
-| **Run Feature Tests** | `vendor/bin/phpunit --testdox --group feature` | N/A | Assumes tests are tagged via `@group`. |
-| **Run Unit Tests** | `vendor/bin/phpunit --testdox --group unit` | N/A | Consistency in tagging tests is mandatory. |
+| **Run Feature Tests** | `vendor/bin/phpunit --testdox --group feature` | N/A | Tests are tagged with the `#[Group('feature')]` attribute (PHPUnit 12 no longer reads `@group` docblocks). Tests use an in-memory SQLite DB. |
+| **Run Unit Tests** | `vendor/bin/phpunit --testdox --group unit` | N/A | Tag with `#[Group('unit')]`. Consistency in tagging tests is mandatory. |
 | **Format Code (PHP)** | `vendor/bin/pint` | `vendor/bin/pint --test` | **MUST** be run before any commit. |
+| **Refactor (PHP)** | `vendor/bin/rector process` | `vendor/bin/rector process --dry-run` | Config in `rector.php` (PHP 8.5 + Laravel 13 sets). Run Pint afterwards. |
 | **Frontend Build** | `npm run build` | N/A | Compiles assets via Vite. |
 | **Frontend Watch** | `npm run dev` | N/A | Starts Vite HMR server, typically run outside DDEV if host Node is used. |
 | **Dependency Install** | `composer install --no-dev` | `npm ci` | Use `npm ci` for dependency consistency if lockfiles are present. |
@@ -38,7 +39,7 @@ Agents must strictly adhere to styles enforced by existing tools and established
 ### 2.1. PHP / Backend (Laravel)
 
 1.  **Formatting:** **Laravel Pint** standards are non-negotiable. Use `vendor/bin/pint` to automatically enforce style upon code modification.
-2.  **Typing:** All new and substantially modified PHP files **MUST** begin with `declare(strict_types=1);`. Utilize modern PHP 8.4 features (e.g., named arguments, match expressions) idiomatically where appropriate.
+2.  **Typing:** All new and substantially modified PHP files **MUST** begin with `declare(strict_types=1);`. Utilize modern PHP 8.5 features (e.g., named arguments, match expressions) idiomatically where appropriate.
 3.  **Imports:** Adhere to **PSR-4** structure (`App\\`). Imports must be correctly grouped and ordered: Core, Framework (Laravel/Filament), Library (Spatie, etc.), Project-specific. Sort imports alphabetically within groups.
 4.  **Naming:**
     -   Classes, Interfaces, Enums: PascalCase (`UserProfileManager`).
@@ -69,10 +70,10 @@ Agents must strictly adhere to styles enforced by existing tools and established
 This context guides the selection and invocation of tools based on project dependencies.
 
 ### 3.1. PHP Dependencies (Key Frameworks/Tools)
-- **Laravel Framework (v10.x):** Core MVC structure. Be aware of service container behavior.
+- **Laravel Framework (v13.x):** Core MVC structure, still using the Laravel 10-style application layout (`app/Http/Kernel.php`, `app/Console/Kernel.php`, `RouteServiceProvider`). Prefer Laravel 13 model/command attributes (`#[Table]`, `#[Fillable]`, `#[Signature]`, etc.) over properties.
 - **Filament (v3.x):** Major admin framework. When editing backend forms or tables, prioritize Filament conventions over raw Blade/Vue if within an admin context.
-- **Rector:** Indicates active project maintenance for PHP upgrades; agents should use modern syntax where possible but avoid aggressive refactoring unless explicitly tasked.
-- **Database Abstraction:** Doctrine DBAL is present alongside Eloquent. Always prefer Eloquent for standard operations.
+- **Rector (v2.x + driftingly/rector-laravel):** Indicates active project maintenance for PHP/Laravel upgrades; agents should use modern syntax where possible but avoid aggressive refactoring unless explicitly tasked.
+- **Database Abstraction:** Eloquent only (Doctrine DBAL was removed; Laravel 11+ no longer needs it).
 
 ### 3.2. Frontend Dependencies (Key Libraries)
 - **Vite:** Primary asset pipeline tool. Asset imports must use the Vite helper if running via PHP routes, or standard ES module imports if running client-side.
@@ -94,6 +95,6 @@ This context guides the selection and invocation of tools based on project depen
 - **Safety:** Never commit configuration files containing environment-specific data (e.g., `.env`, DDEV config sensitive data).
 - **Adherence:** Follow the style of the file being edited. When in doubt, search for existing patterns (`grep`/`glob`).
 - **Completeness:** Ensure all aspects of the user request are addressed, including implied verification steps like linting.
-- **Trust Boundary:** Trust the environment setup provided by DDEV (PHP 8.4, Node 16).
+- **Trust Boundary:** Trust the environment setup provided by DDEV (PHP 8.5, Node 16).
 - **Code Exploration:** Use `read` tool to confirm context before *any* edit; do not rely on memory alone for file contents.
 - **Final Output:** Always end the execution chain with a verification command (test/build) if code was modified.

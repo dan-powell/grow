@@ -40,8 +40,8 @@ return new class extends Migration
             $table->boolean('calibrate')->default(false);
             $table->decimal('calibrate_value', 8, 2)->nullable();
             $table->boolean('calibrate_percentage')->default(false);
-            $table->float('range_min', 16, 4)->nullable();
-            $table->float('range_max', 16, 4)->nullable();
+            $table->float('range_min', 16)->nullable();
+            $table->float('range_max', 16)->nullable();
             $table->string('range_min_color')->nullable();
             $table->string('range_max_color')->nullable();
             $table->boolean('dashboard')->default(false);
@@ -52,7 +52,7 @@ return new class extends Migration
         Schema::create('datum', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('figure_id')->constrained('figure')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->float('value', 16, 4);
+            $table->float('value', 16);
             $table->datetime('timestamp');
             $table->timestamps();
         });

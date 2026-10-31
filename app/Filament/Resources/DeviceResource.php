@@ -2,62 +2,77 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DeviceResource\Pages;
+use App\Filament\Resources\DeviceResource\Pages\CreateDevice;
+use App\Filament\Resources\DeviceResource\Pages\EditDevice;
+use App\Filament\Resources\DeviceResource\Pages\ListDevices;
+use App\Filament\Resources\DeviceResource\RelationManagers\DataRelationManager;
+use App\Filament\Resources\DeviceResource\RelationManagers\FiguresRelationManager;
 use App\Models\Device;
-use Filament\Forms;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class DeviceResource extends Resource
 {
+    #[\Override]
     protected static ?string $model = Device::class;
 
+    #[\Override]
     protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()
+                Card::make()
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('nickname')
+                        TextInput::make('nickname')
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('summary')
+                        TextInput::make('summary')
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('location')
+                        TextInput::make('location')
                             ->maxLength(255),
-                        Forms\Components\FileUpload::make('image')
+                        FileUpload::make('image')
                             ->disk('public')
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('4:3')
                             ->imageResizeTargetWidth('1024')
                             ->imageResizeTargetHeight('768'),
                     ]),
-                Forms\Components\Section::make('Alert configuration')
+                Section::make('Alert configuration')
                     ->columns(6)
                     ->schema([
-                        Forms\Components\Toggle::make('alert_enabled')
+                        Toggle::make('alert_enabled')
                             ->label('Enabled')
                             ->reactive()
                             ->columnSpan(1)
                             ->inline(false),
-                        Forms\Components\TextInput::make('alert_timeout')
+                        TextInput::make('alert_timeout')
                             ->label('Alert Timeout')
                             ->suffix('mins')
-                            ->required(fn (Device $device, \Filament\Forms\Get $get) => $get('alert_enabled'))
+                            ->required(fn (Device $device, Get $get) => $get('alert_enabled'))
                             ->columnSpan(2),
-                        Forms\Components\Toggle::make('alert_email')
+                        Toggle::make('alert_email')
                             ->label('Send Emails')
                             ->columnSpan(1)
                             ->inline(false),
-                        Forms\Components\DateTimePicker::make('alert_activated')
+                        DateTimePicker::make('alert_activated')
                             ->label('Alert Triggered')
                             ->columnSpan(2)
                             ->disabled(),
@@ -69,38 +84,38 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('summary')->sortable(),
-                Tables\Columns\TextColumn::make('last_reading.created_at')
+                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('summary')->sortable(),
+                TextColumn::make('last_reading.created_at')
                     ->dateTime(),
-                Tables\Columns\ToggleColumn::make('alert_enabled'),
+                ToggleColumn::make('alert_enabled'),
             ])
             ->defaultSort('order')
             ->reorderable('order')
             ->filters([
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            DeviceResource\RelationManagers\FiguresRelationManager::class,
-            DeviceResource\RelationManagers\DataRelationManager::class,
+            FiguresRelationManager::class,
+            DataRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDevices::route('/'),
-            'create' => Pages\CreateDevice::route('/create'),
-            'edit' => Pages\EditDevice::route('/{record}/edit'),
+            'index' => ListDevices::route('/'),
+            'create' => CreateDevice::route('/create'),
+            'edit' => EditDevice::route('/{record}/edit'),
         ];
     }
 }

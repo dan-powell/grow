@@ -3,28 +3,29 @@
 namespace App\Models;
 
 use App\Enum\Icons;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[Appends([
+    'last_reading',
+    'icon_src',
+    'icon_small_src',
+    'active_alerts',
+])]
+#[Fillable(['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'icon_small', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color', 'order'])]
+#[Table(name: 'figure')]
+#[WithoutTimestamps]
 class Figure extends Model
 {
     use HasFactory;
     use HasUlids;
-
-    protected $table = 'figure';
-
-    public $timestamps = false;
-
-    protected $fillable = ['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'icon_small', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color', 'order'];
-
-    protected $appends = [
-        'last_reading',
-        'icon_src',
-        'icon_small_src',
-        'active_alerts',
-    ];
 
     protected function label(): Attribute
     {
@@ -35,9 +36,7 @@ class Figure extends Model
 
     protected function lastReading(): Attribute
     {
-        return Attribute::get(function () {
-            return $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1)->first();
-        });
+        return Attribute::get(fn () => $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1)->first());
     }
 
     protected function lastReadingRangeValue(): Attribute
@@ -60,9 +59,7 @@ class Figure extends Model
 
     protected function activeAlerts(): Attribute
     {
-        return Attribute::get(function () {
-            return $this->alerts()->whereNotNull('activated')->get();
-        });
+        return Attribute::get(fn () => $this->alerts()->whereNotNull('activated')->get());
     }
 
     protected function iconSrc(): Attribute
@@ -91,7 +88,8 @@ class Figure extends Model
         });
     }
 
-    public function scopeDashboard($query)
+    #[Scope]
+    protected function dashboard($query)
     {
         $query->where('dashboard', true);
     }

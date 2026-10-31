@@ -2,34 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\Appends;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Appends([
+    'last_reading',
+    'image_src',
+    'alerted',
+    'alert_activated_formatted',
+])]
+#[Fillable(['name', 'nickname', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email', 'order'])]
+#[Table(name: 'device')]
 class Device extends Model
 {
     use HasFactory;
     use HasUlids;
 
-    protected $table = 'device';
-
+    #[\Override]
     public $timestamps = true;
-
-    protected $fillable = ['name', 'nickname', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email', 'order'];
-
-    protected $casts = [
-        'alert_activated' => 'datetime',
-    ];
-
-    protected $appends = [
-        'last_reading',
-        'image_src',
-        'alerted',
-        'alert_activated_formatted',
-    ];
 
     /**
      * The "booted" method of the model.
@@ -46,11 +43,9 @@ class Device extends Model
 
     protected function lastReading(): Attribute
     {
-        return Attribute::get(function () {
-            return $this->figures()->whereHas('data', function ($query) {
-                $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
-            })->limit(1)->get()->first()?->last_reading;
-        });
+        return Attribute::get(fn () => $this->figures()->whereHas('data', function ($query) {
+            $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
+        })->limit(1)->get()->first()?->last_reading);
     }
 
     protected function imageSrc(): Attribute
@@ -68,7 +63,8 @@ class Device extends Model
         return Attribute::get(fn (): ?string => $this->alert_activated?->toDateTimeString());
     }
 
-    public function scopeDashboard($query)
+    #[Scope]
+    protected function dashboard($query)
     {
         $query->whereHas('figures', function ($query) {
             $query->where('dashboard', true);
@@ -90,5 +86,12 @@ class Device extends Model
     public function datum()
     {
         return $this->through('figures')->has('data');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'alert_activated' => 'datetime',
+        ];
     }
 }

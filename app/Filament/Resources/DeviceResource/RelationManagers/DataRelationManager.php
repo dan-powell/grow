@@ -3,27 +3,30 @@
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Models\Datum;
-use Filament\Forms;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class DataRelationManager extends RelationManager
 {
+    #[\Override]
     protected static string $relationship = 'datum';
 
+    #[\Override]
     protected static ?string $recordTitleAttribute = 'timestamp';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Placeholder::make('Timestamp')
+                Placeholder::make('Timestamp')
                     ->content(fn (Datum $record) => $record->timestamp->toDateTimeString()),
-                Forms\Components\Placeholder::make('Raw Value')
+                Placeholder::make('Raw Value')
                     ->content(fn (Datum $record) => $record->value),
-                Forms\Components\Placeholder::make('Raw Value')
+                Placeholder::make('Raw Value')
                     ->content(fn (Datum $record) => $record->value),
             ]);
     }
@@ -32,19 +35,19 @@ class DataRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('figure.name')->label('Figure')->searchable(),
-                Tables\Columns\TextColumn::make('value')->label('Figure')->sortable(),
-                Tables\Columns\TextColumn::make('figure.prefix')->label('Prefix'),
-                Tables\Columns\TextColumn::make('value_calibrated')->label('Calibrated Value')->sortable(),
-                Tables\Columns\TextColumn::make('figure.suffix')->label('Suffix'),
-                Tables\Columns\TextColumn::make('timestamp')->label('Timestamp')->sortable()->datetime(),
+                TextColumn::make('figure.name')->label('Figure')->searchable(),
+                TextColumn::make('value')->label('Figure')->sortable(),
+                TextColumn::make('figure.prefix')->label('Prefix'),
+                TextColumn::make('value_calibrated')->label('Calibrated Value')->sortable(),
+                TextColumn::make('figure.suffix')->label('Suffix'),
+                TextColumn::make('timestamp')->label('Timestamp')->sortable()->datetime(),
             ])
             ->filters([
             ])
             ->headerActions([
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                ViewAction::make(),
             ])
             ->bulkActions([
             ]);
