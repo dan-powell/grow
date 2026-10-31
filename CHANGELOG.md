@@ -7,14 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-31
+
+First tagged release.
+
 ### Added
 
 - GitHub Actions CI running Pint, PHPUnit and the Vite build.
 - Pull request template.
 - Project README.
+- Tests for trusted proxies, API rate limiting, JSON API errors and the `/up` health route.
 
 ### Changed
 
+- Adopted the Laravel 13 application structure: routing, middleware and exceptions are
+  configured in `bootstrap/app.php`, and the HTTP/console kernels, `RouteServiceProvider`
+  and default-only providers, middleware and config files are removed.
 - Replaced the Laravel skeleton changelog with this project changelog.
 
 ## History before this changelog
@@ -29,3 +37,6 @@ Earlier milestones, taken from the git history:
 - **2023-03**: upgraded to Laravel 10; added the Filament admin panel, switched to Vite,
   moved reading processing onto the queue, and added figure alert notifications.
 - **2022-08**: initial build with device readings, charts, alert notifications and timeouts.
+
+[Unreleased]: https://github.com/dan-powell/grow/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/dan-powell/grow/releases/tag/v1.0.0
