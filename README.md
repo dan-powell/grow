@@ -19,7 +19,7 @@ or a device stops reporting.
 | Layer      | Tech                                                       |
 | :--------- | :--------------------------------------------------------- |
 | Backend    | PHP 8.5, Laravel 13, Octane, Horizon (Redis queues)        |
-| Admin      | Filament 3                                                 |
+| Admin      | Filament 5                                                 |
 | Frontend   | Vue 3, Inertia 2, Vite, Bulma, Chart.js                    |
 | Tooling    | PHPUnit 12, Pint, Rector, Telescope, Debugbar              |
 | Dev / Ops  | DDEV, Deployer, Ansible (Docker provisioning), GitHub Actions |

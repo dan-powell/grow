@@ -69,7 +69,7 @@ class AdminPanelTest extends TestCase
         $this->actingAs(User::factory()->create(['admin' => true]))
             ->get('/admin')
             ->assertOk()
-            ->assertSee('fi-dropdown-list-item-label">View</span>', false);
+            ->assertSeeHtml('fi-dropdown-list-item-label">View</span>');
     }
 
     public function test_admins_can_edit_a_device(): void

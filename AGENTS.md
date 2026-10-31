@@ -71,7 +71,7 @@ This context guides the selection and invocation of tools based on project depen
 
 ### 3.1. PHP Dependencies (Key Frameworks/Tools)
 - **Laravel Framework (v13.x):** Core MVC structure using the Laravel 11+ slim application layout: middleware, routing and exception handling are configured in `bootstrap/app.php`, service providers are registered in `bootstrap/providers.php`, and scheduled tasks live in `routes/console.php`. There are no HTTP/console kernels or `RouteServiceProvider`. Prefer Laravel 13 model/command attributes (`#[Table]`, `#[Fillable]`, `#[Signature]`, etc.) over properties.
-- **Filament (v3.x):** Major admin framework. When editing backend forms or tables, prioritize Filament conventions over raw Blade/Vue if within an admin context.
+- **Filament (v5.x):** Major admin framework. When editing backend forms or tables, prioritize Filament conventions over raw Blade/Vue if within an admin context.
 - **Rector (v2.x + driftingly/rector-laravel):** Indicates active project maintenance for PHP/Laravel upgrades; agents should use modern syntax where possible but avoid aggressive refactoring unless explicitly tasked.
 - **Database Abstraction:** Eloquent only (Doctrine DBAL was removed; Laravel 11+ no longer needs it).
 
