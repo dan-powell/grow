@@ -75,10 +75,52 @@ device's configured figures, and unknown keys are ignored.
 
 ## Git workflow
 
-- `master` is the main line. All changes go through short-lived branches
-  (`feat/…`, `fix/…`, `chore/…`) and pull requests, and CI must pass before merging.
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org).
-- `production` is the deploy branch Deployer pulls from. Fast-forward it from `master`
-  to release.
-- Releases are tagged with [SemVer](https://semver.org) and recorded in
-  [`CHANGELOG.md`](CHANGELOG.md).
+### Branches
+
+| Branch       | Purpose                                                                        |
+| :----------- | :----------------------------------------------------------------------------- |
+| `master`     | Main line. Protected: changes arrive only through pull requests that pass CI.   |
+| `production` | Deploy branch Deployer pulls from. Only fast-forwarded to a release tag.       |
+| `feat/…`, `fix/…`, `chore/…`, `docs/…` | Short-lived work branches cut from `master`.         |
+| `release/vX.Y.Z` | Prepares a release (changelog only).                                       |
+
+### Making a change
+
+1. **Branch** from an up-to-date `master`:
+   ```bash
+   git switch master && git pull --ff-only
+   git switch -c feat/short-description
+   ```
+2. **Commit** in small, self-contained steps using
+   [Conventional Commits](https://www.conventionalcommits.org), for example
+   `fix(alerts): resolve late-reading alert on next reading`. Commits are signed.
+   Before pushing, tidy up with `git rebase -i master` (or `--fixup` and `--autosquash`).
+3. **Update the changelog**: add an entry under `## [Unreleased]` in
+   [`CHANGELOG.md`](CHANGELOG.md) for anything user-facing.
+4. **Run the checks** locally (see [Checks](#checks)).
+5. **Push and open a PR** against `master`. Fill in the template (what, why, how tested).
+   - The **PR title must be a Conventional Commit**, because it becomes the commit message on `master`.
+6. **Wait for CI**. The `PHP (Pint + PHPUnit)` and `Frontend build` checks are required,
+   and the branch must be up to date with `master`.
+7. **Squash and merge**, then delete the branch.
+
+### Releasing
+
+Versions follow [SemVer](https://semver.org).
+
+1. Cut `release/vX.Y.Z` from `master`. In `CHANGELOG.md`, rename `## [Unreleased]` to
+   `## [X.Y.Z] - YYYY-MM-DD`, add a new empty `## [Unreleased]` above it, and update the
+   compare links at the bottom.
+2. Open a PR titled `chore(release): prepare vX.Y.Z` and squash-merge it once CI passes.
+3. Tag the merge commit on `master` and push the tag:
+   ```bash
+   git switch master && git pull --ff-only
+   git tag -a vX.Y.Z -m "vX.Y.Z"
+   git push origin vX.Y.Z
+   ```
+4. Create a GitHub Release from the tag, using that version's changelog section as the notes.
+5. Deploy by fast-forwarding `production` to the tag:
+   ```bash
+   git switch production && git merge --ff-only vX.Y.Z && git push
+   vendor/bin/dep deploy
+   ```

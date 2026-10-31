@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `.mailmap` to unify commit author identity.
+- README documentation of the pull request and release process.
+
+### Removed
+
+- Unused StyleCI configuration (style is enforced by Pint).
+
 ## [1.0.0] - 2026-10-31
 
 First tagged release.
