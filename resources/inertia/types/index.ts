@@ -32,6 +32,15 @@ export interface Datum {
     created_at_diff: string;
 }
 
+export interface FigureAlert {
+    id: string;
+    figure_id: number;
+    enabled: boolean;
+    value: number;
+    lower: boolean;
+    activated: string | null;
+}
+
 export interface Figure {
     id: number;
     device_id: number;
@@ -48,7 +57,7 @@ export interface Figure {
     range_max: number | null;
     order: number;
     last_reading: Datum | null;
-    active_alerts: unknown[];
+    active_alerts: FigureAlert[];
     device?: Device;
 }
 
@@ -83,6 +92,10 @@ export interface Paginator<T> {
     data: T[];
     current_page: number;
     last_page: number;
+    per_page: number;
+    total: number;
+    from: number | null;
+    to: number | null;
     prev_page_url: string | null;
     next_page_url: string | null;
     links: { url: string | null; label: string; active: boolean }[];

@@ -54,13 +54,13 @@ Agents must strictly adhere to styles enforced by existing tools and established
 2.  **Framework:** React 19 function components written in TypeScript (`.tsx`, strict mode). Shared prop/model types live in `resources/inertia/types`. Run `npm run types` (`tsc --noEmit`) to type-check. Ziggy's `route()` is available globally via the `@routes` Blade directive.
 3.  **State Management:** Inertia.js passes server-side data via props. Avoid complex, separate global state solutions unless absolutely necessary and explicitly justified by performance or complexity metrics.
 4.  **HTTP Client:** Use Inertia's router, `<Link>` and `useForm` for page visits and form submissions (Inertia v3 ships its own HTTP client). Axios and lodash are **not** installed; for standalone JSON requests use native `fetch` rather than adding a new HTTP or utility library.
-5.  **Styling:** Tailwind CSS v4 is loaded via `@tailwindcss/vite` (`@import "tailwindcss"` in `resources/css/app.css`; no `tailwind.config.js`, configure with `@theme` in CSS). Global styles live in `resources/css` (organised into `abstracts`, `base`, `utilities` and `layout`) and are processed by PostCSS (`postcss-nested`, `postcss-mixins`); prefer Tailwind utility classes in components. Avoid inline styles unless dynamic calculations are required.
+5.  **Styling:** Tailwind CSS v4 is loaded via `@tailwindcss/vite` (`@import "tailwindcss"` in `resources/css/app.css`; no `tailwind.config.js`, configure with `@theme` in CSS). Theme tokens (colours, radius, fonts) are shadcn CSS variables defined in `resources/css/app.css`; prefer Tailwind utility classes in components over new global CSS. Avoid inline styles unless dynamic calculations are required.
 
 ### 2.3. Configuration & Agent Directives
 
 1.  **DDEV Context:** All environment-specific ports (Vite on 5173) are managed via `.ddev/config.yaml`. Agents must not attempt to run services bound to arbitrary ports without verifying routing/exposure in this file. If a port conflict arises, an agent should suggest modifying `.ddev/config.yaml` via explicit user instruction.
 2.  **Agent Rules:** **NO** specific agent configuration files (like `.cursorrules`) were detected. Agents must rely solely on the established codebase patterns and the rules in this document.
-3.  **File Creation:** When scaffolding new features, adhere strictly to Laravel/React structure. Frontend code lives in `resources/inertia` (aliased as `@` in `vite.config.js`): pages in `resources/inertia/Pages`, reusable components in `resources/inertia/Components`, layouts in `resources/inertia/Layouts` (`AppLayout` is applied to every page via the `layout` option in `app.tsx`). Global CSS lives in `resources/css`.
+3.  **File Creation:** When scaffolding new features, adhere strictly to Laravel/React structure. Frontend code lives in `resources/inertia` (aliased as `@` in `vite.config.js`): pages in `resources/inertia/Pages`, reusable components in `resources/inertia/Components`, shadcn/ui primitives in `resources/inertia/Components/ui` (add with `npx shadcn add <component>`; built on Base UI, so pass Inertia's `<Link>` via the `render` prop), layouts in `resources/inertia/Layouts` (`AppLayout` is applied to every page via the `layout` option in `app.tsx`). Global CSS lives in `resources/css`.
 4.  **Documentation:** When adding new features, maintain clear documentation inline, particularly for complex business logic. This `AGENTS.md` must be updated if new standard commands or style deviations are introduced.
 
 ---
@@ -78,7 +78,7 @@ This context guides the selection and invocation of tools based on project depen
 ### 3.2. Frontend Dependencies (Key Libraries)
 - **Vite (v8):** Primary asset pipeline tool, with `laravel-vite-plugin` v3 and `@vitejs/plugin-react`. The project is ESM (`"type": "module"`), so config files must use `import`/`export`, not `require()`. Asset imports must use the Vite helper if running via PHP routes, or standard ES module imports if running client-side.
 - **React 19 / Inertia.js (v3):** React components are the standard. Data flow is primarily via Inertia props. Client (`@inertiajs/react`) and server (`inertiajs/inertia-laravel`) must stay on the same major version.
-- **Font Awesome (v7 Free):** Icons, imported via `resources/css/app.css`.
+- **shadcn/ui (Base UI, `base-luma` style) + lucide-react:** UI primitives and icons. Config in `components.json`.
 - **Chart.js (v4) / react-chartjs-2 (v5):** Used for visualization; pass `data` and `options` to chart components. Note the presence of `chartjs-adapter-moment` for time-series data.
 
 ### 3.3. Agent Operation & Verification Loop

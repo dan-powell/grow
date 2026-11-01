@@ -1,4 +1,9 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
+import { Cpu } from 'lucide-react';
+import DeviceCard from '@/Components/DeviceCard';
+import FigureCard from '@/Components/FigureCard';
+import PageHeader from '@/Components/PageHeader';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/Components/ui/empty';
 import type { Device, Figure } from '@/types';
 
 interface Props {
@@ -7,28 +12,43 @@ interface Props {
 }
 
 export default function Dashboard({ devices, figures }: Props) {
+    const dashboardFigures = figures.filter((figure) => figure.dashboard);
+
     return (
         <>
             <Head title="Dashboard" />
-            <section className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {figures
-                    .filter((figure) => figure.dashboard)
-                    .map((figure) => (
-                        <div key={figure.id} className="rounded border p-4">
-                            <div className="text-sm opacity-70">{figure.device?.name}</div>
-                            <div className="font-semibold">{figure.name}</div>
-                            <div className="text-2xl">{figure.last_reading?.value_string ?? '—'}</div>
+            <div className="flex flex-col gap-10">
+                <PageHeader title="Dashboard" description="Latest readings from your devices." />
+                {dashboardFigures.length > 0 && (
+                    <section className="flex flex-col gap-4">
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            {dashboardFigures.map((figure) => (
+                                <FigureCard key={figure.id} figure={figure} showDevice />
+                            ))}
                         </div>
-                    ))}
-            </section>
-            <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {devices.map((device) => (
-                    <Link key={device.id} href={route('device.show', device.id)} className="rounded border p-4">
-                        <div className="font-semibold">{device.name}</div>
-                        {device.summary && <p className="text-sm opacity-70">{device.summary}</p>}
-                    </Link>
-                ))}
-            </section>
+                    </section>
+                )}
+                <section className="flex flex-col gap-4">
+                    <h2 className="font-heading text-lg font-semibold tracking-tight">Devices</h2>
+                    {devices.length > 0 ? (
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {devices.map((device) => (
+                                <DeviceCard key={device.id} device={device} />
+                            ))}
+                        </div>
+                    ) : (
+                        <Empty className="border border-dashed bg-background">
+                            <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <Cpu />
+                                </EmptyMedia>
+                                <EmptyTitle>No devices yet</EmptyTitle>
+                                <EmptyDescription>Add a device in the admin panel to start logging readings.</EmptyDescription>
+                            </EmptyHeader>
+                        </Empty>
+                    )}
+                </section>
+            </div>
         </>
     );
 }

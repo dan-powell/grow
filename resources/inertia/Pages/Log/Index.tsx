@@ -1,57 +1,71 @@
-import { Head, Link } from '@inertiajs/react';
-import type { Log, Paginator } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { ListChecks } from 'lucide-react';
+import LogItem from '@/Components/LogItem';
+import PageHeader from '@/Components/PageHeader';
+import Paginator from '@/Components/Paginator';
+import { Button } from '@/Components/ui/button';
+import { Card } from '@/Components/ui/card';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/Components/ui/empty';
+import type { Log, Paginator as PaginatorData } from '@/types';
 
 interface Props {
-    logs: Paginator<Log>;
+    logs: PaginatorData<Log>;
     severities: string[];
 }
 
 export default function Index({ logs, severities }: Props) {
+    const { url } = usePage();
+    const currentSeverity = new URLSearchParams(url.split('?')[1] ?? '').get('severity');
+    const filters: { label: string; severity: string | null }[] = [
+        { label: 'All', severity: null },
+        ...severities.map((severity) => ({ label: severity, severity })),
+    ];
+
     return (
         <>
             <Head title="Log" />
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-                <nav className="flex gap-1">
-                    {logs.links.map((link, index) =>
-                        link.url ? (
-                            <Link
-                                key={index}
-                                href={link.url}
-                                preserveScroll
-                                className={`rounded border px-2 py-1 ${link.active ? 'font-bold' : ''}`}
-                                dangerouslySetInnerHTML={{ __html: link.label }}
-                            />
-                        ) : (
-                            <span
-                                key={index}
-                                className="rounded border px-2 py-1 opacity-50"
-                                dangerouslySetInnerHTML={{ __html: link.label }}
-                            />
-                        ),
-                    )}
-                </nav>
-                <div className="flex gap-1">
-                    <Link href={route('log.index')} className="rounded border px-2 py-1">
-                        All
-                    </Link>
-                    {severities.map((severity) => (
-                        <Link key={severity} href={route('log.index', { severity })} className="rounded border px-2 py-1">
-                            {severity}
-                        </Link>
-                    ))}
-                </div>
+            <div className="flex flex-col gap-6">
+                <PageHeader
+                    title="Log"
+                    description={logs.total > 0 ? `Showing ${logs.from}–${logs.to} of ${logs.total} entries` : undefined}
+                    actions={
+                        <nav aria-label="Filter by severity" className="flex flex-wrap gap-1">
+                            {filters.map(({ label, severity }) => (
+                                <Button
+                                    key={label}
+                                    size="sm"
+                                    variant={severity === currentSeverity ? 'default' : 'outline'}
+                                    className="capitalize"
+                                    nativeButton={false}
+                                    render={<Link href={route('log.index', severity ? { severity } : {})} preserveScroll />}
+                                >
+                                    {label}
+                                </Button>
+                            ))}
+                        </nav>
+                    }
+                />
+                {logs.data.length > 0 ? (
+                    <Card className="py-0">
+                        <ul className="divide-y">
+                            {logs.data.map((log) => (
+                                <LogItem key={log.id} log={log} />
+                            ))}
+                        </ul>
+                    </Card>
+                ) : (
+                    <Empty className="border border-dashed bg-background">
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <ListChecks />
+                            </EmptyMedia>
+                            <EmptyTitle>No log entries</EmptyTitle>
+                            <EmptyDescription>Nothing has been logged{currentSeverity ? ` at ${currentSeverity} level` : ''} yet.</EmptyDescription>
+                        </EmptyHeader>
+                    </Empty>
+                )}
+                <Paginator paginator={logs} />
             </div>
-            <ul className="divide-y">
-                {logs.data.map((log) => (
-                    <li key={log.id} className="py-2">
-                        <div className="font-semibold">{log.name}</div>
-                        {log.summary && <p className="text-sm">{log.summary}</p>}
-                        <time className="text-xs opacity-70" title={log.created_at_formatted}>
-                            {log.created_at_diff}
-                        </time>
-                    </li>
-                ))}
-            </ul>
         </>
     );
 }

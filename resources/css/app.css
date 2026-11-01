@@ -1,19 +1,4 @@
 @import "tailwindcss";
-@import "@fortawesome/fontawesome-free/css/all";
-
-@import "abstracts/variables";
-@import "abstracts/mixins";
-@import "abstracts/animations";
-
-@import "base/reset";
-@import "base/typography";
-@import "base/inputs";
-
-@import "utilities/button";
-@import "utilities/content";
-
-@import "layout/section";
-@import "layout/group";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/figtree";
