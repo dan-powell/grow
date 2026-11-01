@@ -19,6 +19,7 @@
         "octane-development",
         "telescope-debugging",
         "inertia-vue-development",
-        "debug-using-debugbar"
+        "debug-using-debugbar",
+        "filament-development"
     ]
 }

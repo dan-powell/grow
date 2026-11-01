@@ -16,6 +16,6 @@ abstract class TestCase extends BaseTestCase
         $this->withoutVite();
 
         // Inertia pages live in resources/inertia rather than the default resources/js
-        config(['inertia.testing.page_paths' => [resource_path('inertia/Pages')]]);
+        config(['inertia.pages.paths' => [resource_path('inertia/Pages')]]);
     }
 }

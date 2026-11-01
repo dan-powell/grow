@@ -2,8 +2,8 @@
     <LayoutDefault>
         <div class="Section">
             <Line
-                :chart-data="chartData"
-                :chart-options="options"
+                :data="chartData"
+                :options="options"
                 :width=800
                 :height=400
             />

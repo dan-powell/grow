@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-const path = require('path');
+import path from 'node:path';
 import laravel, { refreshPaths } from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
@@ -12,7 +12,6 @@ export default defineConfig({
             ],
             refresh: [
                 ...refreshPaths,
-                'app/Http/Livewire/**',
                 'app/Http/**',
                 'app/Models/**',
                 'app/Filament/**',
