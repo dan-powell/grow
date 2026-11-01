@@ -18,7 +18,8 @@
         "configuring-horizon",
         "octane-development",
         "telescope-debugging",
-        "inertia-vue-development",
+        "inertia-react-development",
+        "tailwindcss-development",
         "debug-using-debugbar",
         "filament-development"
     ]
