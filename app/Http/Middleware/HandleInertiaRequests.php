@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Datum;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -36,6 +37,9 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'breadcrumbs' => $request->route()->breadcrumbs()->toCollection(),
+            // ULIDs sort by creation time, so this changes whenever a new reading is stored.
+            // The frontend polls it to decide when to reload the page's props.
+            'latest_reading_id' => fn (): ?string => Datum::max('id'),
         ]);
     }
 }

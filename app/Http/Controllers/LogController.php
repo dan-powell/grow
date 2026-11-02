@@ -11,14 +11,10 @@ class LogController extends Controller
 {
     public function index(LogIndexRequest $request)
     {
-        $query = Log::orderBy('created_at', 'DESC');
-        if ($request->input('severity')) {
-            $query->where('severity', $request->input('severity'));
-        }
-        $logs = $query->paginate(16);
-
         return Inertia::render('Log/Index', [
-            'logs' => $logs,
+            'logs' => fn () => Log::orderBy('created_at', 'DESC')
+                ->when($request->input('severity'), fn ($query, $severity) => $query->where('severity', $severity))
+                ->paginate(16),
             'severities' => array_values(Severity::options()),
         ]);
     }
