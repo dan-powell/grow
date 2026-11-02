@@ -10,6 +10,8 @@ use App\Filament\Resources\FiguresResource\Pages\EditFigures;
 use App\Filament\Resources\FiguresResource\RelationManagers\AssignmentsRelationManager;
 use App\Filament\Resources\LogResource;
 use App\Filament\Resources\SubjectResource;
+use App\Filament\Resources\SubjectResource\Pages\EditSubject;
+use App\Filament\Resources\SubjectResource\RelationManagers\AssignmentsRelationManager as SubjectAssignmentsRelationManager;
 use App\Filament\Resources\UserResource;
 use App\Models\Device;
 use App\Models\Figure;
@@ -86,6 +88,39 @@ class AdminPanelTest extends TestCase
             ->get(DeviceResource::getUrl('edit', ['record' => $device]))
             ->assertOk()
             ->assertSee($device->name);
+    }
+
+    public function test_figures_index_links_to_the_assigned_subject_and_device(): void
+    {
+        $figure = Figure::factory()->for(Device::factory())->create();
+        $subject = FigureAssignment::factory()->for($figure)->create()->subject;
+
+        $this->actingAs(User::factory()->create(['admin' => true]))
+            ->get(FiguresResource::getUrl('index'))
+            ->assertOk()
+            ->assertSee(SubjectResource::getUrl('edit', ['record' => $subject]))
+            ->assertSee(DeviceResource::getUrl('edit', ['record' => $figure->device]));
+    }
+
+    public function test_subjects_index_links_to_the_assigned_figure_and_device(): void
+    {
+        $figure = Figure::factory()->for(Device::factory())->create();
+        FigureAssignment::factory()->for($figure)->create();
+
+        $this->actingAs(User::factory()->create(['admin' => true]))
+            ->get(SubjectResource::getUrl('index'))
+            ->assertOk()
+            ->assertSee(FiguresResource::getUrl('edit', ['record' => $figure]))
+            ->assertSee(DeviceResource::getUrl('edit', ['record' => $figure->device]));
+    }
+
+    public function test_subject_figures_table_links_to_the_figure(): void
+    {
+        $assignment = FigureAssignment::factory()->for(Figure::factory()->for(Device::factory()))->create();
+
+        $this->actingAs(User::factory()->create(['admin' => true]));
+        Livewire::test(SubjectAssignmentsRelationManager::class, ['ownerRecord' => $assignment->subject, 'pageClass' => EditSubject::class])
+            ->assertSee(FiguresResource::getUrl('edit', ['record' => $assignment->figure]));
     }
 
     public function test_admins_can_assign_a_subject_from_the_figure(): void

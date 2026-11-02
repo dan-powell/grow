@@ -30,6 +30,12 @@ class SubjectResource extends Resource
     #[\Override]
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
 
+    #[\Override]
+    protected static string|\UnitEnum|null $navigationGroup = 'Monitoring';
+
+    #[\Override]
+    protected static ?int $navigationSort = 3;
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -65,8 +71,13 @@ class SubjectResource extends Resource
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('summary')->searchable(),
-                TextColumn::make('currentAssignment.figure.name')->label('Figure')->placeholder('Unassigned'),
-                TextColumn::make('currentAssignment.figure.device.name')->label('Device'),
+                TextColumn::make('currentAssignment.figure.name')
+                    ->label('Figure')
+                    ->placeholder('Unassigned')
+                    ->url(fn (Subject $record): ?string => $record->currentAssignment?->figure ? FiguresResource::getUrl('edit', ['record' => $record->currentAssignment->figure]) : null),
+                TextColumn::make('currentAssignment.figure.device.name')
+                    ->label('Device')
+                    ->url(fn (Subject $record): ?string => $record->currentAssignment?->figure?->device ? DeviceResource::getUrl('edit', ['record' => $record->currentAssignment->figure->device]) : null),
                 TextColumn::make('alerts_count')
                     ->label('Active alerts')
                     ->counts(['alerts' => fn (Builder $query) => $query->whereNotNull('activated')]),

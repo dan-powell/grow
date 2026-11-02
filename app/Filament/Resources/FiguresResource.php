@@ -36,6 +36,12 @@ class FiguresResource extends Resource
     #[\Override]
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    #[\Override]
+    protected static string|\UnitEnum|null $navigationGroup = 'Monitoring';
+
+    #[\Override]
+    protected static ?int $navigationSort = 2;
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -153,10 +159,16 @@ class FiguresResource extends Resource
             ->description('Each figure is one value reported by a device. When you move a sensor to a different plant, use "Assign subject" rather than renaming the figure. Drag rows to change the display order.')
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('key')->sortable()->searchable(),
-                TextColumn::make('currentSubject.name')->label('Subject')->placeholder('Unassigned'),
+                TextColumn::make('key')->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('currentSubject.name')
+                    ->label('Subject')
+                    ->placeholder('Unassigned')
+                    ->url(fn (Figure $record): ?string => $record->currentSubject ? SubjectResource::getUrl('edit', ['record' => $record->currentSubject]) : null),
                 TextColumn::make('summary')->sortable()->searchable(),
-                TextColumn::make('device.name')->sortable()->searchable(),
+                TextColumn::make('device.name')
+                    ->sortable()
+                    ->searchable()
+                    ->url(fn (Figure $record): ?string => $record->device ? DeviceResource::getUrl('edit', ['record' => $record->device]) : null),
                 ToggleColumn::make('dashboard'),
             ])
             ->filters([
