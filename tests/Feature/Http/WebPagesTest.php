@@ -41,6 +41,32 @@ class WebPagesTest extends TestCase
             );
     }
 
+    public function test_dashboard_hides_disabled_devices_and_their_figures(): void
+    {
+        $enabled = Device::factory()->create();
+        Figure::factory()->for($enabled)->create(['dashboard' => true]);
+        $disabled = Device::factory()->create(['enabled' => false]);
+        Figure::factory()->for($disabled)->create(['dashboard' => true]);
+
+        $this->get(route('dashboard.show'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('devices', 1)
+                ->where('devices.0.id', $enabled->id)
+                ->has('figures', 1)
+                ->where('figures.0.device_id', $enabled->id)
+            );
+    }
+
+    public function test_disabled_device_pages_return_404(): void
+    {
+        $device = Device::factory()->create(['enabled' => false]);
+        $figure = Figure::factory()->for($device)->create();
+
+        $this->get(route('device.show', $device))->assertNotFound();
+        $this->get(route('device.figure.history', [$device, $figure]))->assertNotFound();
+    }
+
     public function test_device_page_shows_device_with_figures(): void
     {
         $device = Device::factory()->has(Figure::factory()->count(2), 'figures')->create();

@@ -114,6 +114,15 @@ class Figure extends Model
         $query->where('dashboard', true);
     }
 
+    /**
+     * Figures whose device is shown on the site.
+     */
+    #[Scope]
+    protected function enabled($query)
+    {
+        $query->whereHas('device', fn ($query) => $query->enabled());
+    }
+
     public function device(): BelongsTo
     {
         return $this->belongsTo(Device::class);

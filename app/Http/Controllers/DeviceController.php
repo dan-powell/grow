@@ -10,6 +10,8 @@ class DeviceController extends Controller
 {
     public function show($device, Request $request)
     {
+        abort_unless($device->enabled, 404);
+
         return Inertia::render('Devices/Show', [
             'device' => fn () => $device->loadMissing('figures.currentSubject'),
         ]);
@@ -17,6 +19,8 @@ class DeviceController extends Controller
 
     public function history($device, $figure, Request $request)
     {
+        abort_unless($device->enabled, 404);
+
         return Inertia::render('Devices/History', [
             'device' => $device,
             'figure' => $figure->loadMissing('currentSubject'),

@@ -51,6 +51,15 @@ class ProcessReadingTest extends TestCase
         FigureAssignment::factory()->for($this->figure)->for($this->subject)->create(['started_at' => '2024-01-01 00:00:00']);
     }
 
+    public function test_reading_is_stored_for_a_disabled_device(): void
+    {
+        $this->device->update(['enabled' => false]);
+
+        ProcessReading::dispatch('greenhouse', ['temperature' => 21.5], '2024-06-01 12:00:00');
+
+        $this->assertSame(1, $this->figure->data()->count());
+    }
+
     public function test_reading_stores_data_for_known_keys_only(): void
     {
         ProcessReading::dispatch('greenhouse', ['temperature' => 21.5, 'unknown' => 3], '2024-06-01 12:00:00');

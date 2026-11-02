@@ -32,6 +32,12 @@ class DeviceResource extends Resource
     #[\Override]
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cpu-chip';
 
+    #[\Override]
+    protected static string|\UnitEnum|null $navigationGroup = 'Monitoring';
+
+    #[\Override]
+    protected static ?int $navigationSort = 1;
+
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -51,6 +57,10 @@ class DeviceResource extends Resource
                         TextInput::make('summary')
                             ->helperText('A short description shown on the device card.')
                             ->maxLength(255),
+                        Toggle::make('enabled')
+                            ->helperText('Show this device and its figures on the site. Readings are still received while it is disabled.')
+                            ->default(true)
+                            ->inline(false),
                         TextInput::make('location')
                             ->helperText('Where the device is. Shown on the device card and in late-reading emails.')
                             ->maxLength(255),
@@ -100,6 +110,7 @@ class DeviceResource extends Resource
                 TextColumn::make('summary')->sortable(),
                 TextColumn::make('last_reading.created_at')
                     ->dateTime(),
+                ToggleColumn::make('enabled'),
                 ToggleColumn::make('alert_enabled'),
             ])
             ->defaultSort('order')

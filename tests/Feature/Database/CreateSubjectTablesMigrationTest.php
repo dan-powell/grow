@@ -21,7 +21,7 @@ class CreateSubjectTablesMigrationTest extends TestCase
 
     public function test_existing_figures_get_a_subject_assignment_and_their_alerts(): void
     {
-        $this->artisan('migrate:rollback', ['--step' => 1])->assertSuccessful();
+        $this->artisan('migrate:rollback', ['--path' => 'database/migrations/2026_11_02_000000_create_subject_tables.php'])->assertSuccessful();
         $figure = Figure::factory()->for(Device::factory())->create(['name' => 'Basil', 'summary' => 'Kitchen window']);
         Datum::factory()->create(['figure_id' => $figure->id, 'timestamp' => '2024-06-02 00:00:00']);
         Datum::factory()->create(['figure_id' => $figure->id, 'timestamp' => '2024-06-01 08:00:00']);
