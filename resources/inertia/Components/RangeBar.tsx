@@ -1,6 +1,6 @@
 import type { Datum } from '@/types';
 
-/** Horizontal meter showing where a reading sits between the figure's range_min and range_max. */
+/** Vertical meter, filling from the bottom, showing where a reading sits between the figure's range_min and range_max. */
 export default function RangeBar({ reading }: { reading: Datum }) {
     if (reading.range_percentage === null) {
         return null;
@@ -10,15 +10,16 @@ export default function RangeBar({ reading }: { reading: Datum }) {
 
     return (
         <div
-            className="h-2 w-full overflow-hidden rounded-full bg-muted"
+            className="flex h-full w-2 flex-col justify-end overflow-hidden rounded-full bg-muted"
             role="meter"
+            aria-orientation="vertical"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(percentage)}
         >
             <div
-                className="h-full rounded-full bg-primary transition-[width]"
-                style={{ width: `${percentage}%`, backgroundColor: reading.range_color ?? undefined }}
+                className="w-full rounded-full bg-primary transition-[height]"
+                style={{ height: `${percentage}%`, backgroundColor: reading.range_color ?? undefined }}
             />
         </div>
     );

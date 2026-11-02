@@ -10,12 +10,9 @@ class DashboardController extends Controller
 {
     public function show()
     {
-        $devices = Device::orderBy('order')->get();
-        $figures = Figure::dashboard()->with(['device'])->orderBy('order')->get();
-
         return Inertia::render('Dashboard', [
-            'devices' => $devices,
-            'figures' => $figures,
+            'devices' => fn () => Device::orderBy('order')->get(),
+            'figures' => fn () => Figure::dashboard()->with(['device'])->orderBy('order')->get(),
         ]);
     }
 }

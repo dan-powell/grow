@@ -1,5 +1,6 @@
 /**
  * Shapes of the Eloquent models as serialised into Inertia props.
+ * Primary and foreign keys are ULID strings.
  * Keep in sync with the #[Appends] / #[Fillable] attributes in app/Models.
  */
 
@@ -11,12 +12,13 @@ export interface Breadcrumb {
 
 export interface SharedProps {
     breadcrumbs: Breadcrumb[];
+    latest_reading_id: string | null;
     [key: string]: unknown;
 }
 
 export interface Datum {
-    id: number;
-    figure_id: number;
+    id: string;
+    figure_id: string;
     name: string | null;
     value: number;
     value_calibrated: number;
@@ -34,7 +36,7 @@ export interface Datum {
 
 export interface FigureAlert {
     id: string;
-    figure_id: number;
+    figure_id: string;
     enabled: boolean;
     value: number;
     lower: boolean;
@@ -42,8 +44,8 @@ export interface FigureAlert {
 }
 
 export interface Figure {
-    id: number;
-    device_id: number;
+    id: string;
+    device_id: string;
     name: string;
     key: string;
     summary: string | null;
@@ -62,7 +64,7 @@ export interface Figure {
 }
 
 export interface Device {
-    id: number;
+    id: string;
     name: string;
     nickname: string | null;
     summary: string | null;
@@ -76,12 +78,12 @@ export interface Device {
 }
 
 export interface Log {
-    id: number;
+    id: string;
     name: string;
     summary: string | null;
     severity: string | null;
     icon: string | null;
-    device_id: number | null;
+    device_id: string | null;
     created_at_formatted: string;
     created_at_date: string;
     created_at_time: string;

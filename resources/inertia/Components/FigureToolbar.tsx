@@ -17,7 +17,7 @@ export default function FigureToolbar({ filters, onChange, devices }: Props) {
         filters.search !== '' || filters.deviceId !== defaultFigureFilters.deviceId || filters.alertsOnly;
     const deviceItems = {
         all: 'All devices',
-        ...Object.fromEntries(devices.map((device) => [String(device.id), device.name])),
+        ...Object.fromEntries(devices.map((device) => [device.id, device.name])),
     };
 
     return (

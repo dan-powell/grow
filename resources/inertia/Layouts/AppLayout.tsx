@@ -10,7 +10,8 @@ import {
     BreadcrumbSeparator,
 } from '@/Components/ui/breadcrumb';
 import { Button } from '@/Components/ui/button';
-import { TooltipProvider } from '@/Components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Components/ui/tooltip';
+import { LIVE_READINGS_INTERVAL, useLiveReadings } from '@/hooks/useLiveReadings';
 import type { SharedProps } from '@/types';
 
 /** Icons8 attribution, required by their free licence for the figure/device icons. */
@@ -48,6 +49,7 @@ const iconCredits: [name: string, url: string][] = [
 
 export default function AppLayout({ children }: { children: ReactNode }) {
     const { breadcrumbs } = usePage<SharedProps>().props;
+    useLiveReadings();
 
     return (
         <TooltipProvider>
@@ -78,6 +80,20 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                                 ))}
                             </BreadcrumbList>
                         </Breadcrumb>
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={<span className="flex items-center gap-1.5 text-xs text-muted-foreground" />}
+                            >
+                                <span className="relative flex size-2">
+                                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75 motion-reduce:hidden" />
+                                    <span className="relative inline-flex size-2 rounded-full bg-primary" />
+                                </span>
+                                <span className="hidden sm:inline">Live</span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Checks for new readings every {LIVE_READINGS_INTERVAL / 1000} seconds
+                            </TooltipContent>
+                        </Tooltip>
                         <Button variant="ghost" size="sm" nativeButton={false} render={<Link href={route('log.index')} />}>
                             <ListChecks data-icon="inline-start" />
                             <span className="hidden sm:inline">Log</span>

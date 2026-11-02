@@ -26,6 +26,22 @@ export const defaultFigureFilters: FigureFilters = {
     descending: false,
 };
 
+/** Rebuild filters from untrusted stored data, keeping only well-typed fields and falling back to defaults. */
+export function parseFigureFilters(stored: unknown): FigureFilters {
+    const value = (typeof stored === 'object' && stored !== null ? stored : {}) as Record<string, unknown>;
+
+    return {
+        search: typeof value.search === 'string' ? value.search : defaultFigureFilters.search,
+        deviceId: typeof value.deviceId === 'string' ? value.deviceId : defaultFigureFilters.deviceId,
+        alertsOnly: typeof value.alertsOnly === 'boolean' ? value.alertsOnly : defaultFigureFilters.alertsOnly,
+        sort:
+            typeof value.sort === 'string' && value.sort in figureSortOptions
+                ? (value.sort as FigureSort)
+                : defaultFigureFilters.sort,
+        descending: typeof value.descending === 'boolean' ? value.descending : defaultFigureFilters.descending,
+    };
+}
+
 /** Sort key per option; `null` means "no data" and always sorts last whatever the direction. */
 const sortKeys: Record<FigureSort, (figure: Figure) => string | number | null> = {
     order: (figure) => figure.order,
@@ -41,7 +57,7 @@ export function applyFigureFilters(figures: Figure[], filters: FigureFilters): F
     const direction = filters.descending ? -1 : 1;
 
     return figures
-        .filter((figure) => filters.deviceId === 'all' || String(figure.device_id) === filters.deviceId)
+        .filter((figure) => filters.deviceId === 'all' || figure.device_id === filters.deviceId)
         .filter((figure) => !filters.alertsOnly || figure.active_alerts.length > 0)
         .filter((figure) => {
             if (terms.length === 0) {

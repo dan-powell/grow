@@ -1,4 +1,4 @@
-import { Head, useRemember } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { Cpu, SearchX } from 'lucide-react';
 import { useMemo } from 'react';
 import DeviceCard from '@/Components/DeviceCard';
@@ -7,7 +7,8 @@ import FigureToolbar from '@/Components/FigureToolbar';
 import PageHeader from '@/Components/PageHeader';
 import { Button } from '@/Components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/Components/ui/empty';
-import { applyFigureFilters, defaultFigureFilters, type FigureFilters } from '@/lib/figures';
+import { usePersistentState } from '@/hooks/usePersistentState';
+import { applyFigureFilters, defaultFigureFilters, parseFigureFilters } from '@/lib/figures';
 import type { Device, Figure } from '@/types';
 
 interface Props {
@@ -17,12 +18,21 @@ interface Props {
 
 export default function Dashboard({ devices, figures }: Props) {
     const dashboardFigures = useMemo(() => figures.filter((figure) => figure.dashboard), [figures]);
-    const [filters, setFilters] = useRemember<FigureFilters>(defaultFigureFilters, 'Dashboard/figureFilters');
-    const visibleFigures = useMemo(() => applyFigureFilters(dashboardFigures, filters), [dashboardFigures, filters]);
+    const [storedFilters, setFilters] = usePersistentState('grow.dashboard.figureFilters', defaultFigureFilters, parseFigureFilters);
     const figureDevices = useMemo(
         () => devices.filter((device) => dashboardFigures.some((figure) => figure.device_id === device.id)),
         [devices, dashboardFigures],
     );
+    // A saved device filter may point at a device that no longer has dashboard figures.
+    const filters = useMemo(
+        () =>
+            storedFilters.deviceId === defaultFigureFilters.deviceId ||
+            figureDevices.some((device) => device.id === storedFilters.deviceId)
+                ? storedFilters
+                : { ...storedFilters, deviceId: defaultFigureFilters.deviceId },
+        [storedFilters, figureDevices],
+    );
+    const visibleFigures = useMemo(() => applyFigureFilters(dashboardFigures, filters), [dashboardFigures, filters]);
 
     return (
         <>
