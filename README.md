@@ -9,10 +9,38 @@ or a device stops reporting.
 ## Features
 
 - **Readings API**: devices `POST` batches of readings, which are processed on the queue.
-- **Dashboard**: current figures and history charts per device (Inertia + Vue 3 + Chart.js).
-- **Alerts**: per-figure threshold alerts and late-reading alerts, with emails sent when
+- **Dashboard**: current figures and history charts per device (Inertia + React + Chart.js).
+- **Subjects**: sensors can be rotated between plants without losing track of which
+  readings belong to which plant.
+- **Alerts**: per-subject threshold alerts and late-reading alerts, with emails sent when
   an alert triggers and when it resolves. `reading:check` runs hourly.
-- **Admin panel**: Filament manages devices, figures, alerts, users and the event log.
+- **Admin panel**: Filament manages devices, figures, subjects, alerts, users and the event log.
+
+## How it works
+
+```
+Device ─< Figure ─< Datum (reading)
+            │
+            └─< FigureAssignment >─ Subject ─< SubjectAlert
+                (started_at → ended_at)
+```
+
+- **Device**: a physical unit that posts readings, identified by its `nickname`. It can
+  raise a late-reading alert if it stops reporting.
+- **Figure**: one value a device reports, such as a temperature or soil moisture probe,
+  matched to incoming readings by its `key`. It describes the sensor: display
+  prefix/suffix, calibration and the range bar.
+- **Datum**: a single stored reading. The raw value is kept; calibration is applied
+  when it is shown or checked.
+- **Subject**: the thing being measured, such as a plant or a greenhouse. While a subject
+  is assigned, the site shows its name in place of the figure's.
+- **FigureAssignment**: links a figure to a subject for a period of time. A figure and a
+  subject each have at most one open assignment. To rotate plants, assign the new
+  subject to the figure rather than renaming it. Each reading belongs to the subject
+  assigned when it was taken.
+- **SubjectAlert**: a threshold on a subject (e.g. moisture below 30). It is checked against
+  readings from whichever figure the subject was on at the time, so alerts follow a
+  plant when it moves.
 
 ## Stack
 
@@ -20,7 +48,7 @@ or a device stops reporting.
 | :--------- | :--------------------------------------------------------- |
 | Backend    | PHP 8.5, Laravel 13, Octane, Horizon (Redis queues)        |
 | Admin      | Filament 5                                                 |
-| Frontend   | Vue 3, Inertia 2, Vite, Bulma, Chart.js                    |
+| Frontend   | React 19, TypeScript, Inertia 3, Vite 8, Tailwind 4, shadcn/ui, Chart.js |
 | Tooling    | PHPUnit 12, Pint, Rector, Telescope, Debugbar              |
 | Dev / Ops  | DDEV, Deployer, Ansible (Docker provisioning), GitHub Actions |
 
