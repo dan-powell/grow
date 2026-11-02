@@ -35,6 +35,7 @@ class AssignmentsRelationManager extends RelationManager
         return $schema
             ->components([
                 DateTimePicker::make('started_at')
+                    ->helperText('When this figure started measuring the subject.')
                     ->required()
                     ->rules([
                         fn (Get $get, ?FigureAssignment $record): Closure => function (string $attribute, $value, Closure $fail) use ($get, $record): void {
@@ -55,6 +56,7 @@ class AssignmentsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->description('The subjects this figure has measured. Each reading belongs to the subject assigned when it was taken, so correcting dates here also changes which subject past readings belong to.')
             ->columns([
                 TextColumn::make('subject.name')->label('Subject'),
                 TextColumn::make('started_at')->dateTime()->sortable(),

@@ -23,6 +23,7 @@ class AssignmentsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->description('The figures that have measured this subject. Assignments are managed from the figure.')
             ->columns([
                 TextColumn::make('figure.name')->label('Figure'),
                 TextColumn::make('figure.device.name')->label('Device'),

@@ -47,12 +47,14 @@ class UserResource extends Resource
                     ->schema([
                         TextInput::make('password')
                             ->password()
+                            ->helperText('Leave empty to keep the current password.')
                             ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                             ->dehydrated(fn ($state) => filled($state)),
                     ]),
                 Section::make()
                     ->schema([
                         Toggle::make('receive_alerts')
+                            ->helperText('Email this user about late readings and subject alerts that have email turned on.')
                             ->required(),
                     ]),
             ]);
@@ -61,6 +63,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->description('People with an account. Only users marked as admin can sign in to this panel; that flag is set in the database, not here.')
             ->columns([
                 TextColumn::make('id'),
                 TextColumn::make('name'),

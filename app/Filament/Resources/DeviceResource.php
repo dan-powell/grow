@@ -37,19 +37,25 @@ class DeviceResource extends Resource
         return $schema
             ->components([
                 Section::make()
+                    ->description('A physical unit, such as a microcontroller, that sends readings. Each value it sends is stored against one of its figures.')
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
+                            ->helperText('Shown on the site and in alert emails.')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('nickname')
+                            ->helperText('The identifier the device sends with each reading. It must match exactly; if you change it here, update the device too or its readings will be rejected.')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('summary')
+                            ->helperText('A short description shown on the device card.')
                             ->maxLength(255),
                         TextInput::make('location')
+                            ->helperText('Where the device is. Shown on the device card and in late-reading emails.')
                             ->maxLength(255),
                         FileUpload::make('image')
+                            ->helperText('A photo shown on the device card, cropped to 4:3.')
                             ->disk('public')
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('4:3')
@@ -57,6 +63,7 @@ class DeviceResource extends Resource
                             ->imageResizeTargetHeight('768'),
                     ]),
                 Section::make('Alert configuration')
+                    ->description('Raises an alert when the device stops sending readings, e.g. because of a flat battery. Devices are checked hourly. For alerts on the readings themselves, add alerts to a subject.')
                     ->columns(6)
                     ->schema([
                         Toggle::make('alert_enabled')
@@ -67,14 +74,17 @@ class DeviceResource extends Resource
                         TextInput::make('alert_timeout')
                             ->label('Alert Timeout')
                             ->suffix('mins')
+                            ->helperText('How long without a reading before the alert is raised. Checks run hourly, so an alert can arrive up to an hour later than this.')
                             ->required(fn (Get $get) => $get('alert_enabled'))
                             ->columnSpan(2),
                         Toggle::make('alert_email')
                             ->label('Send Emails')
+                            ->helperText('Email users with "Receive alerts" on. Alerts are always logged.')
                             ->columnSpan(1)
                             ->inline(false),
                         DateTimePicker::make('alert_activated')
                             ->label('Alert Triggered')
+                            ->helperText('When the current late-reading alert was raised. Cleared when the next reading arrives.')
                             ->columnSpan(2)
                             ->disabled(),
                     ]),
@@ -84,6 +94,7 @@ class DeviceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->description('Devices send readings to the API, identified by their nickname. Drag rows to change the display order.')
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('summary')->sortable(),
