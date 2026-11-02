@@ -4,23 +4,23 @@ namespace App\Notifications;
 
 use App\Models\Datum;
 use App\Models\Figure;
-use App\Models\FigureAlert;
+use App\Models\SubjectAlert;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class FigureAlertTriggered extends Notification
+class SubjectAlertTriggered extends Notification
 {
     // use Queueable;
     private readonly Figure $figure;
 
-    private readonly FigureAlert $alert;
+    private readonly SubjectAlert $alert;
 
     private readonly Datum $datum;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Figure $figure, FigureAlert $alert, Datum $datum)
+    public function __construct(Figure $figure, SubjectAlert $alert, Datum $datum)
     {
         $this->figure = $figure;
         $this->alert = $alert;
@@ -47,11 +47,12 @@ class FigureAlertTriggered extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Alert Triggered - '.$this->figure->name.' ('.$this->figure->device->name.')')
-            ->line('An alert for '.$this->figure->name.' ('.$this->figure->device->name.') has been triggered')
+            ->subject('Alert Triggered - '.$this->alert->subject->name.' ('.$this->figure->device->name.')')
+            ->line('An alert for '.$this->alert->subject->name.' ('.$this->figure->device->name.') has been triggered')
             ->line('The reading value "'.$this->datum->value.'" has '.($this->alert->lower ? 'subceeded' : 'exceeded').' the alert by '.($this->alert->lower ? ($this->alert->value - $this->datum->value) : ($this->datum->value - $this->alert->value)))
             ->line('Device: '.$this->figure->device->name)
-            ->line('Reading: '.$this->figure->device->name)
+            ->line('Subject: '.$this->alert->subject->name)
+            ->line('Reading: '.$this->figure->name)
             ->line('Alert Trigger Value: '.$this->alert->value)
             ->line('Reading Value: '.$this->datum->value_string);
     }

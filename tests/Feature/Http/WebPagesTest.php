@@ -8,7 +8,9 @@ use App\Enum\Severity;
 use App\Models\Datum;
 use App\Models\Device;
 use App\Models\Figure;
+use App\Models\FigureAssignment;
 use App\Models\Log;
+use App\Models\Subject;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use PHPUnit\Framework\Attributes\Group;
@@ -22,8 +24,9 @@ class WebPagesTest extends TestCase
     public function test_dashboard_lists_devices_and_dashboard_figures(): void
     {
         $device = Device::factory()->create(['name' => 'Greenhouse']);
-        Figure::factory()->for($device)->create(['dashboard' => true]);
+        $figure = Figure::factory()->for($device)->create(['dashboard' => true]);
         Figure::factory()->for($device)->create(['dashboard' => false]);
+        FigureAssignment::factory()->for($figure)->for(Subject::factory()->state(['name' => 'Basil']))->create();
 
         $this->get(route('dashboard.show'))
             ->assertOk()
@@ -33,6 +36,7 @@ class WebPagesTest extends TestCase
                 ->where('devices.0.name', 'Greenhouse')
                 ->has('figures', 1)
                 ->has('figures.0.device')
+                ->where('figures.0.current_subject.name', 'Basil')
                 ->has('breadcrumbs', 1)
             );
     }
@@ -48,6 +52,26 @@ class WebPagesTest extends TestCase
                 ->where('device.id', $device->id)
                 ->has('device.figures', 2)
                 ->has('breadcrumbs', 2)
+            );
+    }
+
+    public function test_history_lists_assignments_in_the_window_and_names_the_page_after_the_subject(): void
+    {
+        $device = Device::factory()->create();
+        $figure = Figure::factory()->for($device)->create();
+        FigureAssignment::factory()->for($figure)->create(['started_at' => now()->subDays(90), 'ended_at' => now()->subDays(60)]);
+        $previous = FigureAssignment::factory()->for($figure)->create(['started_at' => now()->subDays(60), 'ended_at' => now()->subDays(10)]);
+        $current = FigureAssignment::factory()->for($figure)->for(Subject::factory()->state(['name' => 'Basil']))->create(['started_at' => now()->subDays(10)]);
+
+        $this->get(route('device.figure.history', [$device, $figure]))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('figure.current_subject.name', 'Basil')
+                ->has('assignments', 2)
+                ->where('assignments.0.id', $current->id)
+                ->where('assignments.0.subject.name', 'Basil')
+                ->where('assignments.1.id', $previous->id)
+                ->where('breadcrumbs.2.title', 'Basil')
             );
     }
 

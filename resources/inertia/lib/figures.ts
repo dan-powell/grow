@@ -1,5 +1,10 @@
 import type { Figure } from '@/types';
 
+/** The name to show for a figure: what it is measuring, falling back to the sensor's own name. */
+export function figureLabel(figure: Figure): string {
+    return figure.current_subject?.name ?? figure.name;
+}
+
 export const figureSortOptions = {
     order: 'Default order',
     name: 'Name',
@@ -45,7 +50,7 @@ export function parseFigureFilters(stored: unknown): FigureFilters {
 /** Sort key per option; `null` means "no data" and always sorts last whatever the direction. */
 const sortKeys: Record<FigureSort, (figure: Figure) => string | number | null> = {
     order: (figure) => figure.order,
-    name: (figure) => figure.name.toLocaleLowerCase(),
+    name: (figure) => figureLabel(figure).toLocaleLowerCase(),
     value: (figure) => figure.last_reading?.value_calibrated ?? null,
     updated: (figure) => (figure.last_reading ? Date.parse(figure.last_reading.timestamp) : null),
     range: (figure) => figure.last_reading?.range_percentage ?? null,
@@ -63,7 +68,7 @@ export function applyFigureFilters(figures: Figure[], filters: FigureFilters): F
             if (terms.length === 0) {
                 return true;
             }
-            const haystack = [figure.name, figure.key, figure.summary, figure.device?.name]
+            const haystack = [figure.current_subject?.name, figure.name, figure.key, figure.summary, figure.device?.name]
                 .filter(Boolean)
                 .join(' ')
                 .toLocaleLowerCase();

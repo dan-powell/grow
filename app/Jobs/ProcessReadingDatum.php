@@ -6,8 +6,8 @@ use App\Facades\LogHelper;
 use App\Models\Datum;
 use App\Models\Figure;
 use App\Models\User;
-use App\Notifications\FigureAlertResolved;
-use App\Notifications\FigureAlertTriggered;
+use App\Notifications\SubjectAlertResolved;
+use App\Notifications\SubjectAlertTriggered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Notification;
@@ -43,11 +43,14 @@ class ProcessReadingDatum implements ShouldQueue
         $datum->timestamp = $this->timestamp;
         $this->figure->data()->save($datum);
 
-        // Check status of Figure Alerts
+        // Check alerts on the subject this figure was measuring when the reading was taken
+        $subject = $this->figure->assignmentAt($this->timestamp)?->subject;
+        if (! $subject) {
+            return;
+        }
         $datum->refresh();
-        $this->figure->loadMissing('alerts');
         $users = User::where('receive_alerts', true)->get();
-        foreach ($this->figure->alerts as $alert) {
+        foreach ($subject->alerts as $alert) {
             // Check if alert
             if ($alert->enabled && ! $alert->activated) {
                 // Has the value tripped?
@@ -58,10 +61,10 @@ class ProcessReadingDatum implements ShouldQueue
                     // Alert activated
                     $alert->activated = now();
                     $alert->save();
-                    LogHelper::warning()->name('Alert Triggered')->summary('The reading value "'.$datum->value.'" has '.($alert->lower ? 'subceeded' : 'exceeded').' the alert by '.($alert->lower ? ($alert->value - $datum->value) : ($datum->value - $alert->value)))->device($alert->figure->device)->save();
+                    LogHelper::warning()->name('Alert Triggered')->summary('The reading value "'.$datum->value.'" has '.($alert->lower ? 'subceeded' : 'exceeded').' the alert by '.($alert->lower ? ($alert->value - $datum->value) : ($datum->value - $alert->value)))->device($this->figure->device)->save();
                     if ($alert->email) {
                         foreach ($users as $user) {
-                            Notification::route('mail', [$user->email])->notify(new FigureAlertTriggered($this->figure, $alert, $datum));
+                            Notification::route('mail', [$user->email])->notify(new SubjectAlertTriggered($this->figure, $alert, $datum));
                         }
                     }
                 }
@@ -73,10 +76,10 @@ class ProcessReadingDatum implements ShouldQueue
                     // Alert timeout was activated, but we just recieved a reading so we should resolve it
                     $alert->activated = null;
                     $alert->save();
-                    LogHelper::success()->name('Alert Resolved')->summary('An alert for '.$this->figure->name.' ('.$this->figure->device->name.') has been resolved')->device($alert->figure->device)->save();
+                    LogHelper::success()->name('Alert Resolved')->summary('An alert for '.$subject->name.' ('.$this->figure->device->name.') has been resolved')->device($this->figure->device)->save();
                     if ($alert->email) {
                         foreach ($users as $user) {
-                            Notification::route('mail', [$user->email])->notify(new FigureAlertResolved($this->figure, $alert, $datum));
+                            Notification::route('mail', [$user->email])->notify(new SubjectAlertResolved($this->figure, $alert, $datum));
                         }
                     }
                 }

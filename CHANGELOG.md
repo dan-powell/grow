@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `.mailmap` to unify commit author identity.
 - README documentation of the pull request and release process.
+- Subjects: the thing a figure measures (e.g. a plant), assigned to figures over time so a
+  sensor can be rotated between plants without renaming it. The dashboard and history pages
+  show the current subject, and the history chart marks where the subject changed.
 
 ### Changed
 
@@ -18,8 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   migrated with Filament's Rector upgrade rules, the "View" user menu item moved to the
   panel configuration, and v3's full-width section layout is preserved.
 
+- Alerts belong to subjects rather than figures, and are checked against the subject a figure
+  was measuring when each reading was taken. Existing figures are migrated to a subject of
+  the same name, with their alerts moved across.
+- Alert emails now show the figure's name on the "Reading" line (previously the device name).
+
 ### Removed
 
+- The standalone Figure Alerts admin resource; alerts are managed on each subject.
 - Unused StyleCI configuration (style is enforced by Pint).
 
 ## [1.0.0] - 2026-10-31

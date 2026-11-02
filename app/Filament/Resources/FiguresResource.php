@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enum\Icons;
+use App\Filament\Actions\AssignSubjectAction;
 use App\Filament\Resources\FiguresResource\Pages\CreateFigures;
 use App\Filament\Resources\FiguresResource\Pages\EditFigures;
 use App\Filament\Resources\FiguresResource\Pages\ListFigures;
+use App\Filament\Resources\FiguresResource\RelationManagers\AssignmentsRelationManager;
 use App\Models\Figure;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -45,6 +47,7 @@ class FiguresResource extends Resource
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
+                            ->helperText('The sensor\'s own name, e.g. "Moisture probe 2". What it measures is set by assigning a subject.')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('key')
@@ -122,6 +125,7 @@ class FiguresResource extends Resource
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('key')->sortable()->searchable(),
+                TextColumn::make('currentSubject.name')->label('Subject')->placeholder('Unassigned'),
                 TextColumn::make('summary')->sortable()->searchable(),
                 TextColumn::make('device.name')->sortable()->searchable(),
                 ToggleColumn::make('dashboard'),
@@ -130,6 +134,7 @@ class FiguresResource extends Resource
                 //
             ])
             ->recordActions([
+                AssignSubjectAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
@@ -147,7 +152,7 @@ class FiguresResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AssignmentsRelationManager::class,
         ];
     }
 

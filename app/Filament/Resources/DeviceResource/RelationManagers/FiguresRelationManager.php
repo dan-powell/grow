@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use App\Enum\Icons;
+use App\Filament\Actions\AssignSubjectAction;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -40,6 +41,7 @@ class FiguresRelationManager extends RelationManager
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
+                            ->helperText('The sensor\'s own name, e.g. "Moisture probe 2". What it measures is set by assigning a subject.')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('key')
@@ -116,6 +118,7 @@ class FiguresRelationManager extends RelationManager
         return $table
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('currentSubject.name')->label('Subject')->placeholder('Unassigned'),
                 TextColumn::make('summary')->sortable()->searchable(),
                 TextColumn::make('key')->sortable()->searchable(),
                 TextColumn::make('last_reading.created_at')->datetime(),
@@ -128,6 +131,7 @@ class FiguresRelationManager extends RelationManager
                 CreateAction::make(),
             ])
             ->recordActions([
+                AssignSubjectAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
