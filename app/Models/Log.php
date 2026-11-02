@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Appends([
     'created_at_formatted',
@@ -26,6 +27,11 @@ class Log extends Model
 
     #[\Override]
     public $timestamps = true;
+
+    public function device(): BelongsTo
+    {
+        return $this->belongsTo(Device::class);
+    }
 
     protected function createdAt(): Attribute
     {
