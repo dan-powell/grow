@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enum\Icons;
 use App\Models\Subject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,6 +26,7 @@ class SubjectFactory extends Factory
         return [
             'name' => fake()->randomElement(['Basil', 'Tomato', 'Chilli', 'Mint', 'Rosemary', 'Thyme', 'Coriander', 'Parsley']),
             'summary' => fake()->sentence(),
+            'icon' => fake()->randomElement([null, ...Icons::names()]),
         ];
     }
 }

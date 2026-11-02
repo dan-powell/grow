@@ -59,13 +59,30 @@ class DeviceAndFigureTest extends TestCase
         $this->assertSame(asset('storage/devices/a.jpg'), Device::factory()->make(['image' => 'devices/a.jpg'])->image_src);
     }
 
-    public function test_figure_icon_sources(): void
+    public function test_figure_icon_without_a_subject_icon(): void
     {
         $this->assertSame(asset('storage/custom.png'), Figure::factory()->make(['icon_custom' => 'custom.png'])->icon_src);
         $this->assertSame(asset(Icons::TOMATO->value), Figure::factory()->make(['icon_custom' => null, 'icon' => 'TOMATO'])->icon_src);
         $this->assertSame(asset(Icons::SPROUT->value), Figure::factory()->make(['icon_custom' => null, 'icon' => null])->icon_src);
-        $this->assertNull(Figure::factory()->make(['icon_small' => null])->icon_small_src);
-        $this->assertSame(asset(Icons::BATTERY->value), Figure::factory()->make(['icon_small' => 'BATTERY'])->icon_small_src);
+        $this->assertNull(Figure::factory()->make(['icon' => 'TOMATO'])->icon_small_src);
+
+        $figure = Figure::factory()->for(Device::factory())->create(['icon' => 'MOISTURE']);
+        FigureAssignment::factory()->for($figure)->for(Subject::factory()->state(['icon' => null]))->create();
+        $this->assertSame(asset(Icons::MOISTURE->value), $figure->icon_src);
+        $this->assertNull($figure->icon_small_src);
+    }
+
+    public function test_subject_icon_is_main_with_figure_icon_as_badge(): void
+    {
+        $figure = Figure::factory()->for(Device::factory())->create(['icon' => 'MOISTURE', 'icon_custom' => null]);
+        FigureAssignment::factory()->for($figure)->for(Subject::factory()->state(['icon' => 'BASIL']))->create();
+
+        $this->assertSame(asset(Icons::BASIL->value), $figure->icon_src);
+        $this->assertSame(asset(Icons::MOISTURE->value), $figure->icon_small_src);
+
+        $figure->update(['icon' => null]);
+        $this->assertSame(asset(Icons::BASIL->value), $figure->icon_src);
+        $this->assertNull($figure->icon_small_src);
     }
 
     public function test_dashboard_scopes(): void

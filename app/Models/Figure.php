@@ -31,7 +31,7 @@ use InvalidArgumentException;
  * A sensor channel on a Device, matched to incoming readings by `key`. The thing it measures
  * (e.g. a plant) is a Subject, linked over time through FigureAssignment.
  */
-#[Fillable(['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'icon_small', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color', 'order'])]
+#[Fillable(['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color', 'order'])]
 #[Table(name: 'figure')]
 #[WithoutTimestamps]
 class Figure extends Model
@@ -82,30 +82,24 @@ class Figure extends Model
         return Attribute::get(fn (): Collection => $this->currentSubject?->alerts()->whereNotNull('activated')->get() ?? collect());
     }
 
+    /**
+     * The main icon on the card: the current subject's icon, else the figure's own, else a sprout.
+     */
     protected function iconSrc(): Attribute
     {
-        return Attribute::get(function (): string {
-            if ($this->icon_custom) {
-                return asset('storage/'.$this->icon_custom);
-            }
-            if ($this->icon) {
-                return asset(Icons::fromName($this->icon)());
-            }
-
-            // Default to sprout icon
-            return asset(Icons::fromName('SPROUT')());
-        });
+        return Attribute::get(fn (): string => $this->currentSubject?->icon_src
+            ?? Icons::src($this->icon, $this->icon_custom)
+            ?? asset(Icons::SPROUT->value));
     }
 
+    /**
+     * The figure's own icon, shown as a small badge when the current subject's icon is the main one.
+     */
     protected function iconSmallSrc(): Attribute
     {
-        return Attribute::get(function () {
-            if ($this->icon_small) {
-                return asset(Icons::fromName($this->icon_small)());
-            }
-
-            return null;
-        });
+        return Attribute::get(fn (): ?string => $this->currentSubject?->icon_src
+            ? Icons::src($this->icon, $this->icon_custom)
+            : null);
     }
 
     #[Scope]

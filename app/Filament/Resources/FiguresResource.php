@@ -79,13 +79,13 @@ class FiguresResource extends Resource
                         ->helperText('Not currently used.')
                         ->maxLength(255),
                     Select::make('icon')
-                        ->helperText('Shown on the figure card. Defaults to a sprout.')
-                        ->options(array_combine(Icons::names(), Icons::names())),
+                        ->helperText('Shown on the figure card. If the current subject has an icon, this is shown as a small badge on it instead. Defaults to a sprout.')
+                        ->options(Icons::selectOptions())
+                        ->allowHtml()
+                        ->searchable(),
                     FileUpload::make('icon_custom')
-                        ->helperText('Upload an image to use instead of the icon above.'),
-                    Select::make('icon_small')
-                        ->helperText('A small badge shown on the corner of the icon.')
-                        ->options(array_combine(Icons::names(), Icons::names())),
+                        ->helperText('Upload an image to use instead of the icon above.')
+                        ->disk('public'),
                     TextInput::make('location')
                         ->helperText('Not currently shown on the site.')
                         ->maxLength(255),

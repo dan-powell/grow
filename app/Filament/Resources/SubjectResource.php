@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enum\Icons;
 use App\Filament\Resources\SubjectResource\Pages\CreateSubject;
 use App\Filament\Resources\SubjectResource\Pages\EditSubject;
 use App\Filament\Resources\SubjectResource\Pages\ListSubjects;
@@ -13,6 +14,7 @@ use App\Models\Subject;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -51,6 +53,14 @@ class SubjectResource extends Resource
                         TextInput::make('summary')
                             ->helperText('Shown on the figure card. If empty, the figure\'s summary is used.')
                             ->maxLength(255),
+                        Select::make('icon')
+                            ->helperText('Shown on the figure card while assigned, with the figure\'s icon as a small badge.')
+                            ->options(Icons::selectOptions())
+                            ->allowHtml()
+                            ->searchable(),
+                        FileUpload::make('icon_custom')
+                            ->helperText('Upload an image to use instead of the icon above.')
+                            ->disk('public'),
                         FileUpload::make('image')
                             ->helperText('Not currently shown on the site.')
                             ->disk('public')

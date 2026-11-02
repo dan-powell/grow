@@ -49,6 +49,7 @@ export interface Subject {
     name: string;
     summary: string | null;
     image_src: string | null;
+    icon_src: string | null;
 }
 
 /** A period during which a figure measured a subject; `ended_at` is null while current. */

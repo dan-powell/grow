@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enum\Icons;
 use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Table;
@@ -18,8 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * The thing a Figure measures, such as a plant. Subjects come and go from sensors
  * over time; see FigureAssignment.
  */
-#[Appends(['image_src'])]
-#[Fillable(['name', 'summary', 'image', 'notes'])]
+#[Appends(['image_src', 'icon_src'])]
+#[Fillable(['name', 'summary', 'image', 'icon', 'icon_custom', 'notes'])]
 #[Table(name: 'subject')]
 class Subject extends Model
 {
@@ -29,6 +30,11 @@ class Subject extends Model
     protected function imageSrc(): Attribute
     {
         return Attribute::get(fn (): ?string => $this->image ? asset('storage/'.$this->image) : null);
+    }
+
+    protected function iconSrc(): Attribute
+    {
+        return Attribute::get(fn (): ?string => Icons::src($this->icon, $this->icon_custom));
     }
 
     public function assignments(): HasMany
