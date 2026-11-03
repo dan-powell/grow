@@ -91,6 +91,27 @@ class WebPagesTest extends TestCase
             );
     }
 
+    public function test_device_page_defers_recent_calibrated_readings_per_figure(): void
+    {
+        $device = Device::factory()->create();
+        $figure = Figure::factory()->for($device)->create(['calibrate' => true, 'calibrate_value' => 5, 'calibrate_percentage' => false]);
+        $empty = Figure::factory()->for($device)->create();
+        Datum::factory()->create(['figure_id' => $figure->id, 'value' => 20, 'timestamp' => now()->subDays(2)]);
+        Datum::factory()->create(['figure_id' => $figure->id, 'timestamp' => now()->subDays(60)]);
+
+        $this->get(route('device.show', $device))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->missing('readings')
+                ->loadDeferredProps(fn (Assert $reload) => $reload
+                    ->has("readings.{$figure->id}", 1)
+                    ->where("readings.{$figure->id}.0.y", 25)
+                    ->has("readings.{$figure->id}.0.x")
+                    ->has("readings.{$empty->id}", 0)
+                )
+            );
+    }
+
     public function test_device_page_includes_late_and_figure_alerts(): void
     {
         $device = Device::factory()->create(['alert_enabled' => true, 'alert_timeout' => 120, 'alert_activated' => now()]);

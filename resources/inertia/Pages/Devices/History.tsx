@@ -20,6 +20,7 @@ import { Line } from 'react-chartjs-2';
 import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/Components/ui/empty';
+import { themeColor } from '@/lib/chart';
 import { figureLabel } from '@/lib/figures';
 import type { Datum, Device, Figure, FigureAssignment } from '@/types';
 
@@ -81,13 +82,6 @@ function markerPlugin(markers: Marker[], color: string): Plugin<'line'> {
             ctx.restore();
         },
     };
-}
-
-/** Resolve a shadcn theme token (e.g. `--primary`) so Chart.js, which draws on canvas, can use it. */
-function themeColor(token: string, alpha?: number): string {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(token).trim();
-
-    return alpha === undefined ? value : `color-mix(in oklch, ${value} ${alpha * 100}%, transparent)`;
 }
 
 export default function History({ device, figure, assignments, readings }: Props) {

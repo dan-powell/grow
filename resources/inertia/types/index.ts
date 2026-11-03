@@ -16,6 +16,12 @@ export interface SharedProps {
     [key: string]: unknown;
 }
 
+/** A calibrated reading reduced to a chart point: ISO timestamp and value. */
+export interface ReadingPoint {
+    x: string;
+    y: number;
+}
+
 export interface Datum {
     id: string;
     figure_id: string;
