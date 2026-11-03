@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Cpu, SearchX } from 'lucide-react';
 import { useMemo } from 'react';
 import DeviceCard from '@/Components/DeviceCard';
@@ -8,7 +8,7 @@ import PageHeader from '@/Components/PageHeader';
 import { Button } from '@/Components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/Components/ui/empty';
 import { usePersistentState } from '@/hooks/usePersistentState';
-import { applyFigureFilters, defaultFigureFilters, parseFigureFilters } from '@/lib/figures';
+import { applyFigureFilters, defaultFigureFilters, groupFiguresByDevice, parseFigureFilters } from '@/lib/figures';
 import type { Device, Figure } from '@/types';
 
 interface Props {
@@ -33,6 +33,11 @@ export default function Dashboard({ devices, figures }: Props) {
         [storedFilters, figureDevices],
     );
     const visibleFigures = useMemo(() => applyFigureFilters(dashboardFigures, filters), [dashboardFigures, filters]);
+    // Grouping only helps when figures span several devices; otherwise show one flat grid.
+    const figureGroups = useMemo(
+        () => (filters.groupByDevice && figureDevices.length > 1 ? groupFiguresByDevice(visibleFigures, figureDevices) : null),
+        [filters.groupByDevice, visibleFigures, figureDevices],
+    );
 
     return (
         <>
@@ -45,7 +50,28 @@ export default function Dashboard({ devices, figures }: Props) {
                         <p className="text-xs text-muted-foreground" aria-live="polite">
                             Showing {visibleFigures.length} of {dashboardFigures.length} figures
                         </p>
-                        {visibleFigures.length > 0 ? (
+                        {visibleFigures.length > 0 && figureGroups ? (
+                            <div className="flex flex-col gap-8">
+                                {figureGroups.map(({ device, figures: deviceFigures }) => (
+                                    <section key={device.id} className="flex flex-col gap-3" aria-labelledby={`device-${device.id}`}>
+                                        <h3 id={`device-${device.id}`} className="flex items-center gap-2 font-heading font-semibold">
+                                            <Cpu className="size-4 text-muted-foreground" />
+                                            <Link href={route('device.show', device.id)} className="hover:underline">
+                                                {device.name}
+                                            </Link>
+                                            <span className="text-xs font-normal text-muted-foreground">
+                                                {deviceFigures.length} {deviceFigures.length === 1 ? 'figure' : 'figures'}
+                                            </span>
+                                        </h3>
+                                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                            {deviceFigures.map((figure) => (
+                                                <FigureCard key={figure.id} figure={figure} />
+                                            ))}
+                                        </div>
+                                    </section>
+                                ))}
+                            </div>
+                        ) : visibleFigures.length > 0 ? (
                             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                 {visibleFigures.map((figure) => (
                                     <FigureCard key={figure.id} figure={figure} showDevice />

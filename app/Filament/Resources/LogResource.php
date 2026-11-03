@@ -44,6 +44,7 @@ class LogResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->description('Events recorded by the system: readings received, alerts raised and resolved, and late devices. The same entries are shown on the site\'s Log page.')
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('severity'),

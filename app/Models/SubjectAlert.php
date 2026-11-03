@@ -9,28 +9,35 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * A threshold alert on a Subject, checked against readings from whichever
+ * Figure the subject was assigned to when the reading was taken.
+ */
 #[Fillable([
-    'figure_id',
+    'subject_id',
     'enabled',
     'value',
     'lower',
     'email',
 ])]
-#[Table(name: 'figure_alert')]
+#[Table(name: 'subject_alert')]
 #[WithoutTimestamps]
-class FigureAlert extends Model
+class SubjectAlert extends Model
 {
     use HasUlids;
 
-    public function figure()
+    public function subject(): BelongsTo
     {
-        return $this->belongsTo(Figure::class);
+        return $this->belongsTo(Subject::class);
     }
 
     protected function casts(): array
     {
         return [
+            'enabled' => 'boolean',
+            'lower' => 'boolean',
             'activated' => 'datetime',
         ];
     }

@@ -3,6 +3,8 @@ import { Clock, MapPin, TriangleAlert } from 'lucide-react';
 import RelativeTime from '@/Components/RelativeTime';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/Components/ui/tooltip';
+import { describeDeviceAlert, formatTimestamp } from '@/lib/alerts';
 import { cn } from '@/lib/utils';
 import type { Device } from '@/types';
 
@@ -13,6 +15,8 @@ interface Props {
 }
 
 export default function DeviceCard({ device, asHeader = false }: Props) {
+    // Figures are only loaded on the device's own page; elsewhere just the late-reading alert is known.
+    const figureAlertCount = (device.figures ?? []).reduce((count, figure) => count + figure.active_alerts.length, 0);
     const card = (
         <Card
             className={cn(
@@ -33,12 +37,33 @@ export default function DeviceCard({ device, asHeader = false }: Props) {
                         {asHeader ? <h1>{device.name}</h1> : device.name}
                     </CardTitle>
                     {device.summary && <CardDescription>{device.summary}</CardDescription>}
-                    {device.alerted && (
+                    {(device.alerted || figureAlertCount > 0) && (
                         <CardAction>
-                            <Badge variant="destructive">
-                                <TriangleAlert data-icon="inline-start" />
-                                Alert
-                            </Badge>
+                            <Tooltip>
+                                <TooltipTrigger render={<span />}>
+                                    <Badge variant="destructive">
+                                        <TriangleAlert data-icon="inline-start" />
+                                        Alert
+                                    </Badge>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <ul className="flex flex-col gap-0.5">
+                                        {device.alerted && (
+                                            <li>
+                                                <span className="font-medium">{describeDeviceAlert(device)}</span>
+                                                {device.alert_activated && <> since {formatTimestamp(device.alert_activated)}</>}
+                                            </li>
+                                        )}
+                                        {figureAlertCount > 0 && (
+                                            <li>
+                                                {figureAlertCount === 1
+                                                    ? '1 figure alert'
+                                                    : `${figureAlertCount} figure alerts`}
+                                            </li>
+                                        )}
+                                    </ul>
+                                </TooltipContent>
+                            </Tooltip>
                         </CardAction>
                     )}
                 </CardHeader>

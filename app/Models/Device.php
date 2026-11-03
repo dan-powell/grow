@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'alerted',
     'alert_activated_formatted',
 ])]
-#[Fillable(['name', 'nickname', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email', 'order'])]
+#[Fillable(['name', 'nickname', 'enabled', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email', 'order'])]
 #[Table(name: 'device')]
 class Device extends Model
 {
@@ -63,6 +63,15 @@ class Device extends Model
         return Attribute::get(fn (): ?string => $this->alert_activated?->toDateTimeString());
     }
 
+    /**
+     * Devices shown on the site. Disabled devices still receive readings.
+     */
+    #[Scope]
+    protected function enabled($query)
+    {
+        $query->where('enabled', true);
+    }
+
     #[Scope]
     protected function dashboard($query)
     {
@@ -92,6 +101,7 @@ class Device extends Model
     {
         return [
             'alert_activated' => 'datetime',
+            'enabled' => 'boolean',
         ];
     }
 }

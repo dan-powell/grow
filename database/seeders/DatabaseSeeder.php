@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Datum;
 use App\Models\Device;
 use App\Models\Figure;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -32,6 +33,9 @@ class DatabaseSeeder extends Seeder
                 ->has(Datum::factory()
                     ->count(fake()->numberBetween(1000, 2000)), 'data'), 'figures')
             ->create();
+
+        // Give each figure a subject, as if it had been measuring it for the last month
+        Figure::all()->each(fn (Figure $figure) => $figure->assign(Subject::factory()->create(), now()->subMonth()));
 
         User::factory()->create([
             'name' => 'Test User',

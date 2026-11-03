@@ -7,11 +7,12 @@ namespace Tests\Feature;
 use App\Models\Datum;
 use App\Models\Device;
 use App\Models\Figure;
-use App\Models\FigureAlert;
+use App\Models\Subject;
+use App\Models\SubjectAlert;
 use App\Notifications\DeviceAlertLateReading;
 use App\Notifications\DeviceAlertLateReadingResolved;
-use App\Notifications\FigureAlertResolved;
-use App\Notifications\FigureAlertTriggered;
+use App\Notifications\SubjectAlertResolved;
+use App\Notifications\SubjectAlertTriggered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
 use PHPUnit\Framework\Attributes\Group;
@@ -58,24 +59,25 @@ class NotificationsTest extends TestCase
         $this->assertSame('🔋 Device alert resolved - Greenhouse late reading', $mail->subject);
     }
 
-    public function test_figure_alert_triggered_mail(): void
+    public function test_subject_alert_triggered_mail(): void
     {
-        $alert = FigureAlert::create(['figure_id' => $this->figure->id, 'enabled' => true, 'value' => 30, 'lower' => false]);
+        $alert = SubjectAlert::create(['subject_id' => Subject::factory()->create(['name' => 'Basil'])->id, 'enabled' => true, 'value' => 30, 'lower' => false]);
 
-        $mail = new FigureAlertTriggered($this->figure, $alert, $this->datum)->toMail(new AnonymousNotifiable);
+        $mail = new SubjectAlertTriggered($this->figure, $alert, $this->datum)->toMail(new AnonymousNotifiable);
 
-        $this->assertSame('Alert Triggered - Temperature (Greenhouse)', $mail->subject);
+        $this->assertSame('Alert Triggered - Basil (Greenhouse)', $mail->subject);
+        $this->assertContains('Reading: Temperature', $mail->introLines);
         $this->assertContains('The reading value "35" has exceeded the alert by 5', $mail->introLines);
         $this->assertContains('Reading Value: 35C', $mail->introLines);
     }
 
-    public function test_figure_alert_resolved_mail(): void
+    public function test_subject_alert_resolved_mail(): void
     {
-        $alert = FigureAlert::create(['figure_id' => $this->figure->id, 'enabled' => true, 'value' => 40, 'lower' => false]);
+        $alert = SubjectAlert::create(['subject_id' => Subject::factory()->create(['name' => 'Basil'])->id, 'enabled' => true, 'value' => 40, 'lower' => false]);
 
-        $mail = new FigureAlertResolved($this->figure, $alert, $this->datum)->toMail(new AnonymousNotifiable);
+        $mail = new SubjectAlertResolved($this->figure, $alert, $this->datum)->toMail(new AnonymousNotifiable);
 
-        $this->assertSame('Alert resolved - Temperature (Greenhouse)', $mail->subject);
+        $this->assertSame('Alert resolved - Basil (Greenhouse)', $mail->subject);
         $this->assertContains('Alert Trigger Value: 40', $mail->introLines);
     }
 }

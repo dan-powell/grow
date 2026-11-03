@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\Icons;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -12,6 +13,13 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 #[Appends([
     'last_reading',
@@ -19,7 +27,11 @@ use Illuminate\Database\Eloquent\Model;
     'icon_small_src',
     'active_alerts',
 ])]
-#[Fillable(['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'icon_small', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color', 'order'])]
+/**
+ * A sensor channel on a Device, matched to incoming readings by `key`. The thing it measures
+ * (e.g. a plant) is a Subject, linked over time through FigureAssignment.
+ */
+#[Fillable(['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color', 'order'])]
 #[Table(name: 'figure')]
 #[WithoutTimestamps]
 class Figure extends Model
@@ -32,6 +44,14 @@ class Figure extends Model
         $this->loadMissing('device');
 
         return Attribute::get(fn (): string => $this->device->name.' - '.$this->name.' - '.$this->key);
+    }
+
+    /**
+     * The name to show people: the current subject's name, falling back to the figure's own name.
+     */
+    protected function displayName(): Attribute
+    {
+        return Attribute::get(fn (): string => $this->currentSubject?->name ?? $this->name);
     }
 
     protected function lastReading(): Attribute
@@ -59,33 +79,27 @@ class Figure extends Model
 
     protected function activeAlerts(): Attribute
     {
-        return Attribute::get(fn () => $this->alerts()->whereNotNull('activated')->get());
+        return Attribute::get(fn (): Collection => $this->currentSubject?->alerts()->whereNotNull('activated')->get() ?? collect());
     }
 
+    /**
+     * The main icon on the card: the current subject's icon, else the figure's own, else a sprout.
+     */
     protected function iconSrc(): Attribute
     {
-        return Attribute::get(function (): string {
-            if ($this->icon_custom) {
-                return asset('storage/'.$this->icon_custom);
-            }
-            if ($this->icon) {
-                return asset(Icons::fromName($this->icon)());
-            }
-
-            // Default to sprout icon
-            return asset(Icons::fromName('SPROUT')());
-        });
+        return Attribute::get(fn (): string => $this->currentSubject?->icon_src
+            ?? Icons::src($this->icon, $this->icon_custom)
+            ?? asset(Icons::SPROUT->value));
     }
 
+    /**
+     * The figure's own icon, shown as a small badge when the current subject's icon is the main one.
+     */
     protected function iconSmallSrc(): Attribute
     {
-        return Attribute::get(function () {
-            if ($this->icon_small) {
-                return asset(Icons::fromName($this->icon_small)());
-            }
-
-            return null;
-        });
+        return Attribute::get(fn (): ?string => $this->currentSubject?->icon_src
+            ? Icons::src($this->icon, $this->icon_custom)
+            : null);
     }
 
     #[Scope]
@@ -94,14 +108,81 @@ class Figure extends Model
         $query->where('dashboard', true);
     }
 
-    public function device()
+    /**
+     * Figures whose device is shown on the site.
+     */
+    #[Scope]
+    protected function enabled($query)
+    {
+        $query->whereHas('device', fn ($query) => $query->enabled());
+    }
+
+    public function device(): BelongsTo
     {
         return $this->belongsTo(Device::class);
     }
 
-    public function alerts()
+    public function assignments(): HasMany
     {
-        return $this->hasMany(FigureAlert::class);
+        return $this->hasMany(FigureAssignment::class)->orderByDesc('started_at');
+    }
+
+    /**
+     * The open assignment, if the figure is currently measuring a subject. A figure has at most one.
+     */
+    public function currentAssignment(): HasOne
+    {
+        return $this->hasOne(FigureAssignment::class)->whereNull('ended_at');
+    }
+
+    public function currentSubject(): HasOneThrough
+    {
+        return $this->hasOneThrough(Subject::class, FigureAssignment::class, 'figure_id', 'id', 'id', 'subject_id')
+            ->whereNull('figure_assignment.ended_at');
+    }
+
+    /**
+     * The assignment in effect at the given moment, used to attribute a reading to a subject.
+     */
+    public function assignmentAt(CarbonInterface|string $at): ?FigureAssignment
+    {
+        return $this->assignments()->at($at)->first();
+    }
+
+    /**
+     * Start measuring a subject, ending this figure's current assignment and the subject's
+     * current assignment (on another figure) at the same moment.
+     *
+     * @throws InvalidArgumentException when $at is before an assignment it would end
+     */
+    public function assign(Subject $subject, ?CarbonInterface $at = null): FigureAssignment
+    {
+        $at = FigureAssignment::normaliseTime($at ?? now());
+
+        return DB::transaction(function () use ($subject, $at): FigureAssignment {
+            $open = FigureAssignment::query()
+                ->whereNull('ended_at')
+                ->where(fn ($query) => $query->where('figure_id', $this->id)->orWhere('subject_id', $subject->id))
+                ->get();
+
+            if ($open->contains(fn (FigureAssignment $assignment): bool => $assignment->started_at->gt($at))) {
+                throw new InvalidArgumentException('An assignment cannot start before the assignment it replaces.');
+            }
+
+            $open->each(fn (FigureAssignment $assignment) => $assignment->update(['ended_at' => $at]));
+            $this->unsetRelation('currentAssignment')->unsetRelation('currentSubject');
+
+            return $this->assignments()->create(['subject_id' => $subject->id, 'started_at' => $at]);
+        });
+    }
+
+    /**
+     * Stop measuring the current subject, leaving the figure unassigned.
+     */
+    public function endAssignment(?CarbonInterface $at = null): void
+    {
+        $this->currentAssignment?->update(['ended_at' => FigureAssignment::normaliseTime($at ?? now())]);
+        $this->unsetRelation('currentAssignment')->unsetRelation('currentSubject');
     }
 
     public function data()

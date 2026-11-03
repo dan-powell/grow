@@ -29,7 +29,6 @@ class FigureFactory extends Factory
             'summary' => fake()->name(),
             'dashboard' => fake()->boolean(),
             'icon' => fake()->randomElement([null, ...Icons::names()]),
-            'icon_small' => fake()->randomElement([null, ...Icons::names()]),
             'prefix' => fake()->randomElement([null, '£', '^']),
             'suffix' => fake()->randomElement([null, '℃', '%']),
             'range_min' => fake()->randomFloat(2, 1, 2500),

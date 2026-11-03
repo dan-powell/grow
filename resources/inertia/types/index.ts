@@ -34,15 +34,35 @@ export interface Datum {
     created_at_diff: string;
 }
 
-export interface FigureAlert {
+export interface SubjectAlert {
     id: string;
-    figure_id: string;
+    subject_id: string;
     enabled: boolean;
     value: number;
     lower: boolean;
     activated: string | null;
 }
 
+/** The thing a figure measures, such as a plant. */
+export interface Subject {
+    id: string;
+    name: string;
+    summary: string | null;
+    image_src: string | null;
+    icon_src: string | null;
+}
+
+/** A period during which a figure measured a subject; `ended_at` is null while current. */
+export interface FigureAssignment {
+    id: string;
+    figure_id: string;
+    subject_id: string;
+    started_at: string;
+    ended_at: string | null;
+    subject?: Subject;
+}
+
+/** A sensor channel on a device. Its `name` describes the sensor; see `figureLabel()` for display. */
 export interface Figure {
     id: string;
     device_id: string;
@@ -59,7 +79,8 @@ export interface Figure {
     range_max: number | null;
     order: number;
     last_reading: Datum | null;
-    active_alerts: FigureAlert[];
+    active_alerts: SubjectAlert[];
+    current_subject: Subject | null;
     device?: Device;
 }
 
@@ -71,6 +92,9 @@ export interface Device {
     location: string | null;
     image_src: string | null;
     alerted: boolean;
+    /** Minutes without a reading before the late-reading alert triggers. */
+    alert_timeout: number | null;
+    alert_activated: string | null;
     alert_activated_formatted: string | null;
     order: number;
     last_reading: Datum | null;

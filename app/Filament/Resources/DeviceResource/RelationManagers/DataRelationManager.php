@@ -28,17 +28,18 @@ class DataRelationManager extends RelationManager
                     ->content(fn (Datum $record) => $record->timestamp->toDateTimeString()),
                 Placeholder::make('Raw Value')
                     ->content(fn (Datum $record) => $record->value),
-                Placeholder::make('Raw Value')
-                    ->content(fn (Datum $record) => $record->value),
+                Placeholder::make('Calibrated Value')
+                    ->content(fn (Datum $record) => $record->value_calibrated),
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
+            ->description('Readings received from this device. The raw value is what the device sent; the calibrated value applies the figure\'s calibration and is what the site shows.')
             ->columns([
                 TextColumn::make('figure.name')->label('Figure')->searchable(),
-                TextColumn::make('value')->label('Figure')->sortable(),
+                TextColumn::make('value')->label('Raw Value')->sortable(),
                 TextColumn::make('figure.prefix')->label('Prefix'),
                 TextColumn::make('value_calibrated')->label('Calibrated Value')->sortable(),
                 TextColumn::make('figure.suffix')->label('Suffix'),

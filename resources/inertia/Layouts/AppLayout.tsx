@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { ListChecks, Sprout } from 'lucide-react';
+import { CircleHelp, ListChecks, Settings, Sprout } from 'lucide-react';
 import { Fragment, type ReactNode } from 'react';
 import {
     Breadcrumb,
@@ -13,39 +13,6 @@ import { Button } from '@/Components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/Components/ui/tooltip';
 import { LIVE_READINGS_INTERVAL, useLiveReadings } from '@/hooks/useLiveReadings';
 import type { SharedProps } from '@/types';
-
-/** Icons8 attribution, required by their free licence for the figure/device icons. */
-const iconCredits: [name: string, url: string][] = [
-    ['Hygrometer', 'https://icons8.com/icon/15365/hygrometer'],
-    ['Thermometer', 'https://icons8.com/icon/15350/thermometer'],
-    ['Humidity', 'https://icons8.com/icon/13001/humidity'],
-    ['Atmospheric Pressure', 'https://icons8.com/icon/15344/atmospheric-pressure'],
-    ['Sun', 'https://icons8.com/icon/15352/sun'],
-    ['Paprika', 'https://icons8.com/icon/18075/paprika'],
-    ['Bok Choy', 'https://icons8.com/icon/Ynaia0d7j5Am/bok-choy'],
-    ['Spinach', 'https://icons8.com/icon/qIF4XIx-ZSGt/spinach'],
-    ['Potato', 'https://icons8.com/icon/20756/potato'],
-    ['Carrot', 'https://icons8.com/icon/12865/carrot'],
-    ['Tomato', 'https://icons8.com/icon/18102/tomato'],
-    ['Chili Pepper', 'https://icons8.com/icon/15573/chili-pepper'],
-    ['Pipelines', 'https://icons8.com/icon/73818/pipelines'],
-    ['Sprout', 'https://icons8.com/icon/19656/sprout'],
-    ['Parsley', 'https://icons8.com/icon/wrgV9nSA6k5f/parsley'],
-    ['Mint', 'https://icons8.com/icon/rwvFV6ECv3E0/mint'],
-    ['Basil', 'https://icons8.com/icon/WRfXwryHkOg0/basil'],
-    ['Cucumber', 'https://icons8.com/icon/20758/cucumber'],
-    ['Whole Watermelon', 'https://icons8.com/icon/Vh5AxBulOk9L/whole-watermelon'],
-    ['Thyme', 'https://icons8.com/icon/xrQnyagkvVrx/thyme'],
-    ['Broccoli', 'https://icons8.com/icon/18042/broccoli'],
-    ['Vegetables Bag', 'https://icons8.com/icon/6qkfySkko5F9/vegetables-bag'],
-    ['Cabbage', 'https://icons8.com/icon/20986/cabbage'],
-    ['Peas', 'https://icons8.com/icon/18956/peas'],
-    ['Potted Plant', 'https://icons8.com/icon/19190/potted-plant'],
-    ['Onion', 'https://icons8.com/icon/18072/onion'],
-    ['Scallions', 'https://icons8.com/icon/nlIIz9nKHTpf/scallions'],
-    ['Pumphouse', 'https://icons8.com/icon/Swgs9lrgWMvb/pumphouse'],
-    ['Charging Battery', 'https://icons8.com/icon/11843/charging-battery'],
-];
 
 export default function AppLayout({ children }: { children: ReactNode }) {
     const { breadcrumbs } = usePage<SharedProps>().props;
@@ -98,26 +65,23 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                             <ListChecks data-icon="inline-start" />
                             <span className="hidden sm:inline">Log</span>
                         </Button>
+                        <Button variant="ghost" size="sm" nativeButton={false} render={<Link href={route('help.show')} />}>
+                            <CircleHelp data-icon="inline-start" />
+                            <span className="hidden sm:inline">Help</span>
+                        </Button>
+                        {/* The admin panel is Filament, not Inertia, so this is a full page load. */}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            nativeButton={false}
+                            render={<a href={route('filament.admin.pages.dashboard')} />}
+                        >
+                            <Settings data-icon="inline-start" />
+                            <span className="hidden sm:inline">Admin</span>
+                        </Button>
                     </div>
                 </header>
                 <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
-                <footer className="border-t bg-background">
-                    <p className="mx-auto max-w-7xl px-4 py-6 text-[0.7rem] leading-relaxed text-muted-foreground sm:px-6">
-                        Icons by{' '}
-                        <a href="https://icons8.com" target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-                            Icons8
-                        </a>
-                        :{' '}
-                        {iconCredits.map(([name, url], index) => (
-                            <Fragment key={url}>
-                                {index > 0 && ', '}
-                                <a href={url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-                                    {name}
-                                </a>
-                            </Fragment>
-                        ))}
-                    </p>
-                </footer>
             </div>
         </TooltipProvider>
     );

@@ -1,10 +1,12 @@
 import { Link } from '@inertiajs/react';
-import { Clock, Cpu, TriangleAlert } from 'lucide-react';
+import { Clock, Cpu, Gauge, TriangleAlert } from 'lucide-react';
 import RangeBar from '@/Components/RangeBar';
 import RelativeTime from '@/Components/RelativeTime';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/Components/ui/tooltip';
+import { describeSubjectAlert, formatTimestamp } from '@/lib/alerts';
+import { figureLabel } from '@/lib/figures';
 import type { Figure } from '@/types';
 
 interface Props {
@@ -15,6 +17,8 @@ interface Props {
 
 export default function FigureCard({ figure, deviceId, showDevice = false }: Props) {
     const reading = figure.last_reading;
+    const subject = figure.current_subject;
+    const summary = subject?.summary ?? figure.summary;
     const alertCount = figure.active_alerts.length;
     const hasRange = reading !== null && reading.range_percentage !== null;
 
@@ -45,8 +49,8 @@ export default function FigureCard({ figure, deviceId, showDevice = false }: Pro
                                 </div>
                             )}
                             <div className="min-w-0">
-                                <CardTitle className="truncate">{figure.name}</CardTitle>
-                                {figure.summary && <CardDescription className="line-clamp-2">{figure.summary}</CardDescription>}
+                                <CardTitle className="truncate">{figureLabel(figure)}</CardTitle>
+                                {summary && <CardDescription className="line-clamp-2">{summary}</CardDescription>}
                             </div>
                         </div>
                         {alertCount > 0 && (
@@ -59,7 +63,14 @@ export default function FigureCard({ figure, deviceId, showDevice = false }: Pro
                                         </Badge>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        {alertCount === 1 ? '1 active alert' : `${alertCount} active alerts`}
+                                        <ul className="flex flex-col gap-0.5">
+                                            {figure.active_alerts.map((alert) => (
+                                                <li key={alert.id}>
+                                                    <span className="font-medium">{describeSubjectAlert(alert, figure)}</span>
+                                                    {alert.activated && <> since {formatTimestamp(alert.activated)}</>}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </TooltipContent>
                                 </Tooltip>
                             </CardAction>
@@ -78,6 +89,12 @@ export default function FigureCard({ figure, deviceId, showDevice = false }: Pro
                                     'No readings'
                                 )}
                             </span>
+                            {subject && (
+                                <span className="flex min-w-0 items-center gap-1">
+                                    <Gauge className="size-3.5 shrink-0" />
+                                    <span className="truncate">{figure.name}</span>
+                                </span>
+                            )}
                             {showDevice && (
                                 <span className="flex min-w-0 items-center gap-1">
                                     <Cpu className="size-3.5 shrink-0" />
