@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Facades\LogHelper;
@@ -16,21 +18,14 @@ class ProcessReadingDatum implements ShouldQueue
 {
     use Queueable;
 
-    private Figure $figure;
-
-    private float $value;
-
-    private string $timestamp;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(Figure $figure, float $value, string $timestamp)
-    {
-        $this->figure = $figure;
-        $this->value = $value;
-        $this->timestamp = $timestamp;
-    }
+    public function __construct(
+        private Figure $figure,
+        private float $value,
+        private string $timestamp,
+    ) {}
 
     /**
      * Execute the job.
@@ -45,43 +40,30 @@ class ProcessReadingDatum implements ShouldQueue
 
         // Check alerts on the subject this figure was measuring when the reading was taken
         $subject = $this->figure->assignmentAt($this->timestamp)?->subject;
-        if (! $subject) {
+        $alerts = $subject?->alerts()->where('enabled', true)->get();
+        if (! $alerts || $alerts->isEmpty()) {
             return;
         }
-        $datum->refresh();
-        $users = User::where('receive_alerts', true)->get();
-        foreach ($subject->alerts as $alert) {
-            // Check if alert
-            if ($alert->enabled && ! $alert->activated) {
-                // Has the value tripped?
-                if (
-                    ($alert->lower && $datum->value_calibrated < $alert->value) ||
-                    (! $alert->lower && $datum->value_calibrated > $alert->value)
-                ) {
-                    // Alert activated
-                    $alert->activated = now();
-                    $alert->save();
-                    LogHelper::warning()->name('Alert Triggered')->summary('The reading value "'.$datum->value.'" has '.($alert->lower ? 'subceeded' : 'exceeded').' the alert by '.($alert->lower ? ($alert->value - $datum->value) : ($datum->value - $alert->value)))->device($this->figure->device)->save();
-                    if ($alert->email) {
-                        foreach ($users as $user) {
-                            Notification::route('mail', [$user->email])->notify(new SubjectAlertTriggered($this->figure, $alert, $datum));
-                        }
-                    }
+
+        $datum->refresh()->setRelation('figure', $this->figure);
+        $value = (float) $datum->value_calibrated;
+        $device = $this->figure->device;
+        $users = User::receivesAlerts()->get();
+
+        foreach ($alerts as $alert) {
+            if (! $alert->activated && $alert->isTrippedBy($value)) {
+                $alert->activated = now();
+                $alert->save();
+                LogHelper::warning()->name('Alert Triggered')->summary($alert->breachSummary($value))->device($device)->save();
+                if ($alert->email) {
+                    Notification::send($users, new SubjectAlertTriggered($this->figure, $alert, $datum));
                 }
-            } elseif ($alert->enabled && $alert->activated) {
-                if (
-                    ($alert->lower && $datum->value_calibrated > $alert->value) ||
-                    (! $alert->lower && $datum->value_calibrated < $alert->value)
-                ) {
-                    // Alert timeout was activated, but we just recieved a reading so we should resolve it
-                    $alert->activated = null;
-                    $alert->save();
-                    LogHelper::success()->name('Alert Resolved')->summary('An alert for '.$subject->name.' ('.$this->figure->device->name.') has been resolved')->device($this->figure->device)->save();
-                    if ($alert->email) {
-                        foreach ($users as $user) {
-                            Notification::route('mail', [$user->email])->notify(new SubjectAlertResolved($this->figure, $alert, $datum));
-                        }
-                    }
+            } elseif ($alert->activated && $alert->isResolvedBy($value)) {
+                $alert->activated = null;
+                $alert->save();
+                LogHelper::success()->name('Alert Resolved')->summary('An alert for '.$subject->name.' ('.$device->name.') has been resolved')->device($device)->save();
+                if ($alert->email) {
+                    Notification::send($users, new SubjectAlertResolved($this->figure, $alert, $datum));
                 }
             }
         }

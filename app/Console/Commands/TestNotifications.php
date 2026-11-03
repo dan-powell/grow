@@ -8,7 +8,6 @@ use App\Notifications\DeviceAlertLateReading;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 
 #[Description('Send test notifications')]
 #[Signature('test:notifications')]
@@ -20,13 +19,13 @@ class TestNotifications extends Command
     public function handle()
     {
 
-        $devices = Device::all();
+        $devices = Device::with('latestDatum')->get();
         $user = User::first();
 
         foreach ($devices as $device) {
-            if ($device->lastReading) {
+            if ($device->last_reading) {
                 $this->info('Sending alarm notification to '.$user->email);
-                Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReading($device, $device->lastReading));
+                $user->notify(new DeviceAlertLateReading($device, $device->last_reading));
             }
         }
     }

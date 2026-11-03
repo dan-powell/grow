@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Http;
 
 use App\Jobs\ProcessReading;
+use App\Models\Device;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
@@ -43,14 +44,46 @@ class ReadingApiTest extends TestCase
         Queue::assertNothingPushed();
     }
 
-    public function test_valid_reading_is_queued(): void
+    public function test_reading_for_an_unknown_device_is_rejected(): void
     {
         Queue::fake();
 
         $this->post(route('reading.store'), [
-            'nickname' => 'greenhouse',
+            'nickname' => 'nobody',
             'timestamp' => '2024-06-01 12:00:00',
             'readings' => ['temperature' => 21.5],
+        ], $this->basicAuth())
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['nickname']);
+
+        Queue::assertNothingPushed();
+    }
+
+    public function test_non_numeric_reading_is_rejected(): void
+    {
+        Queue::fake();
+        Device::factory()->create(['nickname' => 'greenhouse']);
+
+        $this->post(route('reading.store'), [
+            'nickname' => 'greenhouse',
+            'timestamp' => '2024-06-01 12:00:00',
+            'readings' => ['temperature' => 'hot', 'humidity' => 40],
+        ], $this->basicAuth())
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['readings.temperature']);
+
+        Queue::assertNothingPushed();
+    }
+
+    public function test_valid_reading_is_queued(): void
+    {
+        Queue::fake();
+        Device::factory()->create(['nickname' => 'greenhouse']);
+
+        $this->post(route('reading.store'), [
+            'nickname' => 'greenhouse',
+            'timestamp' => '2024-06-01 12:00:00',
+            'readings' => ['temperature' => 21.5, 'humidity' => null],
         ], $this->basicAuth())
             ->assertOk()
             ->assertExactJson(['status' => 'OK']);

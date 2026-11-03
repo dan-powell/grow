@@ -39,7 +39,8 @@ class CommandsTest extends TestCase
     {
         Notification::fake();
         $this->freezeSecond();
-        User::factory()->create(['receive_alerts' => true]);
+        $user = User::factory()->create(['receive_alerts' => true]);
+        User::factory()->create(['receive_alerts' => false]);
         $device = $this->deviceWithReading(now()->subMinutes(150));
 
         $this->artisan('reading:check')
@@ -50,11 +51,26 @@ class CommandsTest extends TestCase
 
         $this->assertNotNull($device->fresh()->alert_activated);
         $this->assertDatabaseHas('log', ['name' => 'Late Reading', 'severity' => Severity::WARNING->value, 'device_id' => $device->id]);
-        Notification::assertSentOnDemandTimes(DeviceAlertLateReading::class, 1);
+        Notification::assertSentTimes(DeviceAlertLateReading::class, 1);
+        Notification::assertSentTo($user, DeviceAlertLateReading::class);
 
         // Already alerted: no further notifications
         $this->artisan('reading:check')->doesntExpectOutput('Alert notification triggered')->assertSuccessful();
-        Notification::assertSentOnDemandTimes(DeviceAlertLateReading::class, 1);
+        Notification::assertSentTimes(DeviceAlertLateReading::class, 1);
+    }
+
+    public function test_late_reading_check_uses_the_newest_reading_across_figures(): void
+    {
+        Notification::fake();
+        // The first figure has gone quiet but the second is still reporting
+        $device = $this->deviceWithReading(now()->subMinutes(150));
+        $device->figures()->first()->update(['order' => 1]);
+        $reporting = Figure::factory()->for($device)->create(['order' => 2]);
+        Datum::factory()->create(['figure_id' => $reporting->id, 'created_at' => now()->subMinutes(5)]);
+
+        $this->artisan('reading:check')->expectsOutput('All devices OK')->assertSuccessful();
+
+        $this->assertNull($device->fresh()->alert_activated);
     }
 
     public function test_recent_reading_is_ok(): void
@@ -90,7 +106,7 @@ class CommandsTest extends TestCase
 
         $this->artisan('test:notifications')->assertSuccessful();
 
-        Notification::assertSentOnDemandTimes(DeviceAlertLateReading::class, 1);
+        Notification::assertSentTimes(DeviceAlertLateReading::class, 1);
     }
 
     public function test_user_add_creates_user(): void

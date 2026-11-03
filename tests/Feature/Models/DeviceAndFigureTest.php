@@ -41,6 +41,18 @@ class DeviceAndFigureTest extends TestCase
         $this->assertSame($datum->id, $device->fresh()->last_reading->id);
     }
 
+    public function test_device_last_reading_is_the_newest_across_all_figures(): void
+    {
+        $device = Device::factory()->create();
+        $first = Figure::factory()->for($device)->create(['order' => 1]);
+        $second = Figure::factory()->for($device)->create(['order' => 2]);
+        Datum::factory()->create(['figure_id' => $first->id, 'created_at' => now()->subHours(3)]);
+        $newest = Datum::factory()->create(['figure_id' => $second->id, 'created_at' => now()->subMinute()]);
+
+        $this->assertSame($newest->id, $device->last_reading->id);
+        $this->assertSame($newest->id, Device::with('latestDatum')->find($device->id)->last_reading->id);
+    }
+
     public function test_device_alerted_requires_enabled_and_activated(): void
     {
         $device = Device::factory()->create(['alert_enabled' => true]);

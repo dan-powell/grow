@@ -6,6 +6,7 @@ use App\Enum\Icons;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
@@ -31,6 +32,7 @@ use InvalidArgumentException;
  * A sensor channel on a Device, matched to incoming readings by `key`. The thing it measures
  * (e.g. a plant) is a Subject, linked over time through FigureAssignment.
  */
+#[Hidden(['latestDatum'])]
 #[Fillable(['name', 'key', 'summary', 'location', 'icon', 'icon_custom', 'prefix', 'suffix', 'calibrate', 'calibrate_value', 'calibrate_percentage', 'dashboard', 'range_min', 'range_max', 'range_min_color', 'range_max_color', 'order'])]
 #[Table(name: 'figure')]
 #[WithoutTimestamps]
@@ -54,32 +56,18 @@ class Figure extends Model
         return Attribute::get(fn (): string => $this->currentSubject?->name ?? $this->name);
     }
 
+    /**
+     * The most recently received reading. Eager-load `latestDatum` to avoid a query per figure;
+     * the relation itself is hidden so the reading is only serialised once, under this name.
+     */
     protected function lastReading(): Attribute
     {
-        return Attribute::get(fn () => $this->data()->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1)->first());
-    }
-
-    protected function lastReadingRangeValue(): Attribute
-    {
-        return Attribute::get(function () {
-            if (isset($this->range_min, $this->range_max) && $this->last_reading) {
-                if ($this->last_reading->value < $this->range_min) {
-                    return 0;
-                }
-                if ($this->last_reading->value > $this->range_max) {
-                    return 100;
-                }
-
-                return 100 / ($this->range_max - $this->range_min) * ($this->last_reading->value - $this->range_min);
-            }
-
-            return null;
-        });
+        return Attribute::get(fn (): ?Datum => $this->latestDatum);
     }
 
     protected function activeAlerts(): Attribute
     {
-        return Attribute::get(fn (): Collection => $this->currentSubject?->alerts()->whereNotNull('activated')->get() ?? collect());
+        return Attribute::get(fn (): Collection => $this->currentSubject?->activeAlerts ?? collect());
     }
 
     /**
@@ -185,8 +173,14 @@ class Figure extends Model
         $this->unsetRelation('currentAssignment')->unsetRelation('currentSubject');
     }
 
-    public function data()
+    public function data(): HasMany
     {
-        return $this->hasMany(Datum::class);
+        // Readings calibrate and format themselves from their figure, so hand them this one
+        return $this->hasMany(Datum::class)->chaperone('figure');
+    }
+
+    public function latestDatum(): HasOne
+    {
+        return $this->hasOne(Datum::class)->latestOfMany('created_at')->chaperone('figure');
     }
 }

@@ -24,8 +24,8 @@ class CheckLastReading extends Command
     public function handle()
     {
         $ok = true;
-        $devices = Device::all();
-        $users = User::where('receive_alerts', true)->get();
+        $devices = Device::with('latestDatum')->get();
+        $users = User::receivesAlerts()->get();
         foreach ($devices as $device) {
             $this->info('Checking: '.$device->name);
             // Alert enabled & has a timeout setting?
@@ -43,10 +43,8 @@ class CheckLastReading extends Command
                             $this->info('Alert notification triggered');
                             if ($device->alert_email) {
                                 // Send notifications to all subscribed users (If emails are enabled)
-                                foreach ($users as $user) {
-                                    $this->info('Sending alarm notification to '.$user->email);
-                                    Notification::route('mail', [$user->email])->notify(new DeviceAlertLateReading($device, $reading));
-                                }
+                                $users->each(fn (User $user) => $this->info('Sending alarm notification to '.$user->email));
+                                Notification::send($users, new DeviceAlertLateReading($device, $reading));
                             }
                             LogHelper::warning()->name('Late Reading')->summary('Device reading delayed, check batteries.')->device($device)->save();
                             $device->alert_activated = now();

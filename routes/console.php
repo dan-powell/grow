@@ -12,3 +12,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('reading:check')->hourly();
 Schedule::command('cache:prune-stale-tags')->hourly();
+// Deletes readings past `site.reading_retention_days`; does nothing while that is unset
+Schedule::command('model:prune')->daily();
