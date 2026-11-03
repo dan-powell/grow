@@ -1,4 +1,4 @@
-import { ArrowDownWideNarrow, ArrowUpNarrowWide, Search, TriangleAlert, X } from 'lucide-react';
+import { ArrowDownWideNarrow, ArrowUpNarrowWide, Layers, Search, TriangleAlert, X } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
@@ -51,6 +51,16 @@ export default function FigureToolbar({ filters, onChange, devices }: Props) {
                             ))}
                         </SelectContent>
                     </Select>
+                )}
+                {devices.length > 1 && (
+                    <Button
+                        variant={filters.groupByDevice ? 'secondary' : 'outline'}
+                        aria-pressed={filters.groupByDevice}
+                        onClick={() => update({ groupByDevice: !filters.groupByDevice })}
+                    >
+                        <Layers data-icon="inline-start" />
+                        Group by device
+                    </Button>
                 )}
                 <Button
                     variant={filters.alertsOnly ? 'destructive' : 'outline'}
