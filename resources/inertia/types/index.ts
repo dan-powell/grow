@@ -92,6 +92,9 @@ export interface Device {
     location: string | null;
     image_src: string | null;
     alerted: boolean;
+    /** Minutes without a reading before the late-reading alert triggers. */
+    alert_timeout: number | null;
+    alert_activated: string | null;
     alert_activated_formatted: string | null;
     order: number;
     last_reading: Datum | null;

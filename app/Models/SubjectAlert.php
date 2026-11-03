@@ -36,6 +36,8 @@ class SubjectAlert extends Model
     protected function casts(): array
     {
         return [
+            'enabled' => 'boolean',
+            'lower' => 'boolean',
             'activated' => 'datetime',
         ];
     }

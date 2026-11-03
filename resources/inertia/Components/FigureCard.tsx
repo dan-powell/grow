@@ -5,6 +5,7 @@ import RelativeTime from '@/Components/RelativeTime';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/Components/ui/tooltip';
+import { describeSubjectAlert, formatTimestamp } from '@/lib/alerts';
 import { figureLabel } from '@/lib/figures';
 import type { Figure } from '@/types';
 
@@ -62,7 +63,14 @@ export default function FigureCard({ figure, deviceId, showDevice = false }: Pro
                                         </Badge>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        {alertCount === 1 ? '1 active alert' : `${alertCount} active alerts`}
+                                        <ul className="flex flex-col gap-0.5">
+                                            {figure.active_alerts.map((alert) => (
+                                                <li key={alert.id}>
+                                                    <span className="font-medium">{describeSubjectAlert(alert, figure)}</span>
+                                                    {alert.activated && <> since {formatTimestamp(alert.activated)}</>}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </TooltipContent>
                                 </Tooltip>
                             </CardAction>

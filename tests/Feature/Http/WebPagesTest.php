@@ -91,6 +91,26 @@ class WebPagesTest extends TestCase
             );
     }
 
+    public function test_device_page_includes_late_and_figure_alerts(): void
+    {
+        $device = Device::factory()->create(['alert_enabled' => true, 'alert_timeout' => 120, 'alert_activated' => now()]);
+        $figure = Figure::factory()->for($device)->create();
+        $subject = Subject::factory()->create();
+        FigureAssignment::factory()->for($figure)->for($subject)->create();
+        $subject->alerts()->create(['enabled' => true, 'value' => 30, 'lower' => true])->forceFill(['activated' => now()])->save();
+
+        $this->get(route('device.show', $device))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('device.alerted', true)
+                ->where('device.alert_timeout', 120)
+                ->has('device.alert_activated')
+                ->has('device.figures.0.active_alerts', 1)
+                ->where('device.figures.0.active_alerts.0.value', 30)
+                ->where('device.figures.0.active_alerts.0.lower', true)
+            );
+    }
+
     public function test_history_lists_assignments_in_the_window_and_names_the_page_after_the_subject(): void
     {
         $device = Device::factory()->create();
