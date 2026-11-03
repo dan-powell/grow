@@ -14,6 +14,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class FiguresRelationManager extends RelationManager
 {
@@ -32,6 +33,7 @@ class FiguresRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['currentSubject', 'latestDatum']))
             ->description('The values this device reports. Each one is matched to readings by its key. Drag rows to change the display order.')
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),

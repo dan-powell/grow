@@ -33,12 +33,14 @@ class ProcessReadingTest extends TestCase
 
     private Subject $subject;
 
+    private User $recipient;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         Notification::fake();
-        User::factory()->create(['receive_alerts' => true, 'email' => 'alerts@example.com']);
+        $this->recipient = User::factory()->create(['receive_alerts' => true, 'email' => 'alerts@example.com']);
         User::factory()->create(['receive_alerts' => false]);
 
         $this->device = Device::factory()->create(['nickname' => 'greenhouse']);
@@ -78,11 +80,8 @@ class ProcessReadingTest extends TestCase
 
         $this->assertNull($this->device->fresh()->alert_activated);
         $this->assertDatabaseHas('log', ['name' => 'Late Reading Resolved', 'severity' => Severity::SUCCESS->value]);
-        Notification::assertSentOnDemandTimes(DeviceAlertLateReadingResolved::class, 1);
-        Notification::assertSentOnDemand(
-            DeviceAlertLateReadingResolved::class,
-            fn ($notification, $channels, $notifiable) => $notifiable->routes['mail'] === ['alerts@example.com']
-        );
+        Notification::assertSentTimes(DeviceAlertLateReadingResolved::class, 1);
+        Notification::assertSentTo($this->recipient, DeviceAlertLateReadingResolved::class);
     }
 
     public function test_upper_alert_triggers_then_resolves(): void
@@ -93,17 +92,59 @@ class ProcessReadingTest extends TestCase
 
         $this->assertNotNull($alert->fresh()->activated);
         $this->assertSame(1, Log::where('name', 'Alert Triggered')->where('severity', Severity::WARNING->value)->count());
-        Notification::assertSentOnDemandTimes(SubjectAlertTriggered::class, 1);
+        Notification::assertSentTimes(SubjectAlertTriggered::class, 1);
+        Notification::assertSentTo($this->recipient, SubjectAlertTriggered::class);
 
         // A second high reading must not re-trigger the alert
         ProcessReadingDatum::dispatch($this->figure, 36.0, '2024-06-01 12:05:00');
-        Notification::assertSentOnDemandTimes(SubjectAlertTriggered::class, 1);
+        Notification::assertSentTimes(SubjectAlertTriggered::class, 1);
 
         ProcessReadingDatum::dispatch($this->figure, 25.0, '2024-06-01 12:10:00');
 
         $this->assertNull($alert->fresh()->activated);
         $this->assertDatabaseHas('log', ['name' => 'Alert Resolved', 'severity' => Severity::SUCCESS->value]);
-        Notification::assertSentOnDemandTimes(SubjectAlertResolved::class, 1);
+        Notification::assertSentTimes(SubjectAlertResolved::class, 1);
+    }
+
+    public function test_null_readings_are_skipped(): void
+    {
+        $humidity = Figure::factory()->for($this->device)->create(['key' => 'humidity']);
+
+        ProcessReading::dispatch('greenhouse', ['temperature' => 21.5, 'humidity' => null], '2024-06-01 12:00:00');
+
+        $this->assertSame(1, $this->figure->data()->count());
+        $this->assertSame(0, $humidity->data()->count());
+    }
+
+    public function test_alert_compares_and_logs_the_calibrated_value(): void
+    {
+        $this->figure->update(['calibrate' => true, 'calibrate_value' => 10, 'calibrate_percentage' => false]);
+        $alert = SubjectAlert::create(['subject_id' => $this->subject->id, 'enabled' => true, 'value' => 30, 'lower' => false]);
+
+        // Raw 25 is under the threshold, but calibrated 35 is over it
+        ProcessReadingDatum::dispatch($this->figure->fresh(), 25.0, '2024-06-01 12:00:00');
+
+        $this->assertNotNull($alert->fresh()->activated);
+        $this->assertDatabaseHas('log', ['name' => 'Alert Triggered', 'summary' => 'The reading value "35" has exceeded the alert by 5']);
+    }
+
+    public function test_alert_only_resolves_beyond_the_resolve_margin(): void
+    {
+        $alert = SubjectAlert::create(['subject_id' => $this->subject->id, 'enabled' => true, 'value' => 30, 'lower' => true, 'resolve_margin' => 5, 'email' => true]);
+
+        ProcessReadingDatum::dispatch($this->figure, 29.0, '2024-06-01 12:00:00');
+        $this->assertNotNull($alert->fresh()->activated);
+
+        // Back over the threshold but within the margin: still raised, no emails
+        ProcessReadingDatum::dispatch($this->figure, 33.0, '2024-06-01 12:05:00');
+        ProcessReadingDatum::dispatch($this->figure, 29.5, '2024-06-01 12:10:00');
+        $this->assertNotNull($alert->fresh()->activated);
+        Notification::assertSentTimes(SubjectAlertTriggered::class, 1);
+        Notification::assertNotSentTo($this->recipient, SubjectAlertResolved::class);
+
+        ProcessReadingDatum::dispatch($this->figure, 36.0, '2024-06-01 12:15:00');
+        $this->assertNull($alert->fresh()->activated);
+        Notification::assertSentTimes(SubjectAlertResolved::class, 1);
     }
 
     public function test_lower_alert_triggers_without_email(): void

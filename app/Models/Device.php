@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 #[Appends([
     'last_reading',
@@ -18,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'alerted',
     'alert_activated_formatted',
 ])]
+#[Hidden(['latestDatum'])]
 #[Fillable(['name', 'nickname', 'enabled', 'image', 'summary', 'location', 'alert_enabled', 'alert_timeout', 'alert_email', 'order'])]
 #[Table(name: 'device')]
 class Device extends Model
@@ -41,11 +44,14 @@ class Device extends Model
         // });
     }
 
+    /**
+     * The most recently received reading across all of the device's figures. Eager-load
+     * `latestDatum` to avoid a query per device; the relation itself is hidden so the reading
+     * is only serialised once, under this name.
+     */
     protected function lastReading(): Attribute
     {
-        return Attribute::get(fn () => $this->figures()->whereHas('data', function ($query) {
-            $query->orderBy('created_at', 'desc')->orderBy('timestamp', 'desc')->limit(1);
-        })->limit(1)->get()->first()?->last_reading);
+        return Attribute::get(fn (): ?Datum => $this->latestDatum);
     }
 
     protected function imageSrc(): Attribute
@@ -83,6 +89,11 @@ class Device extends Model
     public function figures(): HasMany
     {
         return $this->hasMany(Figure::class)->orderBy('order');
+    }
+
+    public function latestDatum(): HasOneThrough
+    {
+        return $this->hasOneThrough(Datum::class, Figure::class)->latestOfMany('created_at');
     }
 
     public function data()

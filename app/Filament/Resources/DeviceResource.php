@@ -23,6 +23,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class DeviceResource extends Resource
 {
@@ -104,6 +105,7 @@ class DeviceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('latestDatum'))
             ->description('Devices send readings to the API, identified by their nickname. Drag rows to change the display order.')
             ->columns([
                 TextColumn::make('name')->sortable()->searchable(),

@@ -75,6 +75,15 @@ class DatumTest extends TestCase
         $this->assertEqualsWithDelta(25, $this->makeDatum(25)->range_percentage, 0.0001);
     }
 
+    public function test_range_percentage_is_relative_to_the_range_minimum(): void
+    {
+        $range = ['range_min' => 10, 'range_max' => 30];
+
+        $this->assertEqualsWithDelta(50, $this->makeDatum(20, $range)->range_percentage, 0.0001);
+        $this->assertEquals(100, $this->makeDatum(30, $range)->range_percentage);
+        $this->assertEquals(0, $this->makeDatum(10, ['range_min' => 10, 'range_max' => 10])->range_percentage);
+    }
+
     public function test_range_percentage_is_null_without_a_range(): void
     {
         $datum = $this->makeDatum(25, ['range_min' => null, 'range_max' => null]);
@@ -104,5 +113,27 @@ class DatumTest extends TestCase
         $this->assertSame('1st Jun 2024', $datum->timestamp_date);
         $this->assertSame('01:00pm', $datum->timestamp_time);
         $this->assertSame('Europe/London', $datum->created_at->getTimezone()->getName());
+    }
+
+    public function test_timestamps_are_shown_in_the_display_timezone(): void
+    {
+        config(['site.display_timezone' => 'America/New_York']);
+
+        $this->assertSame('2024-06-01 08:00:00', $this->makeDatum(1)->timestamp_formatted);
+    }
+
+    public function test_old_readings_are_pruned_only_when_a_retention_period_is_set(): void
+    {
+        $old = $this->makeDatum(1);
+        $old->forceFill(['created_at' => now()->subDays(40)])->saveQuietly();
+        $recent = Datum::factory()->create(['figure_id' => $old->figure_id]);
+
+        $this->artisan('model:prune', ['--model' => Datum::class])->assertSuccessful();
+        $this->assertModelExists($old);
+
+        config(['site.reading_retention_days' => 30]);
+        $this->artisan('model:prune', ['--model' => Datum::class])->assertSuccessful();
+        $this->assertModelMissing($old);
+        $this->assertModelExists($recent);
     }
 }

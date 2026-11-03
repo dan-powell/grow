@@ -46,6 +46,7 @@ export interface SubjectAlert {
     enabled: boolean;
     value: number;
     lower: boolean;
+    resolve_margin: number;
     activated: string | null;
 }
 

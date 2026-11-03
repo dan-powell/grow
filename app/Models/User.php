@@ -9,6 +9,8 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -35,6 +37,15 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return (bool) $this->admin;
+    }
+
+    /**
+     * Users who are emailed when an alert is raised or resolved.
+     */
+    #[Scope]
+    protected function receivesAlerts(Builder $query): void
+    {
+        $query->where('receive_alerts', true);
     }
 
     /**

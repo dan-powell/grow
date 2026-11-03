@@ -54,4 +54,12 @@ class Subject extends Model
     {
         return $this->hasMany(SubjectAlert::class);
     }
+
+    /**
+     * Alerts that are currently raised.
+     */
+    public function activeAlerts(): HasMany
+    {
+        return $this->alerts()->whereNotNull('activated');
+    }
 }

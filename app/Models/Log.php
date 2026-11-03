@@ -35,7 +35,7 @@ class Log extends Model
 
     protected function createdAt(): Attribute
     {
-        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone('Europe/London'));
+        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone(config('site.display_timezone')));
     }
 
     protected function createdAtFormatted(): Attribute

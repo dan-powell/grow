@@ -12,6 +12,7 @@ use App\Models\FigureAssignment;
 use App\Models\Log;
 use App\Models\Subject;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
 use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
@@ -173,6 +174,42 @@ class WebPagesTest extends TestCase
                 ->where('readings.0.id', $recent->id)
                 ->has('breadcrumbs', 3)
             );
+    }
+
+    public function test_history_includes_todays_readings(): void
+    {
+        $this->travelTo(now()->setTime(15, 0));
+        $device = Device::factory()->create();
+        $figure = Figure::factory()->for($device)->create();
+        $today = Datum::factory()->create(['figure_id' => $figure->id, 'timestamp' => now()->subHour()]);
+
+        $this->get(route('device.figure.history', [$device, $figure]))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->has('readings', 1)
+                ->where('readings.0.id', $today->id)
+                ->missing('readings.0.figure')
+            );
+    }
+
+    public function test_dashboard_query_count_does_not_grow_with_figures(): void
+    {
+        $queriesFor = function (int $figureCount): int {
+            $device = Device::factory()->create();
+            Figure::factory()->for($device)->count($figureCount)->create(['dashboard' => true])->each(function (Figure $figure): void {
+                Datum::factory()->create(['figure_id' => $figure->id]);
+                FigureAssignment::factory()->for($figure)->create();
+            });
+
+            DB::flushQueryLog();
+            DB::enableQueryLog();
+            $this->get(route('dashboard.show'))->assertOk();
+            DB::disableQueryLog();
+
+            return count(DB::getQueryLog());
+        };
+
+        $this->assertSame($queriesFor(1), $queriesFor(4));
     }
 
     public function test_log_index_is_paginated_and_filterable(): void

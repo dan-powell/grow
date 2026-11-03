@@ -5,10 +5,13 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Appends([
@@ -26,11 +29,14 @@ use Illuminate\Database\Eloquent\Model;
     'created_at_diff',
 ])]
 #[Fillable(['name', 'value'])]
+// The figure is only loaded to calibrate and format the value, so keep it out of the JSON
+#[Hidden(['figure'])]
 #[Table(name: 'datum')]
 class Datum extends Model
 {
     use HasFactory;
     use HasUlids;
+    use MassPrunable;
 
     #[\Override]
     public $timestamps = true;
@@ -55,14 +61,14 @@ class Datum extends Model
     {
         return Attribute::get(function () {
             if (isset($this->figure->range_min, $this->figure->range_max)) {
-                if ($this->value_calibrated < $this->figure->range_min) {
+                if ($this->value_calibrated <= $this->figure->range_min) {
                     return 0;
                 }
-                if ($this->value_calibrated > $this->figure->range_max) {
+                if ($this->value_calibrated >= $this->figure->range_max) {
                     return 100;
                 }
 
-                return 100 / $this->figure->range_max * ($this->value_calibrated - $this->figure->range_min);
+                return 100 / ($this->figure->range_max - $this->figure->range_min) * ($this->value_calibrated - $this->figure->range_min);
             }
 
             return null;
@@ -122,7 +128,7 @@ class Datum extends Model
 
     protected function createdAt(): Attribute
     {
-        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone('Europe/London'));
+        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone(config('site.display_timezone')));
     }
 
     protected function createdAtFormatted(): Attribute
@@ -147,7 +153,7 @@ class Datum extends Model
 
     protected function timestamp(): Attribute
     {
-        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone('Europe/London'));
+        return Attribute::get(fn ($value): Carbon => Carbon::parse($value)->setTimezone(config('site.display_timezone')));
     }
 
     protected function timestampFormatted(): Attribute
@@ -168,6 +174,18 @@ class Datum extends Model
     protected function timestampDiff(): Attribute
     {
         return Attribute::get(fn (): string => $this->timestamp->diffForHumans());
+    }
+
+    /**
+     * Readings older than the configured retention period. Nothing is pruned when it isn't set.
+     */
+    public function prunable(): Builder
+    {
+        $days = config('site.reading_retention_days');
+
+        return blank($days)
+            ? static::query()->whereRaw('1 = 0')
+            : static::query()->where('created_at', '<', now()->subDays((int) $days));
     }
 
     public function figure()
