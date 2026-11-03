@@ -58,6 +58,16 @@ class WebPagesTest extends TestCase
             );
     }
 
+    public function test_help_page_renders(): void
+    {
+        $this->get(route('help.show'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Help')
+                ->has('breadcrumbs', 2)
+            );
+    }
+
     public function test_disabled_device_pages_return_404(): void
     {
         $device = Device::factory()->create(['enabled' => false]);
